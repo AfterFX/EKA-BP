@@ -8,7 +8,7 @@ import { Colors } from '../components/styles';
 const { darkLight, brand, primary, tertiary, secondary } = Colors;
 
 // React Navigation
-import { NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
@@ -16,18 +16,15 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import Login from '../screens/Login';
 import Signup from '../screens/Signup';
 import Welcome from '../screens/Welcome';
-import dragNdrop from '../screens/dragNdrop';
-import dragNdropColor from '../screens/dragNdropColor';
+
 import Buy from '../screens/Buy';
-import Battle from '../screens/Battle';
-import Meteor from '../screens/Meteor';
-import ProgressBar from '../screens/ProgressBar';
-import ProgressBarAndroid from '../screens/ProgressBarAndroid';
+import BuyHistory from '../screens/BuyHistory';
 
 const Stack = createStackNavigator();
 
 // credentials context
 import { CredentialsContext } from '../components/CredentialsContext';
+import {IconButton} from "react-native-paper";
 
 
 
@@ -83,14 +80,11 @@ const RootStack = () => {
                                 }}
                             >
                                     <>
-                                        <Drawer.Screen options={{ headerTintColor: primary }} name="Welcome" component={Welcome}/>
+                                        <Drawer.Screen options={{ headerTintColor: primary, headerRight: () => (
+                                                <IconButton icon="alert-outline" onPress={() => alert('You\'re awesome!')} color={DefaultTheme.colors.notification} />
+                                            ) }} name="Welcome" component={Welcome}/>
                                         <Drawer.Screen options={{ headerTintColor: primary }} name="Buy" component={Buy}/>
-                                        <Drawer.Screen options={{ headerTintColor: primary }} name="dragNdrop" component={dragNdrop}/>
-                                        <Drawer.Screen options={{ headerTintColor: primary }} name="dragNdropColor" component={dragNdropColor}/>
-                                        <Drawer.Screen options={{ headerTintColor: primary }} name="Battle" component={Battle}/>
-                                        <Drawer.Screen options={{ headerTintColor: primary }} name="Meteor" component={Meteor}/>
-                                        <Drawer.Screen options={{ headerTintColor: primary }} name="ProgressBar" component={ProgressBar}/>
-                                        <Drawer.Screen options={{ headerTintColor: primary }} name="ProgressBarAndroid" component={ProgressBarAndroid}/>
+                                        <Drawer.Screen options={{ headerTintColor: primary }} name="BuyHistory" component={BuyHistory}/>
                                     </>
                             </Drawer.Navigator>
                         </>

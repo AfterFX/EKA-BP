@@ -44,4 +44,4 @@ export default function App() {
 }
 
 
-global.Server = { ip: "http://192.168.1.140:8081" };
+global.Server = { ip: "http://192.168.1.47:8081" };
