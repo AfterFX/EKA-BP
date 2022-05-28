@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import {View, Text, TouchableOpacity, TextInput, Image, StyleSheet, Dimensions} from 'react-native';
 import Constants from 'expo-constants';
 
-const StatusBarHeight = Constants.statusBarHeight;
+export const StatusBarHeight = Constants.statusBarHeight;
 
 // colors
 export const Colors = {

@@ -15,6 +15,7 @@
     "@react-native-async-storage/async-storage": "~1.15.0",
     "@react-native-community/datetimepicker": "3.5.2",
     "@react-native-community/masked-view": "^0.1.11",
+    "@react-native-community/slider": "4.1.12",
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/stack": "^6.0.11",
     "axios": "^0.24.0",
@@ -26,6 +27,7 @@
     "expo-print": "~11.0.4",
     "expo-sharing": "~10.0.3",
     "expo-status-bar": "~1.1.0",
+    "expo-updates": "~0.10.15",
     "formik": "^2.2.9",
     "react": "17.0.1",
     "react-dom": "17.0.1",
@@ -38,10 +40,10 @@
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "~3.8.0",
     "react-native-table-component": "^1.2.2",
+    "react-native-vector-icons": "^9.1.0",
     "react-native-web": "0.17.1",
     "react-native-webview": "11.13.0",
-    "styled-components": "^5.3.3",
-    "expo-updates": "~0.10.15"
+    "styled-components": "^5.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

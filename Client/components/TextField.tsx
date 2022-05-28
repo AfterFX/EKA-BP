@@ -12,12 +12,14 @@ import {
 type Props = React.ComponentProps<typeof TextInput> & {
     label: string
     errorText?: string | null
+    fontSizeC?: number
 }
 
 const TextField: React.FC<Props> = (props) => {
     const {
         label,
         errorText,
+        fontSizeC,
         value,
         style,
         onBlur,
@@ -50,6 +52,7 @@ const TextField: React.FC<Props> = (props) => {
                 styles.input,
     {
         borderColor: color,
+        fontSize: fontSizeC
     },
 ]}
     ref={inputRef}
@@ -108,14 +111,17 @@ const TextField: React.FC<Props> = (props) => {
     {!!errorText && <Text style={styles.error}>{errorText}</Text>}
         </View>
     )
-    }
+
+}
 
     const styles = StyleSheet.create({
         input: {
             padding: 1,
             borderWidth: 2,
             borderRadius: 4,
-            fontSize: 12,
+            // fontSize: 12,
+            width: '100%',
+            height: '100%'
         },
         labelContainer: {
             position: 'absolute',

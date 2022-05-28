@@ -83,7 +83,7 @@ const RootStack = () => {
                                         <Drawer.Screen options={{ headerTintColor: primary, headerRight: () => (
                                                 <IconButton icon="alert-outline" onPress={() => alert('You\'re awesome!')} color={DefaultTheme.colors.notification} />
                                             ) }} name="Welcome" component={Welcome}/>
-                                        <Drawer.Screen options={{ headerTintColor: primary }} name="Buy" component={Buy}/>
+                                        <Drawer.Screen options={{ headerTintColor: tertiary }} name="Buy" component={Buy}/>
                                         <Drawer.Screen options={{ headerTintColor: primary }} name="BuyHistory" component={BuyHistory}/>
                                     </>
                             </Drawer.Navigator>
