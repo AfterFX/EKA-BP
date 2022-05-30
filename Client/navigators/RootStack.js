@@ -19,6 +19,7 @@ import Welcome from '../screens/Welcome';
 
 import Buy from '../screens/Buy';
 import BuyHistory from '../screens/BuyHistory';
+import BuyHistoryTest1 from '../screens/BuyHistoryTest1';
 
 const Stack = createStackNavigator();
 
@@ -85,6 +86,7 @@ const RootStack = () => {
                                             ) }} name="Welcome" component={Welcome}/>
                                         <Drawer.Screen options={{ headerTintColor: tertiary }} name="Buy" component={Buy}/>
                                         <Drawer.Screen options={{ headerTintColor: primary }} name="BuyHistory" component={BuyHistory}/>
+                                        <Drawer.Screen options={{ headerTintColor: primary }} name="BuyHistoryTest1" component={BuyHistoryTest1}/>
                                     </>
                             </Drawer.Navigator>
                         </>

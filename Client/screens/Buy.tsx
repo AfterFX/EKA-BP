@@ -381,7 +381,7 @@ const Buy = ({ navigation }) => {
                                             style={styles.singleHeadLeftSide}
                                             borderRadius={0}
                                             color={'red'}
-                                            onPress={() => print(number)}
+                                            onPress={() => print(number, onChangeNumber, setIsMain)}
                                         >
                                         </Icon.Button>
                                 </TouchableOpacity>

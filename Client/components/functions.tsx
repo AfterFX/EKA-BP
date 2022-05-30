@@ -25,9 +25,13 @@ export const payTotal = (number: Array<String>) => {
     return totalPrice;
 }
 
-export const print = async (number: Array<String>) => {
+export const print = async (number: Array<String>, onChangeNumber: (value: (((prevState: Array<String>) => Array<String>) | Array<String>)) => void, setIsMain: (value: (((prevState: boolean) => boolean) | boolean)) => void) => {
     await Print.printAsync({
         html: createDynamicTable(number).html,
+    }).then(() => {
+       return onChangeNumber([])
+    }).then(() => {
+       return setIsMain(true)
     });
 }
 
@@ -40,7 +44,7 @@ export const destroy = async (onChangeNumber: (value: (((prevState: Array<String
 export const createDynamicTable = (number) => {
     const priceTotal = (element) => {
         let result = number[element] * prices[element];
-        return (number[element])? Math.round(result * 100) / 100: '0';
+        return (number[element])? Math.round(result * 100) / 100: '';
     }
 
     const html = `<!DOCTYPE html>
