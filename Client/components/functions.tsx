@@ -82,7 +82,7 @@ export const createDynamicTable = (number) => {
             <td  align="center" valign=bottom><br></td>
             <td align="left" valign=middle><br></td>
             <td align="left" valign=middle><b><br></b></td>
-            <td style="height: 25px; border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; font-size: 20px" colspan=6 align="left" valign=middle>${todayDate}</td>
+            <td style="height: 25px; border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; font-size: 20px" colspan=6 align="center" valign=middle>${todayDate}</td>
         </tr>
 
         <tr>
@@ -114,7 +114,7 @@ export const createDynamicTable = (number) => {
             <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; font-size: 10px" align="center" valign=middle bgcolor="#BDD7EE"><i>Suma</i></td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000000; border-right: 2px solid #000000; font-size: 10px" rowspan=9 height="180" align="center" valign=middle bgcolor="#D9D9D9"><b>800x1200</b></td>
+            <td style="border: 1px solid #000000; border-right: 2px solid #000000; font-size: 10px" rowspan=9 align="center" valign=middle bgcolor="#D9D9D9"><b>800x1200</b></td>
             <td style="font-size: 10px" align="left" valign=middle bgcolor="#FFFFFF"><b>EUR-A 1</b></td>
             <td style="font-size: 10px" align="left" valign=middle bgcolor="#FFFFFF">800 x 1200 mm.</td>
             <td style="border-left: 2px solid #000000; font-size: 10px" align="center" valign=middle bgcolor="#FFE796" align="center" valign=middle bgcolor="#FFE796"><b>${number['s_a1'] || ''}</b></td>
@@ -148,15 +148,15 @@ export const createDynamicTable = (number) => {
             <td style="border-top: 1px solid #000000; border-bottom: 1px double #000000; font-size: 10px" align="left" valign=middle bgcolor="#FFFFFF"><b>LPM</b></td>
             <td style="border-top: 1px solid #000000; border-bottom: 1px double #000000; font-size: 10px" align="left" valign=middle bgcolor="#FFFFFF">800 x 1200 mm.</td>
             <td style="${InputBox} border-bottom: 1px solid #000000;"  align="center" valign=middle bgcolor="#FFE796"><b>${number['s_lpm_800'] || ''}</b></td>
-            <td style="${priceBox}  border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF">${prices['s_lpm_800']}</td>
+            <td style="${priceBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF">${prices['s_lpm_800']}</td>
             <td style="${totalPriceLeftSideBox}  border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('s_lpm_800')}</i></td>
             <td style="${InputBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFE796"><b>${number['r_lpm_800'] || ''}</b></td>
             <td style="${priceBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF">${prices['r_lpm_800']}</td>
-            <td style="${totalPriceRightSideBox}  border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('r_lpm_800')}</i></td>
+            <td style="${totalPriceRightSideBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('r_lpm_800')}</i></td>
         </tr>
         <tr>
             <td style="border-top: 1px solid #000000; font-size: 10px" align="left" valign=middle bgcolor="#FFFFFF">LSD</td>
-            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; font-size: 10px" align="left" valign=middle bgcolor="#FFFFFF">800 x 1200 mm.</td>
+            <td style="border-top: 1px solid #000000; font-size: 10px" align="left" valign=middle bgcolor="#FFFFFF">800 x 1200 mm.</td>
             <td style="${InputBox}" align="center" valign=middle bgcolor="#FFE796"><b>${number['s_lsd_800'] || ''}</b></td>
             <td style="${priceBox}" align="center" valign=middle bgcolor="#FFFFFF">${prices['s_lsd_800']}</td>
             <td style="${totalPriceLeftSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('s_lsd_800')}</i></td>
@@ -166,7 +166,7 @@ export const createDynamicTable = (number) => {
         </tr>
         <tr>
             <td style="border-top: 1px solid #000000; font-size: 10px" align="left" valign=middle bgcolor="#FFFFFF">SD           </td>
-            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; font-size: 10px" align="left" valign=middle bgcolor="#FFFFFF">800 x 1200 mm.</td>
+            <td style="border-top: 1px solid #000000; font-size: 10px" align="left" valign=middle bgcolor="#FFFFFF">800 x 1200 mm.</td>
             <td style="${InputBox}" align="center" valign=middle bgcolor="#FFE796"><b>${number['s_sd_800'] || ''}</b></td>
             <td style="${priceBox}" align="center" valign=middle bgcolor="#FFFFFF">${prices['s_sd_800']}</td>
             <td style="${totalPriceLeftSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('s_sd_800')}</i></td>
@@ -176,7 +176,7 @@ export const createDynamicTable = (number) => {
         </tr>
         <tr>
             <td style="border-top: 1px solid #000000; font-size: 10px" align="left" valign=middle bgcolor="#FFFFFF">SD AP        </td>
-            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; font-size: 10px" align="left" valign=middle bgcolor="#FFFFFF">800 x 1200 mm.</td>
+            <td style="border-top: 1px solid #000000; font-size: 10px" align="left" valign=middle bgcolor="#FFFFFF">800 x 1200 mm.</td>
             <td style="${InputBox}" align="center" valign=middle bgcolor="#FFE796"><b>${number['s_ap_800'] || ''}</b></td>
             <td style="${priceBox}" align="center" valign=middle bgcolor="#FFFFFF">${prices['s_ap_800']}</td>
             <td style="${totalPriceLeftSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('s_ap_800')}</i></td>
@@ -186,7 +186,7 @@ export const createDynamicTable = (number) => {
         </tr>
         <tr>
             <td style="border-top: 1px solid #000000; font-size: 10px" align="left" valign=middle bgcolor="#FFFFFF">PM           </td>
-            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; font-size: 10px" align="left" valign=middle bgcolor="#FFFFFF">800 x 1200 mm.</td>
+            <td style="border-top: 1px solid #000000; font-size: 10px" align="left" valign=middle bgcolor="#FFFFFF">800 x 1200 mm.</td>
             <td style="${InputBox}" align="center" valign=middle bgcolor="#FFE796"><b>${number['s_pm_800'] || ''}</b></td>
             <td style="${priceBox}" align="center" valign=middle bgcolor="#FFFFFF">${prices['s_pm_800']}</td>
             <td style="${totalPriceLeftSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('s_pm_800')}</i></td>
@@ -195,17 +195,17 @@ export const createDynamicTable = (number) => {
             <td style="${totalPriceRightSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('r_pm_800')}</i></td>
         </tr>
         <tr>
-            <td style="border-top: 1px solid #000000; font-size: 10px" align="left" valign=middle bgcolor="#FFFFFF"><b>Knauf</b></td>
+            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; font-size: 10px" align="left" valign=middle bgcolor="#FFFFFF"><b>Knauf</b></td>
             <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; font-size: 10px" align="left" valign=middle bgcolor="#FFFFFF">800 x 1200 mm.</td>
-            <td style="${InputBox}" align="center" valign=middle bgcolor="#FFE796"><b>${number['s_knauf_800'] || ''}</b></td>
-            <td style="${priceBox}" align="center" valign=middle bgcolor="#FFFFFF">${prices['s_knauf_800']}</td>
-            <td style="${totalPriceLeftSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('s_knauf_800')}</i></td>
-            <td style="${InputBox}" align="center" valign=middle bgcolor="#FFE796"><b>${number['r_knauf_800'] || ''}</b></td>
-            <td style="${priceBox}" align="center" valign=middle bgcolor="#FFFFFF">${prices['r_knauf_800']}</td>
-            <td style="${totalPriceRightSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('r_knauf_800')}</i></td>
+            <td style="${InputBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFE796"><b>${number['s_knauf_800'] || ''}</b></td>
+            <td style="${priceBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF">${prices['s_knauf_800']}</td>
+            <td style="${totalPriceLeftSideBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('s_knauf_800')}</i></td>
+            <td style="${InputBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFE796"><b>${number['r_knauf_800'] || ''}</b></td>
+            <td style="${priceBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF">${prices['r_knauf_800']}</td>
+            <td style="${totalPriceRightSideBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('r_knauf_800')}</i></td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000000; border-right: 2px solid #000000; font-size: 10px" rowspan=6 height="120" align="center" valign=middle bgcolor="#D9D9D9"><b>1000x1200</b></td>
+            <td style="border: 1px solid #000000; border-right: 2px solid #000000; font-size: 10px" rowspan=6 align="center" valign=middle bgcolor="#D9D9D9"><b>1000x1200</b></td>
             <td style="border-top: 1px solid #000000; font-size: 10px" colspan=2 align="left" valign=middle bgcolor="#FFFFFF">1000 x 1200 mm. LSD, FIN</td>
             <td style="${InputBox}" align="center" valign=middle bgcolor="#FFE796"><b>${number['s_lsd_1000'] || ''}</b></td>
             <td style="${priceBox}" align="center" valign=middle bgcolor="#FFFFFF">${prices['s_lsd_1000']}</td>
@@ -251,16 +251,16 @@ export const createDynamicTable = (number) => {
             <td style="${totalPriceRightSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('r_cp1_1000')}</i></td>
         </tr>
         <tr>
-            <td style="border-top: 1px solid #000000; font-size: 10px" colspan=2 align="left" valign=middle bgcolor="#FFFFFF">1000x1200x156 mm. CP6</td>
-            <td style="${InputBox}" align="center" valign=middle bgcolor="#FFE796"><b>${number['s_cp6_1000'] || ''}</b></td>
-            <td style="${priceBox}" align="center" valign=middle bgcolor="#FFFFFF">${prices['s_cp6_1000']}</td>
-            <td style="${totalPriceLeftSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('s_cp6_1000')}</i></td>
-            <td style="${InputBox}" align="center" valign=middle bgcolor="#FFE796"><b>${number['r_cp6_1000'] || ''}</b></td>
-            <td style="${priceBox}" align="center" valign=middle bgcolor="#FFFFFF">${prices['r_cp6_1000']}</td>
+            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; font-size: 10px" colspan=2 align="left" valign=middle bgcolor="#FFFFFF">1000x1200x156 mm. CP6</td>
+            <td style="${InputBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFE796"><b>${number['s_cp6_1000'] || ''}</b></td>
+            <td style="${priceBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF">${prices['s_cp6_1000']}</td>
+            <td style="${totalPriceLeftSideBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('s_cp6_1000')}</i></td>
+            <td style="${InputBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFE796"><b>${number['r_cp6_1000'] || ''}</b></td>
+            <td style="${priceBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF">${prices['r_cp6_1000']}</td>
             <td style="${totalPriceRightSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('r_cp6_1000')}</i></td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000000; border-right: 2px solid #000000; font-size: 10px" height="20" rowspan=3 align="center" valign=middle bgcolor="#D9D9D9"><b>1140x1140</b></td>
+            <td style="border: 1px solid #000000; border-right: 2px solid #000000; font-size: 10px" rowspan=3 align="center" valign=middle bgcolor="#D9D9D9"><b>1140x1140</b></td>
             <td style="border-top: 1px solid #000000; font-size: 10px" colspan=2 align="left" valign=middle bgcolor="#FFFFFF"><b>LSD, SD 1140 x 1140 mm. </b></td>
             <td style="${InputBox}" align="center" valign=middle bgcolor="#FFE796"><b>${number['s_sd_1140'] || ''}</b></td>
             <td style="${priceBox}" align="center" valign=middle bgcolor="#FFFFFF">${prices['s_sd_1140']}</td>
@@ -280,33 +280,33 @@ export const createDynamicTable = (number) => {
             <td style="${totalPriceRightSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('r_cp3_1140')}</i></td>
         </tr>
         <tr>
-            <td style="border-top: 1px solid #000000; border-left: 1px solid #000000; font-size: 10px" colspan=2 align="left" valign=middle bgcolor="#FFFFFF">CP9, 1140x1140x156 mm. </td>
-            <td style="${InputBox}" align="center" valign=middle bgcolor="#FFE796"><b>${number['s_cp9_1140'] || ''}</b></td>
-            <td style="${priceBox}" align="center" valign=middle bgcolor="#FFFFFF">${prices['s_cp9_1140']}</td>
-            <td style="${totalPriceLeftSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('s_cp9_1140')}</i></td>
-            <td style="${InputBox}" align="center" valign=middle bgcolor="#FFE796"><b>${number['r_cp9_1140'] || ''}</b></td>
-            <td style="${priceBox}" align="center" valign=middle bgcolor="#FFFFFF">${prices['r_cp9_1140']}</td>
-            <td style="${totalPriceRightSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('r_cp9_1140')}</i></td>
+            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; font-size: 10px" colspan=2 align="left" valign=middle bgcolor="#FFFFFF">CP9, 1140x1140x156 mm. </td>
+            <td style="${InputBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFE796"><b>${number['s_cp9_1140'] || ''}</b></td>
+            <td style="${priceBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF">${prices['s_cp9_1140']}</td>
+            <td style="${totalPriceLeftSideBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('s_cp9_1140')}</i></td>
+            <td style="${InputBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFE796"><b>${number['r_cp9_1140'] || ''}</b></td>
+            <td style="${priceBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF">${prices['r_cp9_1140']}</td>
+            <td style="${totalPriceRightSideBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('r_cp9_1140')}</i></td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000000; border-right: 2px solid #000000; font-size: 10px" height="20" align="center" valign=bottom bgcolor="#D9D9D9"><b>PAROC</b></td>
-            <td style="border-top: 1px solid #000000; font-size: 10px" colspan=2 align="left" valign=middle bgcolor="#FFFFFF">1200 x 1750 mm.; 1200 x 1800 mm. &quot;Paroc&quot; </td>
-            <td style="${InputBox}" align="center" valign=middle bgcolor="#FFE796"><b>${number['s_paroc'] || ''}</b></td>
-            <td style="${priceBox}" align="center" valign=middle bgcolor="#FFFFFF">${prices['s_paroc']}</td>
-            <td style="${totalPriceLeftSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('s_paroc')}</i></td>
-            <td style="${InputBox}" align="center" valign=middle bgcolor="#FFE796"><b>${number['r_paroc'] || ''}</b></td>
-            <td style="${priceBox}" align="center" valign=middle bgcolor="#FFFFFF">${prices['r_paroc']}</td>
-            <td style="${totalPriceRightSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('r_paroc')}</i></td>
+            <td style="border: 1px solid #000000; border-right: 2px solid #000000; font-size: 10px" align="center" valign=bottom bgcolor="#D9D9D9"><b>PAROC</b></td>
+            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; font-size: 10px" colspan=2 align="left" valign=middle bgcolor="#FFFFFF">1200 x 1750 mm.; 1200 x 1800 mm. &quot;Paroc&quot; </td>
+            <td style="${InputBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFE796"><b>${number['s_paroc'] || ''}</b></td>
+            <td style="${priceBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF">${prices['s_paroc']}</td>
+            <td style="${totalPriceLeftSideBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('s_paroc')}</i></td>
+            <td style="${InputBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFE796"><b>${number['r_paroc'] || ''}</b></td>
+            <td style="${priceBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF">${prices['r_paroc']}</td>
+            <td style="${totalPriceRightSideBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('r_paroc')}</i></td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000000; border-right: 2px solid #000000; font-size: 10px" height="20" align="center" valign=bottom bgcolor="#D9D9D9"><b>KNAUF</b></td>
-            <td style="border-top: 1px solid #000000; font-size: 10px" colspan=2 align="left" valign=middle bgcolor="#FFFFFF"><b>&quot;Knauf&quot; pad&#279;klas nuo gipso </b></td>
-            <td style="${InputBox}" align="center" valign=middle bgcolor="#FFE796"><b>${number['s_knauf'] || ''}</b></td>
-            <td style="${priceBox}" align="center" valign=middle bgcolor="#FFFFFF">${prices['s_knauf']}</td>
-            <td style="${totalPriceLeftSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('s_knauf')}</i></td>
-            <td style="${InputBox}" align="center" valign=middle bgcolor="#FFE796"><b>${number['r_knauf'] || ''}</b></td>
-            <td style="${priceBox}" align="center" valign=middle bgcolor="#FFFFFF">${prices['r_knauf']}</td>
-            <td style="${totalPriceRightSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('r_knauf')}</i></td>
+            <td style="border: 1px solid #000000; border-right: 2px solid #000000; font-size: 10px" align="center" valign=bottom bgcolor="#D9D9D9"><b>KNAUF</b></td>
+            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; font-size: 10px" colspan=2 align="left" valign=middle bgcolor="#FFFFFF"><b>&quot;Knauf&quot; pad&#279;klas nuo gipso </b></td>
+            <td style="${InputBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFE796"><b>${number['s_knauf'] || ''}</b></td>
+            <td style="${priceBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF">${prices['s_knauf']}</td>
+            <td style="${totalPriceLeftSideBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('s_knauf')}</i></td>
+            <td style="${InputBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFE796"><b>${number['r_knauf'] || ''}</b></td>
+            <td style="${priceBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF">${prices['r_knauf']}</td>
+            <td style="${totalPriceRightSideBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('r_knauf')}</i></td>
         </tr>
         <tr>
             <td style="border: 1px solid #000000; border-right: 2px solid #000000; font-size: 10px" rowspan=8 height="160" align="center" valign=middle bgcolor="#D9D9D9"><b>Nestandartai</b></td>
@@ -373,13 +373,13 @@ export const createDynamicTable = (number) => {
             <td style="${totalPriceRightSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('r_1200x1600')}</i></td>
         </tr>
         <tr>
-            <td style="border-top: 1px solid #000000; font-size: 10px" colspan=2 align="left" valign=middle bgcolor="#FFFFFF">x1600 &hellip;3000 mm., LSD, SD, PM</td>
-            <td style="${InputBox}" align="center" valign=middle bgcolor="#FFE796"><b>${number['s_1600x3000'] || ''}</b></td>
-            <td style="${priceBox}" align="center" valign=middle bgcolor="#FFFFFF">${prices['s_1600x3000']}</td>
-            <td style="${totalPriceLeftSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('s_1600x3000')}</i></td>
-            <td style="${InputBox}" align="center" valign=middle bgcolor="#FFE796"><b>${number['r_1600x3000'] || ''}</b></td>
-            <td style="${priceBox}" align="center" valign=middle bgcolor="#FFFFFF">${prices['r_1600x3000']}</td>
-            <td style="${totalPriceRightSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('r_1600x3000')}</i></td>
+            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; font-size: 10px" colspan=2 align="left" valign=middle bgcolor="#FFFFFF">x1600 &hellip;3000 mm., LSD, SD, PM</td>
+            <td style="${InputBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFE796"><b>${number['s_1600x3000'] || ''}</b></td>
+            <td style="${priceBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF">${prices['s_1600x3000']}</td>
+            <td style="${totalPriceLeftSideBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('s_1600x3000')}</i></td>
+            <td style="${InputBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFE796"><b>${number['r_1600x3000'] || ''}</b></td>
+            <td style="${priceBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF">${prices['r_1600x3000']}</td>
+            <td style="${totalPriceRightSideBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('r_1600x3000')}</i></td>
         </tr>
         <tr>
             <td style="border: 1px solid #000000; border-right: 2px solid #000000; font-size: 10px" rowspan=5 height="100" align="center" valign=middle bgcolor="#D9D9D9"><b>&Scaron;arnyrai</b></td>
@@ -419,13 +419,13 @@ export const createDynamicTable = (number) => {
             <td style="${totalPriceRightSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('r_apvadai_600x800_black')}</i></td>
         </tr>
         <tr>
-            <td style="border-top: 1px solid #000000; font-size: 10px" colspan=2 align="left" valign=middle bgcolor="#FFFFFF">Pad&#279;kl&#371; apvadai nestandartiniai</td>
-            <td style="${InputBox}" align="center" valign=middle bgcolor="#FFE796"><b>${number['s_apvadai_800x2000_mix'] || ''}</b></td>
-            <td style="${priceBox}" align="center" valign=middle bgcolor="#FFFFFF">${prices['s_apvadai_800x2000_mix']}</td>
-            <td style="${totalPriceLeftSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('s_apvadai_800x2000_mix')}</i></td>
-            <td style="${InputBox}" align="center" valign=bottom bgcolor="#FFE796"><b>${number['r_apvadai_800x2000_mix'] || ''}</b></td>
-            <td style="${priceBox}" align="center" valign=middle bgcolor="#FFFFFF">${prices['r_apvadai_800x2000_mix']}</td>
-            <td style="${totalPriceRightSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('r_apvadai_800x2000_mix')}</i></td>
+            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; font-size: 10px" colspan=2 align="left" valign=middle bgcolor="#FFFFFF">Pad&#279;kl&#371; apvadai nestandartiniai</td>
+            <td style="${InputBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFE796"><b>${number['s_apvadai_800x2000_mix'] || ''}</b></td>
+            <td style="${priceBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF">${prices['s_apvadai_800x2000_mix']}</td>
+            <td style="${totalPriceLeftSideBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('s_apvadai_800x2000_mix')}</i></td>
+            <td style="${InputBox} border-bottom: 1px solid #000000;" align="center" valign=bottom bgcolor="#FFE796"><b>${number['r_apvadai_800x2000_mix'] || ''}</b></td>
+            <td style="${priceBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF">${prices['r_apvadai_800x2000_mix']}</td>
+            <td style="${totalPriceRightSideBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('r_apvadai_800x2000_mix')}</i></td>
         </tr>
         <tr>
             <td style="border: 1px solid #000000; border-right: 2px solid #000000; font-size: 10px" rowspan=2 height="20" align="center" valign=middle bgcolor="#D9D9D9"><b>Dekos</b></td>
@@ -457,16 +457,16 @@ export const createDynamicTable = (number) => {
             <td style="${totalPriceRightSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('r_plokste_800x1200_p')}</i></td>
         </tr>
         <tr>
-            <td style="font-size: 10px" colspan=2 align="left" valign=middle>MPP gaminys 2,  6 - 10 mm.</td>
-            <td style="${InputBox}" align="center" valign=middle bgcolor="#FFE796"><b>${number['s_plokste_800x1200_s'] || ''}</b></td>
-            <td style="${priceBox}" align="center" valign=middle bgcolor="#FFFFFF">${prices['s_plokste_800x1200_s']}</td>
-            <td style="${totalPriceLeftSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('s_plokste_800x1200_s')}</i></td>
-            <td style="${InputBox}" align="center" valign=bottom bgcolor="#FFE796"><b>${number['r_plokste_800x1200_s'] || ''}</b></td>
-            <td style="${priceBox}" align="center" valign=middle>${prices['r_plokste_800x1200_s']}</td>
-            <td style="${totalPriceRightSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('r_plokste_800x1200_s')}</i></td>
+            <td style="font-size: 10px" border-bottom: 1px solid #000000; colspan=2 align="left" valign=middle>MPP gaminys 2,  6 - 10 mm.</td>
+            <td style="${InputBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFE796"><b>${number['s_plokste_800x1200_s'] || ''}</b></td>
+            <td style="${priceBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF">${prices['s_plokste_800x1200_s']}</td>
+            <td style="${totalPriceLeftSideBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('s_plokste_800x1200_s')}</i></td>
+            <td style="${InputBox} border-bottom: 1px solid #000000;" align="center" valign=bottom bgcolor="#FFE796"><b>${number['r_plokste_800x1200_s'] || ''}</b></td>
+            <td style="${priceBox} border-bottom: 1px solid #000000;" align="center" valign=middle>${prices['r_plokste_800x1200_s']}</td>
+            <td style="${totalPriceRightSideBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF"><i>${priceTotal('r_plokste_800x1200_s')}</i></td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000000; border-right: 2px solid #000000; font-size: 10px" height="20" align="center" valign=middle bgcolor="#D9D9D9"><b>Mediniai pad&#279;klai</b></td>
+            <td style="border: 1px solid #000000;  border-bottom: 1px solid #000000; border-right: 2px solid #000000; font-size: 10px" height="20" align="center" valign=middle bgcolor="#D9D9D9"><b>Mediniai pad&#279;klai</b></td>
             <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; font-size: 10px" colspan=2 align="left" valign=middle bgcolor="#FFFFFF">Mediniai pad&#279;klai</td>
             <td style="${InputBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFE796"><b>${number['s_remontas'] || ''}</b></td>
             <td style="${priceBox} border-bottom: 1px solid #000000;" align="center" valign=middle bgcolor="#FFFFFF">${prices['s_remontas']}</td>

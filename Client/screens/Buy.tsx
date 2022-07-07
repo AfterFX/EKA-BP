@@ -47,8 +47,10 @@ import {price, payTotal, countTotal, print, destroy} from "../components/functio
 
 import prices from "../price.json";
 import TextField from "../components/TextField";
+import Dialog from "react-native-dialog";
 
 import Icon from 'react-native-vector-icons/AntDesign';
+import { TapGestureHandler, State } from 'react-native-gesture-handler';
 
 // This returns a local uri that can be shared
 const generateShareableExcel = async (): Promise<string> => {
@@ -146,6 +148,9 @@ const Buy = ({ navigation }) => {
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const [isTouchEnded, setIsTouchEnded] = useState(true);
 
+    const [dialogVisible, setDialogVisible] = useState(false);
+    const [editElement, setEditElement] = useState();
+
 
     const { width, height } = useWindowDimensions();
 
@@ -188,12 +193,43 @@ const Buy = ({ navigation }) => {
         )
     };
 
+    function DoubleTapButton({ onDoubleTap, children }) {
+        const onHandlerStateChange = ({ nativeEvent }) => {
+            if (nativeEvent.state === State.ACTIVE) {
+                onDoubleTap && onDoubleTap();
+            }
+        };
 
+        return (
+            <TapGestureHandler
+                onHandlerStateChange={onHandlerStateChange}
+                numberOfTaps={2}>
+                {children}
+            </TapGestureHandler>
+        );
+    }
 
-    const elementPrice = (price: any, underline: boolean) => (
-        <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
-            <Text style={{fontSize: (size*0.56), textAlign: "center"}}>{prices[price]}</Text>
-        </View>
+    const showPriceEditor = (element: any) => {
+        setEditElement(element);//sets editor what shows
+        setDialogVisible(true);
+    };
+
+    const handleCancel = () => {
+        return setDialogVisible(false);
+    };
+
+    const handleSave = () => {
+        // The user has pressed the "Delete" button, so here you can do your own logic.
+        // ...Your logic
+        return setDialogVisible(false);
+    };
+
+    const elementPrice = (element: any, underline: boolean) => (
+        <DoubleTapButton onDoubleTap={() => showPriceEditor(element)}>
+            <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+                <Text style={{fontSize: (size*0.56), textAlign: "center"}}>{prices[element]}</Text>
+            </View>
+        </DoubleTapButton>
     );
 
     const t = (value: any, underline: boolean) => (
@@ -226,7 +262,7 @@ const Buy = ({ navigation }) => {
 
 
     let state = {
-        tableTitle_1: [t('EUR A1', false), t('EUR A', false), t('EUR B', true), t('LPM', false), t('LSD', false), t('SD', false), t('SD AP', false), t('PM', false), t('KNAUF', true)],
+        tableTitle_1: [t('EUR A1', false), t('EUR A', false), t('EUR B', false), t('LPM', true), t('LSD', false), t('SD', false), t('SD AP', false), t('PM', false), t('KNAUF', true)],
         tableTitle_3: [t('LSD, FIN', false), t('SD, perimetriniai', false), t('PM, perimetriniai, SD AP', false), t('KNAUF', false), t('CP1', false), t('CP6', true)],
         tableTitle_4: [t('LSD, SD', false), t('CP3', false), t('CP9', true)],
         tableTitle_5: [t('PAROC', true)],
@@ -245,12 +281,12 @@ const Buy = ({ navigation }) => {
             [elementCol('Suma')],
         ],
         tableData_1: [
-                [elementInput('s_a1', false), elementInput('s_a2', false), elementInput('s_b2', true), elementInput('s_lpm_800', false), elementInput('s_lsd_800', false), elementInput('s_sd_800', false), elementInput('s_ap_800', false), elementInput('s_pm_800', false), elementInput('s_knauf_800', true)],
-            [elementPrice('s_a1', false), elementPrice('s_a2', false), elementPrice('s_b2', true), elementPrice('s_lpm_800', false), elementPrice('s_lsd_800', false), elementPrice('s_sd_800', false), elementPrice('s_ap_800', false), elementPrice('s_pm_800', false), elementPrice('s_knauf_800', true)],
-            [elementResult('s_a1', false), elementResult('s_a2', false), elementResult('s_b2', true), elementResult('s_lpm_800', false), elementResult('s_lsd_800', false), elementResult('s_sd_800', false), elementResult('s_ap_800', false), elementResult('s_pm_800', false), elementResult('s_knauf_800', true)],
-            [elementInput('r_a1', false), elementInput('r_a2', false), elementInput('r_b2', true), elementInput('r_lpm_800', false), elementInput('r_lsd_800', false), elementInput('r_sd_800', false), elementInput('r_ap_800', false), elementInput('r_pm_800', false), elementInput('r_knauf_800', true)],
-            [elementPrice('r_a1', false), elementPrice('r_a2', false), elementPrice('r_b2', true), elementPrice('r_lpm_800', false), elementPrice('r_lsd_800', false), elementPrice('r_sd_800', false), elementPrice('r_ap_800', false), elementPrice('r_pm_800', false), elementPrice('r_knauf_800', true)],
-            [elementResult('r_a1', false), elementResult('r_a2', false), elementResult('r_b2', true), elementResult('r_lpm_800', false), elementResult('r_lsd_800', false), elementResult('r_sd_800', false), elementResult('r_ap_800', false), elementResult('r_pm_800', false), elementResult('r_knauf_800', true)],
+                [elementInput('s_a1', false), elementInput('s_a2', false), elementInput('s_b2', false), elementInput('s_lpm_800', true), elementInput('s_lsd_800', false), elementInput('s_sd_800', false), elementInput('s_ap_800', false), elementInput('s_pm_800', false), elementInput('s_knauf_800', true)],
+            [elementPrice('s_a1', false), elementPrice('s_a2', false), elementPrice('s_b2', false), elementPrice('s_lpm_800', true), elementPrice('s_lsd_800', false), elementPrice('s_sd_800', false), elementPrice('s_ap_800', false), elementPrice('s_pm_800', false), elementPrice('s_knauf_800', true)],
+            [elementResult('s_a1', false), elementResult('s_a2', false), elementResult('s_b2', false), elementResult('s_lpm_800', true), elementResult('s_lsd_800', false), elementResult('s_sd_800', false), elementResult('s_ap_800', false), elementResult('s_pm_800', false), elementResult('s_knauf_800', true)],
+            [elementInput('r_a1', false), elementInput('r_a2', false), elementInput('r_b2', false), elementInput('r_lpm_800', true), elementInput('r_lsd_800', false), elementInput('r_sd_800', false), elementInput('r_ap_800', false), elementInput('r_pm_800', false), elementInput('r_knauf_800', true)],
+            [elementPrice('r_a1', false), elementPrice('r_a2', false), elementPrice('r_b2', false), elementPrice('r_lpm_800', true), elementPrice('r_lsd_800', false), elementPrice('r_sd_800', false), elementPrice('r_ap_800', false), elementPrice('r_pm_800', false), elementPrice('r_knauf_800', true)],
+            [elementResult('r_a1', false), elementResult('r_a2', false), elementResult('r_b2', false), elementResult('r_lpm_800', true), elementResult('r_lsd_800', false), elementResult('r_sd_800', false), elementResult('r_ap_800', false), elementResult('r_pm_800', false), elementResult('r_knauf_800', true)],
         ],
         tableData_3: [
             [elementInput('s_lsd_1000', false), elementInput('s_sd_1000', false), elementInput('s_pm_1000', false), elementInput('s_knauf_1000', false), elementInput('s_cp1_1000', false), elementInput('s_cp6_1000', true)],
@@ -355,6 +391,20 @@ const Buy = ({ navigation }) => {
     const ToggleVisible = () => {(!visible)? fadeIn() : fadeOut()};
     return (
         <View style={[styles.container]}>
+
+            {/*price editor*/}
+            <View>
+                <Dialog.Container visible={dialogVisible}>
+                    <Dialog.Title>Edit price</Dialog.Title>
+                    <Dialog.Input  keyboardType={"phone-pad"} style={{width: 100, alignSelf: 'center', textAlign: 'center'}}>{prices[editElement]}</Dialog.Input>
+                    <Dialog.Description>
+                        {editElement}
+                    </Dialog.Description>
+                    <Dialog.Button label="Cancel" onPress={handleCancel} />
+                    <Dialog.Button label="Save" onPress={handleSave} />
+                </Dialog.Container>
+            </View>
+
             <StatusBar style="dark" />
                 {isMain && (
                     <>
