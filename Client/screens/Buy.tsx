@@ -52,6 +52,41 @@ import Dialog from "react-native-dialog";
 import Icon from 'react-native-vector-icons/AntDesign';
 import { TapGestureHandler, State } from 'react-native-gesture-handler';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
+const sety = async (element: any, value: any) => {
+
+    const field = element;
+    const obj = {};
+    obj[field] = value;
+
+    try {
+        await AsyncStorage.mergeItem(
+            '@Price',
+            JSON.stringify(obj) //            JSON.stringify({s_a1: 50 })
+        );
+    } catch(e) {
+        //save error
+    }
+
+    console.log("Done.")
+}
+
+const getMyObject = async () => {
+    try {
+        const jsonValue = await AsyncStorage.getItem('@Price')
+        return jsonValue != null ? JSON.parse(jsonValue) : null
+    } catch(e) {
+        // read error
+    }
+
+    console.log('Done.')
+
+}
+
+
+
 // This returns a local uri that can be shared
 const generateShareableExcel = async (): Promise<string> => {
     const now = new Date();
@@ -152,6 +187,10 @@ const Buy = ({ navigation }) => {
     const [editElement, setEditElement] = useState();
 
 
+    const [pricer, onPrice] = useState({});
+    const [newPrice, onChangePrice] = useState('Useless Text');
+
+
     const { width, height } = useWindowDimensions();
 
 
@@ -214,20 +253,27 @@ const Buy = ({ navigation }) => {
         setDialogVisible(true);
     };
 
-    const handleCancel = () => {
+    const handleCancel = async () => {
+        let prices = await getMyObject();
+        console.log(prices['s_a1'])
         return setDialogVisible(false);
     };
 
-    const handleSave = () => {
-        // The user has pressed the "Delete" button, so here you can do your own logic.
-        // ...Your logic
+    const handleSave = async () => {
+        sety(editElement, newPrice)
+        let prices1 = await getMyObject();
+        onPrice(prices1)
+        // console.log(editElement)
+        // console.log(newPrice)
+        onChangePrice(prices[editElement])
+        console.log("omg", pricer)
         return setDialogVisible(false);
     };
 
     const elementPrice = (element: any, underline: boolean) => (
         <DoubleTapButton onDoubleTap={() => showPriceEditor(element)}>
             <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
-                <Text style={{fontSize: (size*0.56), textAlign: "center"}}>{prices[element]}</Text>
+                <Text style={{fontSize: (size*0.56), textAlign: "center"}}>{pricer[element]}</Text>
             </View>
         </DoubleTapButton>
     );
@@ -396,7 +442,7 @@ const Buy = ({ navigation }) => {
             <View>
                 <Dialog.Container visible={dialogVisible}>
                     <Dialog.Title>Edit price</Dialog.Title>
-                    <Dialog.Input  keyboardType={"phone-pad"} style={{width: 100, alignSelf: 'center', textAlign: 'center'}}>{prices[editElement]}</Dialog.Input>
+                    <Dialog.Input onChangeText={onChangePrice} keyboardType={"phone-pad"} style={{width: 100, alignSelf: 'center', textAlign: 'center'}}>{prices[editElement]}</Dialog.Input>
                     <Dialog.Description>
                         {editElement}
                     </Dialog.Description>
