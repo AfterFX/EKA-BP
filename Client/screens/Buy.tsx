@@ -42,48 +42,19 @@ import {
 } from '../components/styles';
 
 
-import {useRef, useState} from "react";
-import {price, payTotal, countTotal, print, destroy} from "../components/functions";
+import {useEffect, useRef, useState} from "react";
+import {price, payTotal, countTotal, print, destroy, saveNewPrice} from "../components/functions";
 
-import prices from "../price.json";
+import pricesIndex from "../price.json"; // Get list of prices
 import TextField from "../components/TextField";
 import Dialog from "react-native-dialog";
+
 
 import Icon from 'react-native-vector-icons/AntDesign';
 import { TapGestureHandler, State } from 'react-native-gesture-handler';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
-const sety = async (element: any, value: any) => {
-
-    const field = element;
-    const obj = {};
-    obj[field] = value;
-
-    try {
-        await AsyncStorage.mergeItem(
-            '@Price',
-            JSON.stringify(obj) //            JSON.stringify({s_a1: 50 })
-        );
-    } catch(e) {
-        //save error
-    }
-
-    console.log("Done.")
-}
-
-const getMyObject = async () => {
-    try {
-        const jsonValue = await AsyncStorage.getItem('@Price')
-        return jsonValue != null ? JSON.parse(jsonValue) : null
-    } catch(e) {
-        // read error
-    }
-
-    console.log('Done.')
-
-}
 
 
 
@@ -173,7 +144,7 @@ const elementButton = (value: string) => (
 
 const Buy = ({ navigation }) => {
     const [isMain, setIsMain] = useState(true);
-    const [number, onChangeNumber] = useState<Array<String>>([]);
+    const [ChangeNumber, onChangeNumber] = useState<String>('');
     const [error, setError] = useState<string | null>(null)
     const [size, setSize] = useState(25);
 
@@ -184,16 +155,31 @@ const Buy = ({ navigation }) => {
     const [isTouchEnded, setIsTouchEnded] = useState(true);
 
     const [dialogVisible, setDialogVisible] = useState(false);
-    const [editElement, setEditElement] = useState();
+    const [getEditableElement, setGetEditableElement] = useState(''); //get the element that is being edited
 
 
-    const [pricer, onPrice] = useState({});
-    const [newPrice, onChangePrice] = useState('Useless Text');
-
+    const [OnChangePrice, setOnChangePrice] = useState('Useless Text');
 
     const { width, height } = useWindowDimensions();
 
+    const [storedPrices, setStoredPrices] = useState<{[key: string]: string}>({});
 
+
+    const getStorage = async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem('@Price')
+            jsonValue != null ? JSON.parse(jsonValue) : await AsyncStorage.mergeItem('@Price', JSON.stringify(pricesIndex) ); //            JSON.stringify({s_a1: 50 })
+            setStoredPrices(jsonValue != null ? JSON.parse(jsonValue) : pricesIndex)
+            return jsonValue != null ? JSON.parse(jsonValue) : pricesIndex;
+        } catch(e) {
+            // read error
+        }
+    }
+
+    //Load price if not exits in storage
+    useEffect(() => { if (Object.keys(storedPrices).length === 0) {(getStorage().then(r => {
+        return setStoredPrices(r)
+    }))}}, [storedPrices])
 
     const elementCol = (value: any) => (
             <View style={styles.colBlue}>
@@ -204,7 +190,7 @@ const Buy = ({ navigation }) => {
 
     const handleChange = (name: any, value: any) => {
         onChangeNumber({
-            ...number,
+            ...ChangeNumber,
             [name]: value,
         });
     };
@@ -213,7 +199,7 @@ const Buy = ({ navigation }) => {
 
             <TextField
                 style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
-                value={number[id]}
+                value={ChangeNumber[id]}
                 label=""
                 errorText={error}
                 fontSizeC={(size*0.56)}
@@ -227,7 +213,7 @@ const Buy = ({ navigation }) => {
     const elementResult = (element: any, underline: boolean) =>{
         return (
             <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
-                <Text style={{fontSize: (size > 40? 22 : size*0.56)}}>{price(element, number)}</Text>
+                <Text style={{fontSize: (size > 40? 22 : size*0.56)}}>{price(element, ChangeNumber, storedPrices)}</Text>
             </View>
         )
     };
@@ -248,32 +234,26 @@ const Buy = ({ navigation }) => {
         );
     }
 
-    const showPriceEditor = (element: any) => {
-        setEditElement(element);//sets editor what shows
+    const showPriceEditor = async (element: string) => {
+        setOnChangePrice(storedPrices[element])
+        setGetEditableElement(element);//sets editor what shows
         setDialogVisible(true);
     };
 
     const handleCancel = async () => {
-        let prices = await getMyObject();
-        console.log(prices['s_a1'])
         return setDialogVisible(false);
     };
 
     const handleSave = async () => {
-        sety(editElement, newPrice)
-        let prices1 = await getMyObject();
-        onPrice(prices1)
-        // console.log(editElement)
-        // console.log(newPrice)
-        onChangePrice(prices[editElement])
-        console.log("omg", pricer)
+        await saveNewPrice(getEditableElement, OnChangePrice)
+        await getStorage();//Refreshing numbers after save
         return setDialogVisible(false);
     };
 
-    const elementPrice = (element: any, underline: boolean) => (
+    const elementPrice = (element: string, underline: boolean) => (
         <DoubleTapButton onDoubleTap={() => showPriceEditor(element)}>
             <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
-                <Text style={{fontSize: (size*0.56), textAlign: "center"}}>{pricer[element]}</Text>
+                <Text style={{fontSize: (size*0.56), textAlign: "center"}}>{storedPrices[element]}</Text>
             </View>
         </DoubleTapButton>
     );
@@ -442,9 +422,9 @@ const Buy = ({ navigation }) => {
             <View>
                 <Dialog.Container visible={dialogVisible}>
                     <Dialog.Title>Edit price</Dialog.Title>
-                    <Dialog.Input onChangeText={onChangePrice} keyboardType={"phone-pad"} style={{width: 100, alignSelf: 'center', textAlign: 'center'}}>{prices[editElement]}</Dialog.Input>
+                    <Dialog.Input onChangeText={setOnChangePrice} keyboardType={"phone-pad"} style={{width: 100, alignSelf: 'center', textAlign: 'center'}}>{storedPrices[getEditableElement]}</Dialog.Input>
                     <Dialog.Description>
-                        {editElement}
+                        {getEditableElement}
                     </Dialog.Description>
                     <Dialog.Button label="Cancel" onPress={handleCancel} />
                     <Dialog.Button label="Save" onPress={handleSave} />
@@ -466,8 +446,8 @@ const Buy = ({ navigation }) => {
                         <TouchableOpacity onPress={() => ToggleVisible()} style={{ }}>
                             <Text style={ObjectResize().text}>{visible ? 'Hide' : 'Show'}</Text>
                         </TouchableOpacity>
-                        <Text style={ObjectResize().text}>Viso prekių: {countTotal(number)}</Text>
-                        <Text style={ObjectResize().text}>Viso EUR: {payTotal(number)}</Text>
+                        <Text style={ObjectResize().text}>Viso prekių: {countTotal(ChangeNumber)}</Text>
+                        <Text style={ObjectResize().text}>Viso EUR: {payTotal(ChangeNumber)}</Text>
                         <Table style={{flexDirection: 'row'}} borderStyle={{borderWidth: 1}}>
                             {/* Left Wrapper */}
                                 <TouchableOpacity style={ObjectResize().singleHead}>
@@ -477,7 +457,7 @@ const Buy = ({ navigation }) => {
                                             style={styles.singleHeadLeftSide}
                                             borderRadius={0}
                                             color={'red'}
-                                            onPress={() => print(number, onChangeNumber, setIsMain)}
+                                            onPress={() => print(ChangeNumber, onChangeNumber, setIsMain)}
                                         >
                                         </Icon.Button>
                                 </TouchableOpacity>

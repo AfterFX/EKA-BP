@@ -52,6 +52,7 @@
     "@types/react": "~17.0.21",
     "@types/react-native": "~0.64.12",
     "@types/react-native-table-component": "^1.2.4",
+    "@types/react-native-vector-icons": "^6.4.11",
     "typescript": "~4.3.5"
   },
   "private": true

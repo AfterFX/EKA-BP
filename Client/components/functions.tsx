@@ -1,16 +1,30 @@
 import prices from "../price.json";
 import * as Print from "expo-print";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import pricesIndex from "../price.json";
+
+const getStorage = async () => {
+    try {
+        const jsonValue = await AsyncStorage.getItem('@Price')
+        jsonValue != null ? JSON.parse(jsonValue) : await AsyncStorage.mergeItem('@Price', JSON.stringify(pricesIndex) ); //            JSON.stringify({s_a1: 50 })
+        return jsonValue != null ? JSON.parse(jsonValue) : pricesIndex;
+    } catch(e) {
+        // read error
+    }
+}
 
 
-export const price = (element: number, number: any[]) => {
-    let result = number[element] * prices[element];
-    return (number[element])? Math.round(result * 100) / 100: "";
+
+export const price = (property: any, newPriceObject: any, storedPrices: any) => {
+    // console.log("dfrghdft", storedPrices)
+    let result = newPriceObject[property] * storedPrices?.[property]
+    return (newPriceObject[property])? Math.round(result * 100) / 100: "";
 }
 
 export const countTotal = (number: Array<String>) => {
+
     let countTotal = 0;
     Object.keys(number).map(function(key, index) {
-        if(price(key, number) > 0)
             countTotal += (number[key])? Math.round(number[key] * 100) / 100: "";
     });
     return countTotal;
@@ -19,10 +33,23 @@ export const countTotal = (number: Array<String>) => {
 export const payTotal = (number: Array<String>) => {
     let totalPrice = 0;
     Object.keys(number).map(function(key, index) {
-        if(price(key, number) > 0)
-            totalPrice += price(key, number);
+            totalPrice += price(key, number, prices);
     });
     return totalPrice;
+}
+
+export const saveNewPrice = async (element: any, value: any) => {
+    const field = element;
+    const obj = {};
+    obj[field] = value;
+    try {
+        await AsyncStorage.mergeItem(
+            '@Price',
+            JSON.stringify(obj) //            JSON.stringify({s_a1: 50 })
+        );
+    } catch(e) {
+        //save error
+    }
 }
 
 export const print = async (number: Array<String>, onChangeNumber: (value: (((prevState: Array<String>) => Array<String>) | Array<String>)) => void, setIsMain: (value: (((prevState: boolean) => boolean) | boolean)) => void) => {
