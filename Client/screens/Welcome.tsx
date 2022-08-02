@@ -55,7 +55,7 @@ const Welcome = () => {
                         <StyledButton
                             onPress={clearLogin}
                         >
-                            <ButtonText>Logout</ButtonText>
+                            <ButtonText>Atsijungti</ButtonText>
                         </StyledButton>
                     </StyledFormArea>
                 </WelcomeContainer>

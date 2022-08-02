@@ -140,7 +140,7 @@ const Login = ({ navigation }) => {
                 setStoredCredentials(credentials);
             })
             .catch((error) => {
-                handleMessage('Persisting login failed');
+                handleMessage('Nuolatinis prisijungimas nepavyko');
                 console.log(error);
             })
     }
@@ -151,13 +151,13 @@ const Login = ({ navigation }) => {
                 <StatusBar style="dark" />
                 <InnerContainer>
                     <PageLogo resizeMode="cover" source={require('../assets/img/img1.png')}/>
-                    <PageTitle>Nature Crib</PageTitle>
-                    <SubTitle>Account Login</SubTitle>
+                    <PageTitle>Sveiki atvykę!</PageTitle>
+                    <SubTitle>Prisijungimas prie paskyros</SubTitle>
                     <Formik
                         initialValues={{ email: '', password: '' }}
                         onSubmit={(values, { setSubmitting }) => {
                             if (values.email == '' || values.password == '') {
-                                handleMessage('Please fill in all fields');
+                                handleMessage('Prašome užpildyti visus laukus');
                                 setSubmitting(false);
                             } else {
                                 handleLogin(values, setSubmitting);
@@ -167,7 +167,7 @@ const Login = ({ navigation }) => {
                         {({ handleChange, handleBlur, handleSubmit, values, isSubmitting }) => (
                     <StyledFormArea>
                         <MyTextInput
-                            label="Email Address"
+                            label="Elektroninio pašto adresas"
                             placeholder="exemple@gmail.com"
                             placeholderTextColor={darkLight}
                             onChangeText={handleChange('email')}
@@ -178,7 +178,7 @@ const Login = ({ navigation }) => {
                         />
 
                         <MyTextInput
-                            label="Password"
+                            label="Slaptažodis"
                             placeholder="* * * * * * * *"
                             placeholderTextColor={darkLight}
                             onChangeText={handleChange('password')}
@@ -193,7 +193,7 @@ const Login = ({ navigation }) => {
                         <MsgBox type={messageType}>{message}</MsgBox>
                         {!isSubmitting && (
                             <StyledButton onPress={handleSubmit}>
-                                <ButtonText>Login</ButtonText>
+                                <ButtonText>Prisijungti</ButtonText>
                             </StyledButton>
                         )}
                         {isSubmitting && (
@@ -207,7 +207,7 @@ const Login = ({ navigation }) => {
                         {!googleSubmitting && (
                             <StyledButton onPress={handleGoogleSignin} google={true}>
                                 <Fontisto name="google" size={25} color={primary}/>
-                                <ButtonText google={true}>Sign in with Google</ButtonText>
+                                <ButtonText google={true}>Prisijunkite naudodami „Google“.</ButtonText>
                             </StyledButton>
                         )}
 
@@ -217,9 +217,9 @@ const Login = ({ navigation }) => {
                             </StyledButton>
                         )}
                         <ExtraView>
-                            <ExtraText>Don't have an account already? </ExtraText>
+                            <ExtraText>Dar neturite paskyros? </ExtraText>
                             <TextLink onPress={() => navigation.navigate('Signup')}>
-                                <TextLinkContent>Signup</TextLinkContent>
+                                <TextLinkContent>Registruotis</TextLinkContent>
                             </TextLink>
                         </ExtraView>
                     </StyledFormArea>

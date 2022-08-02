@@ -90,7 +90,7 @@ const Signup = ({ navigation }) => {
             })
             .catch((error) => {
                 setSubmitting(false);
-                handleMessage('An error occurred. Check your network and try again');
+                handleMessage('Įvyko klaida. Patikrinkite tinklą ir bandykite dar kartą');
                 console.log(error.toJSON());
             });
     };
@@ -107,7 +107,7 @@ const Signup = ({ navigation }) => {
                 setStoredCredentials(credentials);
             })
             .catch((error) => {
-                handleMessage('Persisting login failed');
+                handleMessage('Nuolatinis prisijungimas nepavyko');
                 console.log(error);
             });
     };
@@ -117,8 +117,8 @@ const Signup = ({ navigation }) => {
             <StyledContainer>
                 <StatusBar style="dark" />
                 <InnerContainer>
-                    <PageTitle>Nature Crib</PageTitle>
-                    <SubTitle>Account Signup</SubTitle>
+                    <PageTitle>Sveiki atvykę!</PageTitle>
+                    <SubTitle>Paskyros registracija</SubTitle>
 
                     {show && (
                         <DateTimePicker
@@ -139,10 +139,10 @@ const Signup = ({ navigation }) => {
                         onSubmit={(values, { setSubmitting }) => {
                             values = { ...values, dateOfBirth: dob };
                             if (values.email == '' || values.password == '' || values.name == '' || values.dateOfBirth == '' || values.confirmPassword == '') {
-                                handleMessage('Please fill in all fields');
+                                handleMessage('Prašome užpildyti visus laukus');
                                 setSubmitting(false);
                             } else if (values.password !== values.confirmPassword) {
-                                handleMessage('Passwords do not match');
+                                handleMessage('Slaptažodžiai nesutampa');
                                 setSubmitting(false);
                             } else {
                                 handleSignup(values, setSubmitting);
@@ -152,8 +152,8 @@ const Signup = ({ navigation }) => {
                         {({ handleChange, handleBlur, handleSubmit, values, isSubmitting }) => (
                     <StyledFormArea>
                         <MyTextInput
-                            label="Full Name"
-                            placeholder="Richard Barnes"
+                            label="Pilnas vardas"
+                            placeholder="Vardenis Pavardenis"
                             placeholderTextColor={darkLight}
                             onChangeText={handleChange('name')}
                             onBlur={handleBlur('name')}
@@ -162,8 +162,8 @@ const Signup = ({ navigation }) => {
                         />
 
                         <MyTextInput
-                            label="Email Address"
-                            placeholder="exemple@gmail.com"
+                            label="Elektroninio pašto adresas"
+                            placeholder="pavyzdys@gmail.com"
                             placeholderTextColor={darkLight}
                             onChangeText={handleChange('email')}
                             onBlur={handleBlur('email')}
@@ -173,8 +173,7 @@ const Signup = ({ navigation }) => {
                         />
 
                         <MyTextInput
-                            label="Date of Birth"
-
+                            label="Gimimo data"
                             placeholder="YYYY - MM - DD"
                             placeholderTextColor={darkLight}
                             onChangeText={handleChange('dateOfBirth')}
@@ -187,7 +186,7 @@ const Signup = ({ navigation }) => {
                         />
 
                         <MyTextInput
-                            label="Password"
+                            label="Slaptažodis"
                             placeholder="* * * * * * * *"
                             placeholderTextColor={darkLight}
                             onChangeText={handleChange('password')}
@@ -201,7 +200,7 @@ const Signup = ({ navigation }) => {
                         />
 
                         <MyTextInput
-                            label="Confirm Password"
+                            label="Patvirtinti slaptažodį"
                             placeholder="* * * * * * * *"
                             placeholderTextColor={darkLight}
                             onChangeText={handleChange('confirmPassword')}
@@ -217,7 +216,7 @@ const Signup = ({ navigation }) => {
 
                         {!isSubmitting && (
                             <StyledButton onPress={handleSubmit}>
-                                <ButtonText>Login</ButtonText>
+                                <ButtonText>Registruoti</ButtonText>
                             </StyledButton>
                         )}
                         {isSubmitting && (
@@ -228,9 +227,9 @@ const Signup = ({ navigation }) => {
 
                         <Line />
                         <ExtraView>
-                            <ExtraText>Already have an account? </ExtraText>
+                            <ExtraText>Jau turite paskyrą? </ExtraText>
                             <TextLink onPress={() => navigation.navigate('Login')}>
-                                <TextLinkContent>Login</TextLinkContent>
+                                <TextLinkContent>Prisijungti</TextLinkContent>
                             </TextLink>
                         </ExtraView>
                     </StyledFormArea>

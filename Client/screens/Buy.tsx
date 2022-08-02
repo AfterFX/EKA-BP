@@ -557,6 +557,8 @@ const Buy = ({ navigation }) => {
                                     }
                                 ]}
                             >
+
+                                <Text onPress={() => ToggleVisible()} style={[styles.sizeText, { position: 'absolute', right: 5}]}>X</Text>
                                 <Text style={styles.sizeText}>Turinio dydis</Text>
                                 <View style={styles.settings}>
                                     <Text style={styles.sizeValue}>{Math.round(size)}</Text>
