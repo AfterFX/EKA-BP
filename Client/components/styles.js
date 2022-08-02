@@ -12,7 +12,8 @@ export const Colors = {
     darkLight: "#9CA3AF",
     brand: "#6D28D9",
     green: "#10B981",
-    red: "#EF4444"
+    red: "#ffa500",
+    orange: "#FFA500"
 };
 
 const { primary, secondary, tertiary, darkLight, brand, green, red } = Colors;
@@ -55,8 +56,9 @@ export const Avatar = styled.Image`
 `;
 
 export const WelcomeImage = styled.Image`
-    height: 50%;
-    min-width: 100%;
+  width: 100%;
+  height: 50%;
+  min-width: 100%;
 `;
 
 export const PageTitle = styled.Text`

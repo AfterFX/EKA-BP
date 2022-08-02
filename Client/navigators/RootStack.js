@@ -5,7 +5,7 @@ import { View, Text } from 'react-native';
 
 //colors
 import { Colors } from '../components/styles';
-const { darkLight, brand, primary, tertiary, secondary } = Colors;
+const { darkLight, brand, primary, tertiary, secondary, orange } = Colors;
 
 // React Navigation
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
@@ -81,12 +81,12 @@ const RootStack = () => {
                                 }}
                             >
                                     <>
-                                        <Drawer.Screen options={{ headerTintColor: primary, headerRight: () => (
-                                                <IconButton icon="alert-outline" onPress={() => alert('You\'re awesome!')} color={DefaultTheme.colors.notification} />
-                                            ) }} name="Welcome" component={Welcome}/>
-                                        <Drawer.Screen options={{ headerTintColor: tertiary }} name="Buy" component={Buy}/>
-                                        <Drawer.Screen options={{ headerTintColor: primary }} name="BuyHistory" component={BuyHistory}/>
-                                        <Drawer.Screen options={{ headerTintColor: primary }} name="BuyHistoryTest1" component={BuyHistoryTest1}/>
+                                        <Drawer.Screen options={{ headerTintColor: orange, headerRight: () => (
+                                                <IconButton icon="alert-outline" onPress={() => alert('Tuščia.')} color={DefaultTheme.colors.notification} />
+                                            ) }} name="Sveiki" component={Welcome}/>
+                                        <Drawer.Screen options={{ headerTintColor: tertiary }} name="Pirkimas" component={Buy}/>
+                                        {/*<Drawer.Screen options={{ headerTintColor: primary }} name="BuyHistory" component={BuyHistory}/>*/}
+                                        {/*<Drawer.Screen options={{ headerTintColor: primary }} name="BuyHistoryTest1" component={BuyHistoryTest1}/>*/}
                                     </>
                             </Drawer.Navigator>
                         </>

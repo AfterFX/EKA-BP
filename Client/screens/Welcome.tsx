@@ -46,7 +46,7 @@ const Welcome = () => {
             <InnerContainer>
                 <WelcomeImage resizeMode="cover" source={require('../assets/img/img2.png')}/>
                 <WelcomeContainer>
-                    <PageTitle welcome={true}>Welcome! Buddy</PageTitle>
+                    <PageTitle welcome={true}>Sveiki!</PageTitle>
                     <SubTitle welcome={true}>{name || 'John Deo'}</SubTitle>
                     <SubTitle welcome={true}>{email || 'John.@gmail.com'}</SubTitle>
                     <StyledFormArea>

@@ -434,20 +434,22 @@ const Buy = ({ navigation }) => {
             <StatusBar style="dark" />
                 {isMain && (
                     <>
-                        <Button title='Generate Excel' onPress={shareExcel}/>
-                            <TextLink onPress={() => setIsMain(false)}>
-                                <TextLinkContent>New Buyer</TextLinkContent>
-                            </TextLink>
+                        {/*<Button title='Generate Excel' onPress={shareExcel}/>*/}
+                        <Button title='Naujas pirkimas' onPress={() => setIsMain(false)}/>
+                        {/*    <TextLink onPress={() => setIsMain(false)}>*/}
+                        {/*        <TextLinkContent>New Buyer</TextLinkContent>*/}
+                        {/*    </TextLink>*/}
                     </>
                 )}
                 {!isMain && (
                     <>
 
+
+                        <Text style={[ObjectResize().text, {textAlign: 'center'}]}>Viso prekių: {countTotal(ChangeNumber, storedPrices)}</Text>
+                        <Text style={[ObjectResize().text, {textAlign: 'center'}]}>Viso EUR: {payTotal(ChangeNumber, storedPrices)}</Text>
                         <TouchableOpacity onPress={() => ToggleVisible()} style={{ }}>
-                            <Text style={ObjectResize().text}>{visible ? 'Hide' : 'Show'}</Text>
+                            <Text style={ObjectResize().text}>{visible ? 'Slėpti' : 'Nustatymai'}</Text>
                         </TouchableOpacity>
-                        <Text style={ObjectResize().text}>Viso prekių: {countTotal(ChangeNumber, storedPrices)}</Text>
-                        <Text style={ObjectResize().text}>Viso EUR: {payTotal(ChangeNumber, storedPrices)}</Text>
                         <Table style={{flexDirection: 'row'}} borderStyle={{borderWidth: 1}}>
                             {/* Left Wrapper */}
                                 <TouchableOpacity style={ObjectResize().singleHead}>

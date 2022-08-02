@@ -58,26 +58,47 @@ const Login = ({ navigation }) => {
   const {storedCredentials, setStoredCredentials} = useContext(CredentialsContext);
     const handleLogin =  async (credentials, setSubmitting) => {
         handleMessage(null);
-        const url = `${Server.ip}/user/signin`
-        axios
-            .post(url, credentials)
-            .then((response) => {
-                const result = response.data;
-                const { status, message, data } = result;
 
-                if (status !== 'SUCCESS') {
-                    handleMessage(message, status);
-                } else {
-                    persistLogin({ ...data }, message, status);
-                }
-                setSubmitting(false);
-            })
-            .catch((error) => {
-            // console.log(error.JSON());
-            setSubmitting(false);
-            handleMessage("An error occurred. Check your network and try again");
-            console.log(error);
-        });
+        const result = {
+            "data":  {
+            "dateOfBirth": null,
+                "email": "sandelininkas@gmail.com",
+                "id": 1,
+                "name": "Sandelininkas",
+                "password": "",
+        },
+            "message": "Signin successful",
+            "status": "SUCCESS",
+        };
+
+        const { status, message, data } = result;
+
+        if (status !== 'SUCCESS') {
+            handleMessage(message, status);
+        } else {
+            persistLogin({ ...data }, message, status);
+        }
+        setSubmitting(false);
+        // const url = `${Server.ip}/user/signin`
+        // axios
+        //     .post(url, credentials)
+        //     .then((response) => {
+        //         const result = response.data;
+        //         const { status, message, data } = result;
+        //
+        //         if (status !== 'SUCCESS') {
+        //             handleMessage(message, status);
+        //         } else {
+        //             persistLogin({ ...data }, message, status);
+        //         }
+        //         setSubmitting(false);
+        //     })
+        //     .catch((error) => {
+        //     // console.log(error.JSON());
+        //     setSubmitting(false);
+        //     handleMessage("An error occurred. Check your network and try again");
+        //     console.log(error);
+        // });
     };
 
     const handleMessage = (message, type = 'FAILED') => {
