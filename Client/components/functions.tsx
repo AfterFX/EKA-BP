@@ -21,19 +21,20 @@ export const price = (property: any, newPriceObject: any, storedPrices: any) => 
     return (newPriceObject[property])? Math.round(result * 100) / 100: "";
 }
 
-export const countTotal = (number: Array<String>) => {
-
+export const countTotal = (number: Array<String>, storedPrices: any) => {
     let countTotal = 0;
     Object.keys(number).map(function(key, index) {
+        if(price(key, number, storedPrices) > 0)
             countTotal += (number[key])? Math.round(number[key] * 100) / 100: "";
     });
     return countTotal;
 }
 
-export const payTotal = (number: Array<String>) => {
+export const payTotal = (number: Array<String>, storedPrices: any) => {
     let totalPrice = 0;
     Object.keys(number).map(function(key, index) {
-            totalPrice += price(key, number, prices);
+        if(price(key, number, storedPrices) > 0)
+            totalPrice += price(key, number, storedPrices);
     });
     return totalPrice;
 }
@@ -52,9 +53,9 @@ export const saveNewPrice = async (element: any, value: any) => {
     }
 }
 
-export const print = async (number: Array<String>, onChangeNumber: (value: (((prevState: Array<String>) => Array<String>) | Array<String>)) => void, setIsMain: (value: (((prevState: boolean) => boolean) | boolean)) => void) => {
-    await Print.printAsync({
-        html: createDynamicTable(number).html,
+export const print = async (number: String, onChangeNumber: (value: any[]) => void, setIsMain: (value: (((prevState: boolean) => boolean) | boolean)) => void, storedPrices: { [p: string]: string }) => {
+        await Print.printAsync({
+        html: createDynamicTable(number, storedPrices).html,
     }).then(() => {
        return onChangeNumber([])
     }).then(() => {
@@ -67,9 +68,9 @@ export const destroy = async (onChangeNumber: (value: (((prevState: Array<String
 }
 
 
-export const createDynamicTable = (number) => {
-    const priceTotal = (element) => {
-        let result = number[element] * prices[element];
+export const createDynamicTable = (number: any, storedPrices: any) => {
+    const priceTotal = (element: any) => {
+        let result = number[element] * storedPrices[element];
         return (number[element])? Math.round(result * 100) / 100: '';
     }
     const todayDate = new Date().toISOString().slice(0, 10);
@@ -516,8 +517,8 @@ export const createDynamicTable = (number) => {
         <tr>
             <td height="20" align="left" valign=top><br></td>
             <td align="left" valign=top><br></td>
-            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; font-size: 30px" colspan=1 align="center" valign=middle><b>${countTotal(number)}</b></td>
-            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; font-size: 30px" colspan=6 align="center" valign=middle><b>${payTotal(number)}</b></td>
+            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; font-size: 30px" colspan=1 align="center" valign=middle><b>${countTotal(number, storedPrices)}</b></td>
+            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; font-size: 30px" colspan=6 align="center" valign=middle><b>${payTotal(number, storedPrices)}</b></td>
             <td align="center" valign=middle><i><br></i></td>
             <td align="center" valign=middle><b><br></b></td>
             <td align="center" valign=middle><br></td>

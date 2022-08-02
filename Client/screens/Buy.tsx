@@ -446,8 +446,8 @@ const Buy = ({ navigation }) => {
                         <TouchableOpacity onPress={() => ToggleVisible()} style={{ }}>
                             <Text style={ObjectResize().text}>{visible ? 'Hide' : 'Show'}</Text>
                         </TouchableOpacity>
-                        <Text style={ObjectResize().text}>Viso prekių: {countTotal(ChangeNumber)}</Text>
-                        <Text style={ObjectResize().text}>Viso EUR: {payTotal(ChangeNumber)}</Text>
+                        <Text style={ObjectResize().text}>Viso prekių: {countTotal(ChangeNumber, storedPrices)}</Text>
+                        <Text style={ObjectResize().text}>Viso EUR: {payTotal(ChangeNumber, storedPrices)}</Text>
                         <Table style={{flexDirection: 'row'}} borderStyle={{borderWidth: 1}}>
                             {/* Left Wrapper */}
                                 <TouchableOpacity style={ObjectResize().singleHead}>
@@ -457,7 +457,7 @@ const Buy = ({ navigation }) => {
                                             style={styles.singleHeadLeftSide}
                                             borderRadius={0}
                                             color={'red'}
-                                            onPress={() => print(ChangeNumber, onChangeNumber, setIsMain)}
+                                            onPress={() => print(ChangeNumber, onChangeNumber, setIsMain, storedPrices)}
                                         >
                                         </Icon.Button>
                                 </TouchableOpacity>
