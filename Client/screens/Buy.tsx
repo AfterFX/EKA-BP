@@ -158,7 +158,7 @@ const Buy = ({ navigation }) => {
     const [getEditableElement, setGetEditableElement] = useState(''); //get the element that is being edited
 
 
-    const [OnChangePrice, setOnChangePrice] = useState('Useless Text');
+    const [OnChangePrice, setOnChangePrice] = useState('Klaida: 9159.');
 
     const { width, height } = useWindowDimensions();
 
@@ -189,6 +189,8 @@ const Buy = ({ navigation }) => {
 
 
     const handleChange = (name: any, value: any) => {
+        const re = /^[0-9\b]+$/;
+        if (value === '' || re.test(value))
         onChangeNumber({
             ...ChangeNumber,
             [name]: value,
@@ -238,6 +240,12 @@ const Buy = ({ navigation }) => {
         setOnChangePrice(storedPrices[element])
         setGetEditableElement(element);//sets editor what shows
         setDialogVisible(true);
+    };
+
+    const ChangePrice = async (value: string) => {
+        const re = /^[0-9]*\.?[0-9]*$/;
+        if (value === '' || re.test(value))
+        setOnChangePrice(value)
     };
 
     const handleCancel = async () => {
@@ -422,7 +430,7 @@ const Buy = ({ navigation }) => {
             <View>
                 <Dialog.Container visible={dialogVisible}>
                     <Dialog.Title>Edit price</Dialog.Title>
-                    <Dialog.Input onChangeText={setOnChangePrice} keyboardType={"phone-pad"} style={{width: 100, alignSelf: 'center', textAlign: 'center'}}>{storedPrices[getEditableElement]}</Dialog.Input>
+                    <Dialog.Input value={OnChangePrice || ''} onChangeText={newValue => (ChangePrice(newValue))} keyboardType={"phone-pad"} style={{width: 100, alignSelf: 'center', textAlign: 'center'}}/>
                     <Dialog.Description>
                         {getEditableElement}
                     </Dialog.Description>
