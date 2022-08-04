@@ -296,16 +296,16 @@ const Buy = ({ navigation }) => {
 
 
     let state = {
-        tableTitle_1: [t('EUR A1', false), t('EUR A', false), t('EUR B', false), t('LPM', true), t('LSD', false), t('SD', false), t('SD AP', false), t('PM', false), t('KNAUF', true)],
-        tableTitle_3: [t('LSD, FIN', false), t('SD, perimetriniai', false), t('PM, perimetriniai, SD AP', false), t('KNAUF', false), t('CP1', false), t('CP6', true)],
+        tableTitle_1: [t('EUR A1', false), t('EUR A', false), t('EUR B', false), t('', true), t('LSD', true), t('SD', false), t('SD AP', false), t('PM', false), t('KNAUF', true)],
+        tableTitle_3: [t('LSD, FIN', false), t('SD, perimetriniai', false), t('PM, perimetriniai, SD AP', false), t('', false), t('CP1', false), t('CP6', true)],
         tableTitle_4: [t('LSD, SD', false), t('CP3', false), t('CP9', true)],
         tableTitle_5: [t('PAROC', true)],
         tableTitle_6: [t('KNAUF', true)],
-        tableTitle_7: [t('600x800', false), t('800x800', false), t('1100x1100', false), t('1000x1000', false), t('1200x1200', false), t('1000x1300', false), t('1200x1600', false), t('1600x3000', true)],
+        tableTitle_7: [t('600x800', false), t('800x800', false), t('1000x1000', false), t('', false), t('1200x1200', false), t('1100x1300', false), t('Nestandartiniai padėlai', true)],
         tableTitle_8: [t('800x1200 (šviesūs)', false), t('800x1200 (tamsūs)', false), t('600x800 (šviesūs)', false), t('600x800 (tamsūs)', false), t('nestandartai 800x2000', true)],
         tableTitle_9: [t('800x1200', false), t('1000x1200', true)],
         tableTitle_10: [t('2,8 - 3,2', false), t('6 - 10', true)],
-        tableTitle_11: [t('Padėklai', true)],
+        tableTitle_11: [t('Mediniai padėklai', true)],
         tableData: [
                 [elementCol('Kiekis')],
             [elementCol('Kaina € /vnt')],
@@ -315,12 +315,12 @@ const Buy = ({ navigation }) => {
             [elementCol('Suma')],
         ],
         tableData_1: [
-                [elementInput('s_a1', false), elementInput('s_a2', false), elementInput('s_b2', false), elementInput('s_lpm_800', true), elementInput('s_lsd_800', false), elementInput('s_sd_800', false), elementInput('s_ap_800', false), elementInput('s_pm_800', false), elementInput('s_knauf_800', true)],
-            [elementPrice('s_a1', false), elementPrice('s_a2', false), elementPrice('s_b2', false), elementPrice('s_lpm_800', true), elementPrice('s_lsd_800', false), elementPrice('s_sd_800', false), elementPrice('s_ap_800', false), elementPrice('s_pm_800', false), elementPrice('s_knauf_800', true)],
-            [elementResult('s_a1', false), elementResult('s_a2', false), elementResult('s_b2', false), elementResult('s_lpm_800', true), elementResult('s_lsd_800', false), elementResult('s_sd_800', false), elementResult('s_ap_800', false), elementResult('s_pm_800', false), elementResult('s_knauf_800', true)],
-            [elementInput('r_a1', false), elementInput('r_a2', false), elementInput('r_b2', false), elementInput('r_lpm_800', true), elementInput('r_lsd_800', false), elementInput('r_sd_800', false), elementInput('r_ap_800', false), elementInput('r_pm_800', false), elementInput('r_knauf_800', true)],
-            [elementPrice('r_a1', false), elementPrice('r_a2', false), elementPrice('r_b2', false), elementPrice('r_lpm_800', true), elementPrice('r_lsd_800', false), elementPrice('r_sd_800', false), elementPrice('r_ap_800', false), elementPrice('r_pm_800', false), elementPrice('r_knauf_800', true)],
-            [elementResult('r_a1', false), elementResult('r_a2', false), elementResult('r_b2', false), elementResult('r_lpm_800', true), elementResult('r_lsd_800', false), elementResult('r_sd_800', false), elementResult('r_ap_800', false), elementResult('r_pm_800', false), elementResult('r_knauf_800', true)],
+                [elementInput('s_a1', false), elementInput('s_a2', false), elementInput('s_b2', false), elementInput('s_lpm_800', true), elementInput('s_lsd_800', true), elementInput('s_sd_800', false), elementInput('s_ap_800', false), elementInput('s_pm_800', false), elementInput('s_knauf_800', true)],
+            [elementPrice('s_a1', false), elementPrice('s_a2', false), elementPrice('s_b2', false), elementPrice('s_lpm_800', true), elementPrice('s_lsd_800', true), elementPrice('s_sd_800', false), elementPrice('s_ap_800', false), elementPrice('s_pm_800', false), elementPrice('s_knauf_800', true)],
+            [elementResult('s_a1', false), elementResult('s_a2', false), elementResult('s_b2', false), elementResult('s_lpm_800', true), elementResult('s_lsd_800', true), elementResult('s_sd_800', false), elementResult('s_ap_800', false), elementResult('s_pm_800', false), elementResult('s_knauf_800', true)],
+            [elementInput('r_a1', false), elementInput('r_a2', false), elementInput('r_b2', false), elementInput('r_lpm_800', true), elementInput('r_lsd_800', true), elementInput('r_sd_800', false), elementInput('r_ap_800', false), elementInput('r_pm_800', false), elementInput('r_knauf_800', true)],
+            [elementPrice('r_a1', false), elementPrice('r_a2', false), elementPrice('r_b2', false), elementPrice('r_lpm_800', true), elementPrice('r_lsd_800', true), elementPrice('r_sd_800', false), elementPrice('r_ap_800', false), elementPrice('r_pm_800', false), elementPrice('r_knauf_800', true)],
+            [elementResult('r_a1', false), elementResult('r_a2', false), elementResult('r_b2', false), elementResult('r_lpm_800', true), elementResult('r_lsd_800', true), elementResult('r_sd_800', false), elementResult('r_ap_800', false), elementResult('r_pm_800', false), elementResult('r_knauf_800', true)],
         ],
         tableData_3: [
             [elementInput('s_lsd_1000', false), elementInput('s_sd_1000', false), elementInput('s_pm_1000', false), elementInput('s_knauf_1000', false), elementInput('s_cp1_1000', false), elementInput('s_cp6_1000', true)],
@@ -355,12 +355,12 @@ const Buy = ({ navigation }) => {
             [elementResult('r_knauf', true)],
         ],
         tableData_7: [
-            [elementInput('s_600x800', false), elementInput('s_800x800', false), elementInput('s_1100x1100', false), elementInput('s_1000x1000', false), elementInput('s_1200x1200', false), elementInput('s_1100x1300', false), elementInput('s_1200x1600', false), elementInput('s_1600x3000', true)],
-            [elementPrice('s_600x800', false), elementPrice('s_800x800', false), elementPrice('s_1100x1100', false), elementPrice('s_1000x1000', false), elementPrice('s_1200x1200', false), elementPrice('s_1100x1300',false), elementPrice('s_1200x1600', false), elementPrice('s_1600x3000', true)],
-            [elementResult('s_600x800', false), elementResult('s_800x800', false), elementResult('s_1100x1100', false), elementResult('s_1000x1000', false), elementResult('s_1200x1200', false), elementResult('s_1100x1300', false), elementResult('s_1200x1600', false), elementResult('s_1600x3000', true)],
-            [elementInput('r_600x800', false), elementInput('r_800x800', false), elementInput('r_1100x1100', false), elementInput('r_1000x1000', false), elementInput('r_1200x1200', false), elementInput('r_1100x1300', false), elementInput('r_1200x1600', false), elementInput('r_1600x3000', true)],
-            [elementPrice('r_600x800', false), elementPrice('r_800x800', false), elementPrice('r_1100x1100', false), elementPrice('r_1000x1000', false), elementPrice('r_1200x1200', false), elementPrice('r_1100x1300', false), elementPrice('r_1200x1600', false), elementPrice('r_1600x3000', true)],
-            [elementResult('r_600x800', false), elementResult('r_800x800', false), elementResult('r_1100x1100', false), elementResult('r_1000x1000', false), elementResult('r_1200x1200', false), elementResult('r_1100x1300', false), elementResult('r_1200x1600', false), elementResult('r_1600x3000', true)],
+            [elementInput('s_600x800', false), elementInput('s_800x800', false), elementInput('s_1000x1000', false), elementInput('', false), elementInput('s_1200x1200', false), elementInput('s_1100x1300', false), elementInput('s_1600x3000', true)],
+            [elementPrice('s_600x800', false), elementPrice('s_800x800', false), elementPrice('s_1000x1000', false), elementPrice('', false), elementPrice('s_1200x1200', false), elementPrice('s_1100x1300',false), elementPrice('s_1600x3000', true)],
+            [elementResult('s_600x800', false), elementResult('s_800x800', false), elementResult('s_1000x1000', false), elementResult('', false), elementResult('s_1200x1200', false), elementResult('s_1100x1300', false), elementResult('s_1600x3000', true)],
+            [elementInput('r_600x800', false), elementInput('r_800x800', false), elementInput('r_1000x1000', false), elementInput('', false), elementInput('r_1200x1200', false), elementInput('r_1100x1300', false), elementInput('r_1600x3000', true)],
+            [elementPrice('r_600x800', false), elementPrice('r_800x800', false), elementPrice('r_1000x1000', false), elementPrice('', false), elementPrice('r_1200x1200', false), elementPrice('r_1100x1300', false), elementPrice('r_1600x3000', true)],
+            [elementResult('r_600x800', false), elementResult('r_800x800', false), elementResult('r_1000x1000', false), elementResult('', false), elementResult('r_1200x1200', false), elementResult('r_1100x1300', false), elementResult('r_1600x3000', true)],
         ],
         tableData_8: [
             [elementInput('s_apvadai_800x1200_white', false), elementInput('s_apvadai_800x1200_black', false), elementInput('s_apvadai_600x800_white', false), elementInput('s_apvadai_600x800_black', false), elementInput('s_apvadai_800x2000_mix', true)],
@@ -515,8 +515,8 @@ const Buy = ({ navigation }) => {
                                 <Col data={state.tableTitle_6} style={ObjectResize().title1} heightArr={[size]} textStyle={styles.titleText}/>
                             </TableWrapper>
                             <TableWrapper style={{flexDirection: 'row'}}>
-                                <Col data={[headText('Nestandartai')]} style={styles.head} heightArr={[8*size, 60]} textStyle={ObjectResize().text1} />
-                                <Col data={state.tableTitle_7} style={ObjectResize().title1} heightArr={[size, size, size, size, size, size, size, size]} textStyle={styles.titleText}/>
+                                <Col data={[headText('Nestandartai')]} style={styles.head} heightArr={[7*size, 60]} textStyle={ObjectResize().text1} />
+                                <Col data={state.tableTitle_7} style={ObjectResize().title1} heightArr={[size, size, size, size, size, size, size]} textStyle={styles.titleText}/>
                             </TableWrapper>
                             <TableWrapper style={{flexDirection: 'row'}}>
                                 <Col data={[headText('Šarnyrai')]} style={styles.head} heightArr={[5*size, 60]} textStyle={ObjectResize().text1} />
@@ -526,10 +526,10 @@ const Buy = ({ navigation }) => {
                                 <Col data={[headText('Dekos')]} style={styles.head} heightArr={[2*size, 60]} textStyle={ObjectResize().text1} />
                                 <Col data={state.tableTitle_9} style={ObjectResize().title1} heightArr={[size, size]} textStyle={styles.titleText}/>
                             </TableWrapper>
-                            <TableWrapper style={{flexDirection: 'row'}}>
-                                <Col data={[headText('Plokštė')]} style={styles.head} heightArr={[2*size, 60]} textStyle={ObjectResize().text1} />
-                                <Col data={state.tableTitle_10} style={ObjectResize().title1} heightArr={[size, size]} textStyle={styles.titleText}/>
-                            </TableWrapper>
+                            {/*<TableWrapper style={{flexDirection: 'row'}}>*/}
+                            {/*    <Col data={[headText('Plokštė')]} style={styles.head} heightArr={[2*size, 60]} textStyle={ObjectResize().text1} />*/}
+                            {/*    <Col data={state.tableTitle_10} style={ObjectResize().title1} heightArr={[size, size]} textStyle={styles.titleText}/>*/}
+                            {/*</TableWrapper>*/}
                             <TableWrapper style={{flexDirection: 'row'}}>
                                 <Col data={[headText('')]} style={styles.head} heightArr={[size, 60]} textStyle={ObjectResize().text1} />
                                 <Col data={state.tableTitle_11} style={ObjectResize().title1} heightArr={[size]} textStyle={styles.titleText}/>
@@ -546,7 +546,7 @@ const Buy = ({ navigation }) => {
                             <Cols data={state.tableData_7} heightArr={[size, size, size, size, size, size, size, size]} flexArr={flex} textStyle={ObjectResize().priceText}/>
                             <Cols data={state.tableData_8} heightArr={[size, size, size, size, size]} flexArr={flex} textStyle={ObjectResize().priceText}/>
                             <Cols data={state.tableData_9} heightArr={[size, size]} flexArr={flex} textStyle={ObjectResize().priceText}/>
-                            <Cols data={state.tableData_10} heightArr={[size, size]} flexArr={flex} textStyle={ObjectResize().priceText}/>
+                            {/*<Cols data={state.tableData_10} heightArr={[size, size]} flexArr={flex} textStyle={ObjectResize().priceText}/>*/}
                             <Cols data={state.tableData_11} heightArr={[size]} flexArr={flex} textStyle={ObjectResize().priceText}/>
                         </TableWrapper>
 
