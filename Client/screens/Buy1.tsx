@@ -12,8 +12,8 @@ interface MyState {
     foo: boolean,
     text: string,
     result: any,
-    ChangeNumber: any,
-    price: any
+    table: any,
+    priceList: any
 }
 export class Buy1 extends React.Component<MyProps, MyState> {
 
@@ -24,8 +24,9 @@ export class Buy1 extends React.Component<MyProps, MyState> {
             foo: false,
             text: '',
             result: '',
-            ChangeNumber: [],
-            price: {
+            table: {s_a1: {},
+                s_a2: {}},
+            priceList: {
                 s_a1: 12,
                 s_a2: 540,
             }
@@ -44,9 +45,9 @@ export class Buy1 extends React.Component<MyProps, MyState> {
         // this.setState({ ChangeNumber: [...this.state.ChangeNumber, {[element]: value} ] }) //simple value
         this.setState((previousState) => {
             return {
-                ChangeNumber: {
-                    ...previousState.ChangeNumber,
-                    [element]: value
+                table: {
+                    ...previousState.table,
+                    [element]: {"units": value, "totalPrice": value*this.state.priceList[element] }
                 }
             }
         });
@@ -55,10 +56,9 @@ export class Buy1 extends React.Component<MyProps, MyState> {
         this.setState({ result: value*2 })
     }
     input = (element: string) =>{
-        console.log(this.state.ChangeNumber)
         return (
             <TextField style={{width: 250, height: 20}}
-                       value={this.state.ChangeNumber[element]}
+                       value={this.state.table[element]}
                        label=""
                        onChangeText={newNumber => this.OnChange(element, newNumber)}
                        textAlign={"center"}
@@ -68,10 +68,9 @@ export class Buy1 extends React.Component<MyProps, MyState> {
     }
 
     result = (element: string) =>{
-        console.log(element)
         return (
             <View style={{width: 250, height: 20}}>
-                <Text>{this.state.ChangeNumber[element] * this.state.price['s_a1']}</Text>
+                <Text>{this.state.table[element]['totalPrice']}</Text>
             </View>
         )
     }
@@ -80,10 +79,10 @@ export class Buy1 extends React.Component<MyProps, MyState> {
 
         return (
         <View style={{top: 100}}>
-            {this.input('a1')}
-            {this.input('a2')}
-            {this.result('a1')}
-            {this.result('a2')}
+            {this.input('s_a1')}
+            {this.input('s_a2')}
+            {this.result('s_a1')}
+            {this.result('s_a2')}
             {/*<Button*/}
             {/*    onPress={() => console.log(this.state.ChangeNumber)}*/}
             {/*    title="Learn More"*/}
