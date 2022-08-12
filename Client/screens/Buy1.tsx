@@ -24,8 +24,7 @@ export class Buy1 extends React.Component<MyProps, MyState> {
             foo: false,
             text: '',
             result: '',
-            table: {s_a1: {},
-                s_a2: {}},
+            table: {},
             priceList: {
                 s_a1: 12,
                 s_a2: 540,
@@ -42,7 +41,6 @@ export class Buy1 extends React.Component<MyProps, MyState> {
         this.setState({ foo: !this.state.foo });
     }
     OnChange = (element: string, value: any) =>{
-        // this.setState({ ChangeNumber: [...this.state.ChangeNumber, {[element]: value} ] }) //simple value
         this.setState((previousState) => {
             return {
                 table: {
@@ -70,11 +68,11 @@ export class Buy1 extends React.Component<MyProps, MyState> {
     result = (element: string) =>{
         return (
             <View style={{width: 250, height: 20}}>
-                <Text>{this.state.table[element]['totalPrice']}</Text>
+                <Text>{this.state.table[element]?.['totalPrice']}</Text>
             </View>
         )
     }
-
+    // console.log(JSON.stringify(this.state.table, null, ' '))
     render() {
 
         return (
