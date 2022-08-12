@@ -18,6 +18,7 @@ import Signup from '../screens/Signup';
 import Welcome from '../screens/Welcome';
 
 import Buy from '../screens/Buy';
+import {Buy1} from '../screens/Buy1';
 import BuyHistory from '../screens/BuyHistory';
 import BuyHistoryTest1 from '../screens/BuyHistoryTest1';
 
@@ -85,6 +86,7 @@ const RootStack = () => {
                                                 <IconButton icon="alert-outline" onPress={() => alert('Tuščia.')} color={DefaultTheme.colors.notification} />
                                             ) }} name="Sveiki" component={Welcome}/>
                                         <Drawer.Screen options={{ headerTintColor: tertiary }} name="Pirkimas" component={Buy}/>
+                                        <Drawer.Screen options={{ headerTintColor: tertiary }} name="Pirkimas1" component={Buy1}/>
                                         {/*<Drawer.Screen options={{ headerTintColor: primary }} name="BuyHistory" component={BuyHistory}/>*/}
                                         {/*<Drawer.Screen options={{ headerTintColor: primary }} name="BuyHistoryTest1" component={BuyHistoryTest1}/>*/}
                                     </>
