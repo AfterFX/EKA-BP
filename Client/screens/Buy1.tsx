@@ -23,6 +23,95 @@ import {State, TapGestureHandler} from "react-native-gesture-handler";
 const window = Dimensions.get("window");
 const screen = Dimensions.get("screen");
 
+const prices = {
+    "s_a1": 10,
+    "r_a1": 20,
+    "s_a2": 30,
+    "r_a2": 40,
+    "s_b2": 50,
+    "r_b2": 60,
+    "s_lpm_800": "",
+    "r_lpm_800": "",
+    "s_lsd_800": 0,
+    "r_lsd_800": 0,
+    "s_sd_800": 0,
+    "r_sd_800": 0,
+    "s_ap_800": 0,
+    "r_ap_800": 0,
+    "s_pm_800": 0,
+    "r_pm_800": 0,
+    "s_knauf_800": 0,
+    "r_knauf_800": 0,
+
+    "s_lsd_1000": 0,
+    "r_lsd_1000": 0,
+    "s_sd_1000": 0,
+    "r_sd_1000": 0,
+    "s_pm_1000": 0,
+    "r_pm_1000": 0,
+    "s_knauf_1000": "",
+    "r_knauf_1000": "",
+    "s_cp1_1000": 0,
+    "r_cp1_1000": 0,
+    "s_cp6_1000": 0,
+    "r_cp6_1000": 0,
+
+    "s_sd_1140": 0,
+    "r_sd_1140": 0,
+    "s_cp3_1140": 0,
+    "r_cp3_1140": 0,
+    "s_cp9_1140": 0,
+    "r_cp9_1140": 0,
+
+    "s_paroc": 0,
+    "r_paroc": 0,
+
+    "s_knauf": 0,
+    "r_knauf": 0,
+
+    "s_600x800": 0,
+    "r_600x800": 0,
+    "s_800x800": 0,
+    "r_800x800": 0,
+    "s_1100x1100": 0,
+    "r_1100x1100": 0,
+    "s_1000x1000": 0,
+    "r_1000x1000": 0,
+    "s_1200x1200": 0,
+    "r_1200x1200": 0,
+    "s_1100x1300": 0,
+    "r_1100x1300": 0,
+    "s_1200x1600": 0,
+    "r_1200x1600": 0,
+    "s_1600x3000": 0,
+    "r_1600x3000": 0,
+
+
+    "s_apvadai_800x1200_white": 0,
+    "r_apvadai_800x1200_white": 0,
+    "s_apvadai_800x1200_black": 0,
+    "r_apvadai_800x1200_black": 0,
+    "s_apvadai_600x800_white": 0,
+    "r_apvadai_600x800_white": 0,
+    "s_apvadai_600x800_black": 0,
+    "r_apvadai_600x800_black": 0,
+    "s_apvadai_800x2000_mix": 0,
+    "r_apvadai_800x2000_mix": 0,
+
+    "s_dekos_800x1200": 0,
+    "r_dekos_800x1200": 0,
+    "s_dekos_1000x1200": 0,
+    "r_dekos_1000x1200": 0,
+
+    "s_plokste_800x1200_p": 0,
+    "r_plokste_800x1200_p": 0,
+    "s_plokste_800x1200_s": 0,
+    "r_plokste_800x1200_s": 0,
+
+    "s_srotas": 0,
+    "r_srotas": 0
+}
+
 
 interface MyProps {
 
@@ -55,10 +144,7 @@ export class Buy1 extends React.Component<MyProps, MyState> {
             text: '',
             result: '',
             table: {},
-            priceList: {
-                s_a1: 12,
-                s_a2: 540,
-            },
+            priceList: prices,
             dialogVisible: false,
             OnChangePrice: '',
             getEditableElement: '',
@@ -100,84 +186,84 @@ export class Buy1 extends React.Component<MyProps, MyState> {
                [this.elementCol('Suma')],
            ],
            tableData_1: [
-               [this.elementInput('s_a1', false), this.elementInput('s_a2', false), this.elementInput('s_b2', false), this.elementInput('s_lpm_800', true), this.elementInput('s_lsd_800', true), this.elementInput('s_sd_800', false), this.elementInput('s_ap_800', false), this.elementInput('s_pm_800', false), this.elementInput('s_knauf_800', true)],
+               this.s_800x1200(),
                [this.elementPrice('s_a1', false), this.elementPrice('s_a2', false), this.elementPrice('s_b2', false), this.elementPrice('s_lpm_800', true), this.elementPrice('s_lsd_800', true), this.elementPrice('s_sd_800', false), this.elementPrice('s_ap_800', false), this.elementPrice('s_pm_800', false), this.elementPrice('s_knauf_800', true)],
-               [this.elementResult('s_a1', false), this.elementResult('s_a2', false), this.elementResult('s_b2', false), this.elementResult('s_lpm_800', true), this.elementResult('s_lsd_800', true), this.elementResult('s_sd_800', false), this.elementResult('s_ap_800', false), this.elementResult('s_pm_800', false), this.elementResult('s_knauf_800', true)],
-               [this.elementInput('r_a1', false), this.elementInput('r_a2', false), this.elementInput('r_b2', false), this.elementInput('r_lpm_800', true), this.elementInput('r_lsd_800', true), this.elementInput('r_sd_800', false), this.elementInput('r_ap_800', false), this.elementInput('r_pm_800', false), this.elementInput('r_knauf_800', true)],
+               this.s_sum_800x1200(),
+               this.r_800x1200(),
                [this.elementPrice('r_a1', false), this.elementPrice('r_a2', false), this.elementPrice('r_b2', false), this.elementPrice('r_lpm_800', true), this.elementPrice('r_lsd_800', true), this.elementPrice('r_sd_800', false), this.elementPrice('r_ap_800', false), this.elementPrice('r_pm_800', false), this.elementPrice('r_knauf_800', true)],
-               [this.elementResult('r_a1', false), this.elementResult('r_a2', false), this.elementResult('r_b2', false), this.elementResult('r_lpm_800', true), this.elementResult('r_lsd_800', true), this.elementResult('r_sd_800', false), this.elementResult('r_ap_800', false), this.elementResult('r_pm_800', false), this.elementResult('r_knauf_800', true)],
+               this.r_sum_800x1200(),
            ],
            tableData_3: [
-               [this.elementInput('s_lsd_1000', false), this.elementInput('s_sd_1000', false), this.elementInput('s_pm_1000', false), this.elementInput('s_knauf_1000', false), this.elementInput('s_cp1_1000', false), this.elementInput('s_cp6_1000', true)],
+               this.s_1000x1200(),
                [this.elementPrice('s_lsd_1000', false), this.elementPrice('s_sd_1000', false), this.elementPrice('s_pm_1000', false), this.elementPrice('s_knauf_1000', false), this.elementPrice('s_cp1_1000', false), this.elementPrice('s_cp6_1000', true)],
-               [this.elementResult('s_lsd_1000', false), this.elementResult('s_sd_1000', false), this.elementResult('s_pm_1000', false), this.elementResult('s_knauf_1000', false), this.elementResult('s_cp1_1000', false), this.elementResult('s_cp6_1000', true)],
-               [this.elementInput('r_lsd_1000', false), this.elementInput('r_sd_1000', false), this.elementInput('r_pm_1000', false), this.elementInput('r_knauf_1000', false), this.elementInput('r_cp1_1000', false), this.elementInput('r_cp6_1000', true)],
+               this.s_sum_1000x1200(),
+               this.r_1000x1200(),
                [this.elementPrice('r_lsd_1000', false), this.elementPrice('r_sd_1000', false), this.elementPrice('r_pm_1000', false), this.elementPrice('r_knauf_1000', false), this.elementPrice('r_cp1_1000', false), this.elementPrice('r_cp6_1000', true)],
-               [this.elementResult('r_lsd_1000', false), this.elementResult('r_sd_1000', false), this.elementResult('r_pm_1000', false), this.elementResult('r_knauf_1000', false), this.elementResult('r_cp1_1000', false), this.elementResult('r_cp6_1000', true)],
+               this.r_sum_1000x1200(),
            ],
            tableData_4: [
-               [this.elementInput('s_sd_1140', false), this.elementInput('s_cp3_1140', false), this.elementInput('s_cp9_1140', true)],
+               this.s_1140x1140(),
                [this.elementPrice('s_sd_1140', false), this.elementPrice('s_cp3_1140', false), this.elementPrice('s_cp9_1140', true)],
-               [this.elementResult('s_sd_1140', false), this.elementResult('s_cp3_1140', false), this.elementResult('s_cp9_1140', true)],
-               [this.elementInput('r_sd_1140', false), this.elementInput('r_cp3_1140', false), this.elementInput('r_cp9_1140', true)],
+               this.s_sum_1140x1140(),
+               this.r_1140x1140(),
                [this.elementPrice('r_sd_1140', false), this.elementPrice('r_cp3_1140', false), this.elementPrice('r_cp9_1140', true)],
-               [this.elementResult('r_sd_1140', false), this.elementResult('r_cp3_1140', false), this.elementResult('r_cp9_1140', true)],
+               this.r_sum_1140x1140(),
            ],
            tableData_5: [
-               [this.elementInput('s_paroc', true)],
+               this.s_paroc(),
                [this.elementPrice('s_paroc', true)],
-               [this.elementResult('s_paroc', true)],
-               [this.elementInput('r_paroc', true)],
+               this.s_sum_paroc(),
+               this.r_paroc(),
                [this.elementPrice('r_paroc', true)],
-               [this.elementResult('r_paroc', true)],
+               this.r_sum_paroc(),
            ],
            tableData_6: [
-               [this.elementInput('s_knauf', true)],
+               this.s_knauf(),
                [this.elementPrice('s_knauf', true)],
-               [this.elementResult('s_knauf', true)],
-               [this.elementInput('r_knauf', true)],
+               this.s_sum_knauf(),
+               this.r_knauf(),
                [this.elementPrice('r_knauf', true)],
-               [this.elementResult('r_knauf', true)],
+               this.r_sum_knauf(),
            ],
            tableData_7: [
-               [this.elementInput('s_600x800', false), this.elementInput('s_800x800', false), this.elementInput('s_1000x1000', false), this.elementInput('', false), this.elementInput('s_1200x1200', false), this.elementInput('s_1100x1300', false), this.elementInput('s_1600x3000', true)],
+               this.s_Nstandart(),
                [this.elementPrice('s_600x800', false), this.elementPrice('s_800x800', false), this.elementPrice('s_1000x1000', false), this.elementPrice('', false), this.elementPrice('s_1200x1200', false), this.elementPrice('s_1100x1300',false), this.elementPrice('s_1600x3000', true)],
-               [this.elementResult('s_600x800', false), this.elementResult('s_800x800', false), this.elementResult('s_1000x1000', false), this.elementResult('', false), this.elementResult('s_1200x1200', false), this.elementResult('s_1100x1300', false), this.elementResult('s_1600x3000', true)],
-               [this.elementInput('r_600x800', false), this.elementInput('r_800x800', false), this.elementInput('r_1000x1000', false), this.elementInput('', false), this.elementInput('r_1200x1200', false), this.elementInput('r_1100x1300', false), this.elementInput('r_1600x3000', true)],
+               this.s_sum_Nstandart(),
+               this.r_Nstandart(),
                [this.elementPrice('r_600x800', false), this.elementPrice('r_800x800', false), this.elementPrice('r_1000x1000', false), this.elementPrice('', false), this.elementPrice('r_1200x1200', false), this.elementPrice('r_1100x1300', false), this.elementPrice('r_1600x3000', true)],
-               [this.elementResult('r_600x800', false), this.elementResult('r_800x800', false), this.elementResult('r_1000x1000', false), this.elementResult('', false), this.elementResult('r_1200x1200', false), this.elementResult('r_1100x1300', false), this.elementResult('r_1600x3000', true)],
+               this.r_sum_Nstandart(),
            ],
            tableData_8: [
-               [this.elementInput('s_apvadai_800x1200_white', false), this.elementInput('s_apvadai_800x1200_black', false), this.elementInput('s_apvadai_600x800_white', false), this.elementInput('s_apvadai_600x800_black', false), this.elementInput('s_apvadai_800x2000_mix', true)],
+               this.s_apvadai(),
                [this.elementPrice('s_apvadai_800x1200_white', false), this.elementPrice('s_apvadai_800x1200_black', false), this.elementPrice('s_apvadai_600x800_white', false), this.elementPrice('s_apvadai_600x800_black', false), this.elementPrice('s_apvadai_800x2000_mix', true)],
-               [this.elementResult('s_apvadai_800x1200_white', false), this.elementResult('s_apvadai_800x1200_black', false), this.elementResult('s_apvadai_600x800_white', false), this.elementResult('s_apvadai_600x800_black', false), this.elementResult('s_apvadai_800x2000_mix', true)],
-               [this.elementInput('r_apvadai_800x1200_white', false), this.elementInput('r_apvadai_800x1200_black', false), this.elementInput('r_apvadai_600x800_white', false), this.elementInput('r_apvadai_600x800_black', false), this.elementInput('r_apvadai_800x2000_mix', true)],
+               this.s_sum_apvadai(),
+               this.r_apvadai(),
                [this.elementPrice('r_apvadai_800x1200_white', false), this.elementPrice('r_apvadai_800x1200_black', false), this.elementPrice('r_apvadai_600x800_white', false), this.elementPrice('r_apvadai_600x800_black', false), this.elementPrice('r_apvadai_800x2000_mix', true)],
-               [this.elementResult('r_apvadai_800x1200_white', false), this.elementResult('r_apvadai_800x1200_black', false), this.elementResult('r_apvadai_600x800_white', false), this.elementResult('r_apvadai_600x800_black', false), this.elementResult('r_apvadai_800x2000_mix', true)],
+               this.r_sum_apvadai(),
            ],
            tableData_9: [
-               [this.elementInput('s_dekos_800x1200', false), this.elementInput('s_dekos_1000x1200', true)],
+               this.s_dekos(),
                [this.elementPrice('s_dekos_800x1200', false), this.elementPrice('s_dekos_1000x1200', true)],
-               [this.elementResult('s_dekos_800x1200', false), this.elementResult('s_dekos_1000x1200', true)],
-               [this.elementInput('r_dekos_800x1200', false), this.elementInput('r_dekos_1000x1200', true)],
+               this.s_sum_dekos(),
+               this.r_dekos(),
                [this.elementPrice('r_dekos_800x1200', false), this.elementPrice('r_dekos_1000x1200', true)],
-               [this.elementResult('r_dekos_800x1200', false), this.elementResult('r_dekos_1000x1200', true)],
+               this.r_sum_dekos(),
            ],
            tableData_10: [
-               [this.elementInput('s_plokste_800x1200_p', false), this.elementInput('s_plokste_800x1200_s', true)],
+               this.s_plokste(),
                [this.elementPrice('s_plokste_800x1200_p', false), this.elementPrice('s_plokste_800x1200_s', true)],
-               [this.elementResult('s_plokste_800x1200_p', false), this.elementResult('s_plokste_800x1200_s', true)],
-               [this.elementInput('r_plokste_800x1200_p', false), this.elementInput('r_plokste_800x1200_s', true)],
+               this.s_sum_plokste(),
+               this.r_plokste(),
                [this.elementPrice('r_plokste_800x1200_p', false), this.elementPrice('r_plokste_800x1200_s', true)],
-               [this.elementResult('r_plokste_800x1200_p', false), this.elementResult('r_plokste_800x1200_s', true)],
+               this.r_sum_plokste(),
            ],
            tableData_11: [
-               [this.elementInput('s_remontas', true)],
-               [this.elementPrice('s_remontas', true)],
-               [this.elementResult('s_remontas', true)],
-               [this.elementInput('r_remontas', true)],
-               [this.elementPrice('r_remontas', true)],
-               [this.elementResult('r_remontas', true)],
+               this.s_srotas(),
+               [this.elementPrice('s_srotas', true)],
+               this.s_sum_srotas(),
+               this.r_srotas(),
+               [this.elementPrice('r_srotas', true)],
+               this.r_sum_srotas(),
            ]
        }
     }
@@ -241,7 +327,1067 @@ export class Buy1 extends React.Component<MyProps, MyState> {
         )
     };
 
-    elementResult = (element: any, underline: boolean) =>{
+    s_800x1200 = () => {
+        console.log(this.state.table['s_a1'])
+        const underline = false
+        return [<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_a1']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_a1', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />, <TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_a2']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_a2', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />, <TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_b2']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_b2', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />, <TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_lpm_800']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_lpm_800', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,
+            <TextField
+                style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+                value={this.state.table['s_lsd_800']}
+                label=""
+                errorText={this.state.error}
+                fontSizeC={(this.state.size*0.56)}
+                onChangeText={newNumber => this.OnChange('s_lsd_800', newNumber)}
+                textAlign={"center"}
+                keyboardType={"phone-pad"}
+            />, <TextField
+                style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+                value={this.state.table['s_sd_800']}
+                label=""
+                errorText={this.state.error}
+                fontSizeC={(this.state.size*0.56)}
+                onChangeText={newNumber => this.OnChange('s_sd_800', newNumber)}
+                textAlign={"center"}
+                keyboardType={"phone-pad"}
+            />, <TextField
+                style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+                value={this.state.table['s_ap_800']}
+                label=""
+                errorText={this.state.error}
+                fontSizeC={(this.state.size*0.56)}
+                onChangeText={newNumber => this.OnChange('s_ap_800', newNumber)}
+                textAlign={"center"}
+                keyboardType={"phone-pad"}
+            />, <TextField
+                style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+                value={this.state.table['s_pm_800']}
+                label=""
+                errorText={this.state.error}
+                fontSizeC={(this.state.size*0.56)}
+                onChangeText={newNumber => this.OnChange('s_pm_800', newNumber)}
+                textAlign={"center"}
+                keyboardType={"phone-pad"}
+            />, <TextField
+                style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+                value={this.state.table['s_knauf_800']}
+                label=""
+                errorText={this.state.error}
+                fontSizeC={(this.state.size*0.56)}
+                onChangeText={newNumber => this.OnChange('s_knauf_800', newNumber)}
+                textAlign={"center"}
+                keyboardType={"phone-pad"}
+            />]
+
+
+
+
+
+    };
+
+    s_1000x1200 = () => {
+        const underline = false
+        return [<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_lsd_1000']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_lsd_1000', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />, <TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_sd_1000']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_sd_1000', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />, <TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_pm_1000']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_pm_1000', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />, <TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_knauf_1000']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_knauf_1000', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,
+        <TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_cp1_1000']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_cp1_1000', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />, <TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_cp6_1000']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_cp6_1000', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />]
+    };
+
+
+    s_1140x1140 = () => {
+        // [this.elementInput('', false), this.elementInput('', false), this.elementInput('', true)]
+        const underline = false
+        return [<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_sd_1140']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_sd_1140', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />, <TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_cp3_1140']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_cp3_1140', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />, <TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_cp9_1140']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_cp9_1140', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />]
+    };
+
+    s_paroc = () => {
+        const underline = false
+        return [<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_paroc']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_paroc', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />]
+    };
+
+    s_knauf = () => {
+        const underline = false
+        return [<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_knauf']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_knauf', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />]
+    };
+
+    s_Nstandart = () => {
+        const underline = false
+        return [<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_600x800']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_600x800', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_800x800']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_800x800', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_1000x1000']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_1000x1000', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_1200x1200']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_1200x1200', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_1100x1300']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_1100x1300', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_1600x3000']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_1600x3000', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />]
+    };
+
+    s_apvadai = () => {
+        const underline = false
+        return [<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_apvadai_800x1200_white']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_apvadai_800x1200_white', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_apvadai_800x1200_black']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_apvadai_800x1200_black', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_apvadai_600x800_white']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_apvadai_600x800_white', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_apvadai_600x800_black']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_apvadai_600x800_black', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_apvadai_800x2000_mix']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_apvadai_800x2000_mix', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />]
+    };
+
+    s_dekos = () => {
+        const underline = false
+        return [<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_dekos_800x1200']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_dekos_800x1200', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_dekos_1000x1200']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_dekos_1000x1200', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />]
+    };
+
+    s_plokste = () => {
+        const underline = false
+        return [<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_plokste_800x1200_p']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_plokste_800x1200_p', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_plokste_800x1200_s']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_plokste_800x1200_s', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />]
+    };
+
+    s_srotas = () => {
+        const underline = false
+        return [<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['s_srotas']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('s_srotas', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />]
+    };
+
+    r_800x1200 = () => {
+        const underline = false
+        return [<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_a1']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_a1', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />, <TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_a2']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_a2', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />, <TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_b2']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_b2', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />, <TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_lpm_800']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_lpm_800', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,
+            <TextField
+                style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+                value={this.state.table['r_lsd_800']}
+                label=""
+                errorText={this.state.error}
+                fontSizeC={(this.state.size*0.56)}
+                onChangeText={newNumber => this.OnChange('r_lsd_800', newNumber)}
+                textAlign={"center"}
+                keyboardType={"phone-pad"}
+            />, <TextField
+                style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+                value={this.state.table['r_sd_800']}
+                label=""
+                errorText={this.state.error}
+                fontSizeC={(this.state.size*0.56)}
+                onChangeText={newNumber => this.OnChange('r_sd_800', newNumber)}
+                textAlign={"center"}
+                keyboardType={"phone-pad"}
+            />, <TextField
+                style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+                value={this.state.table['r_ap_800']}
+                label=""
+                errorText={this.state.error}
+                fontSizeC={(this.state.size*0.56)}
+                onChangeText={newNumber => this.OnChange('r_ap_800', newNumber)}
+                textAlign={"center"}
+                keyboardType={"phone-pad"}
+            />, <TextField
+                style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+                value={this.state.table['r_pm_800']}
+                label=""
+                errorText={this.state.error}
+                fontSizeC={(this.state.size*0.56)}
+                onChangeText={newNumber => this.OnChange('r_pm_800', newNumber)}
+                textAlign={"center"}
+                keyboardType={"phone-pad"}
+            />, <TextField
+                style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+                value={this.state.table['r_knauf_800']}
+                label=""
+                errorText={this.state.error}
+                fontSizeC={(this.state.size*0.56)}
+                onChangeText={newNumber => this.OnChange('r_knauf_800', newNumber)}
+                textAlign={"center"}
+                keyboardType={"phone-pad"}
+            />]
+
+
+
+
+
+    };
+
+    r_1000x1200 = () => {
+        //               [this.elementInput('', false), this.elementInput('', false), this.elementInput('', false), this.elementInput('', false), this.elementInput('', false), this.elementInput('', true)],
+        const underline = false
+        return [<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_lsd_1000']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_lsd_1000', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />, <TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_sd_1000']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_sd_1000', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />, <TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_pm_1000']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_pm_1000', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />, <TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_knauf_1000']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_knauf_1000', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />, <TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_cp1_1000']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_cp1_1000', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />, <TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_cp6_1000']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_cp6_1000', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />]
+    };
+
+    r_1140x1140 = () => {
+        // [this.elementResult('', false), this.elementResult('', false), this.elementResult('', true)],
+        const underline = false
+        return [<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_sd_1140']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_sd_1140', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />, <TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_cp3_1140']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_cp3_1140', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />, <TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_cp9_1140']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_cp9_1140', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />]
+    };
+
+
+    r_paroc = () => {
+        // [this.elementResult('', false), this.elementResult('', false), this.elementResult('', true)],
+        const underline = false
+        return [<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_paroc']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_paroc', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />]
+    };
+
+    r_knauf = () => {
+        // [this.elementResult('', false), this.elementResult('', false), this.elementResult('', true)],
+        const underline = false
+        return [<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_knauf']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_knauf', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />]
+    };
+
+
+    r_Nstandart = () => {
+        // [this.elementInput('', false), this.elementInput('', false), this.elementInput('', false), this.elementInput('', false), this.elementInput('', false), this.elementInput('', false), this.elementInput('', true)]
+        const underline = false
+        return [<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_600x800']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_600x800', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_800x800']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_800x800', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_1000x1000']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_1000x1000', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_1200x1200']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_1200x1200', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_1100x1300']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_1100x1300', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_1600x3000']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_1600x3000', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,]
+    };
+
+    r_apvadai = () => {
+        const underline = false
+        return [<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_apvadai_800x1200_white']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_apvadai_800x1200_white', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_apvadai_800x1200_black']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_apvadai_800x1200_black', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_apvadai_600x800_white']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_apvadai_600x800_white', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_apvadai_600x800_black']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_apvadai_600x800_black', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_apvadai_800x2000_mix']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_apvadai_800x2000_mix', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />]
+    };
+
+    r_dekos = () => {
+        const underline = false
+        return [<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_dekos_800x1200']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_dekos_800x1200', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_dekos_1000x1200']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_dekos_1000x1200', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />]
+    };
+
+    r_plokste = () => {
+        const underline = false
+        return [<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_plokste_800x1200_p']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_plokste_800x1200_p', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />,<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_plokste_800x1200_s']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_plokste_800x1200_s', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />]
+    };
+
+    r_srotas = () => {
+        const underline = false
+        return [<TextField
+            style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+            value={this.state.table['r_srotas']}
+            label=""
+            errorText={this.state.error}
+            fontSizeC={(this.state.size*0.56)}
+            onChangeText={newNumber => this.OnChange('r_srotas', newNumber)}
+            textAlign={"center"}
+            keyboardType={"phone-pad"}
+        />]
+    };
+
+    elementInput1 = (id: any, underline: boolean) => {
+        return (
+
+            <TextField
+                style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+                value={this.state.table[id]}
+                label=""
+                errorText={this.state.error}
+                fontSizeC={(this.state.size*0.56)}
+                onChangeText={newNumber => this.OnChange(id, newNumber)}
+                textAlign={"center"}
+                keyboardType={"phone-pad"}
+            />
+
+        )
+    };
+
+    s_sum_800x1200 = () => {
+        const underline = false
+        return [<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_a1']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_a2']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_b2']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_lpm_800']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_lsd_800']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_sd_800']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_ap_800']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_pm_800']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_knauf_800']?.['totalPrice']}</Text>
+        </View>]
+    };
+
+    s_sum_1000x1200 = () => {
+        //                [this.elementResult('', false), this.elementResult('', false), this.elementResult('', false), this.elementResult('', false), this.elementResult('', false), this.elementResult('', true)],
+        const underline = false
+        return [<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_lsd_1000']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_sd_1000']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_pm_1000']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_knauf_1000']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_cp1_1000']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_cp6_1000']?.['totalPrice']}</Text>
+        </View>]
+    };
+
+
+    s_sum_1140x1140 = () => {
+        const underline = false;
+        // [this.elementResult('', false), this.elementResult('', false), this.elementResult('', true)]        const underline = false
+        return [<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_sd_1140']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_cp3_1140']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_cp9_1140']?.['totalPrice']}</Text>
+        </View>]
+    };
+
+    s_sum_paroc = () => {
+        const underline = false;
+        return [<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_paroc']?.['totalPrice']}</Text>
+        </View>]
+    };
+
+    s_sum_knauf = () => {
+        const underline = false;
+        return [<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_knauf']?.['totalPrice']}</Text>
+        </View>]
+    };
+
+    s_sum_Nstandart = () => {
+        const underline = false;
+        return [<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_600x800']?.['totalPrice']}</Text>
+        </View>,<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_800x800']?.['totalPrice']}</Text>
+        </View>,<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_1000x1000']?.['totalPrice']}</Text>
+        </View>,<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['']?.['totalPrice']}</Text>
+        </View>,<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_1200x1200']?.['totalPrice']}</Text>
+        </View>,<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_1100x1300']?.['totalPrice']}</Text>
+        </View>,<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_1600x3000']?.['totalPrice']}</Text>
+        </View>,]
+    };
+
+    s_sum_apvadai = () => {
+        const underline = false;
+        return [<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_apvadai_800x1200_white']?.['totalPrice']}</Text>
+        </View>,<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_apvadai_800x1200_black']?.['totalPrice']}</Text>
+        </View>,<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_apvadai_600x800_white']?.['totalPrice']}</Text>
+        </View>,<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_apvadai_600x800_black']?.['totalPrice']}</Text>
+        </View>,<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_apvadai_800x2000_mix']?.['totalPrice']}</Text>
+        </View>]
+    };
+
+    s_sum_dekos = () => {
+        const underline = false;
+        return [<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_dekos_800x1200']?.['totalPrice']}</Text>
+        </View>,<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_dekos_1000x1200']?.['totalPrice']}</Text>
+        </View>]
+    };
+
+    s_sum_plokste = () => {
+        const underline = false;
+        return [<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_plokste_800x1200_p']?.['totalPrice']}</Text>
+        </View>,<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_plokste_800x1200_s']?.['totalPrice']}</Text>
+        </View>]
+    };
+
+    s_sum_srotas = () => {
+        const underline = false;
+        return [<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['s_srotas']?.['totalPrice']}</Text>
+        </View>]
+    };
+
+    r_sum_800x1200 = () => {
+        const underline = false
+        return [<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_a1']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_a2']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_b2']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_lpm_800']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_lsd_800']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_sd_800']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_ap_800']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_pm_800']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_knauf_800']?.['totalPrice']}</Text>
+        </View>]
+    };
+
+    r_sum_1000x1200 = () => {
+        // [this.elementResult('', false), this.elementResult('', false), this.elementResult('', false), this.elementResult('', false), this.elementResult('', false), this.elementResult('', true)]
+        const underline = false
+        return [<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_lsd_1000']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_sd_1000']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_pm_1000']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_knauf_1000']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_cp1_1000']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_cp6_1000']?.['totalPrice']}</Text>
+        </View>]
+    };
+
+    r_sum_1140x1140 = () => {
+        // [this.elementResult('', false), this.elementResult('', false), this.elementResult('', true)],
+        const underline = false
+        return [<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_sd_1140']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_cp3_1140']?.['totalPrice']}</Text>
+        </View>, <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_cp9_1140']?.['totalPrice']}</Text>
+        </View>]
+    };
+
+    r_sum_paroc = () => {
+        const underline = false
+        return [<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_paroc']?.['totalPrice']}</Text>
+        </View>]
+    };
+
+    r_sum_knauf = () => {
+        const underline = false
+        return [<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_knauf']?.['totalPrice']}</Text>
+        </View>]
+    };
+
+    r_sum_Nstandart = () => {
+        // [this.elementResult('', false), this.elementResult('', false), this.elementResult('', false), this.elementResult('', false), this.elementResult('', false), this.elementResult('', false), this.elementResult('', true)]
+        const underline = false
+        return [<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_600x800']?.['totalPrice']}</Text>
+        </View>,<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_800x800']?.['totalPrice']}</Text>
+        </View>,<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_1000x1000']?.['totalPrice']}</Text>
+        </View>,<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['']?.['totalPrice']}</Text>
+        </View>,<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_1200x1200']?.['totalPrice']}</Text>
+        </View>,<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_1100x1300']?.['totalPrice']}</Text>
+        </View>,<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_1600x3000']?.['totalPrice']}</Text>
+        </View>,]
+    };
+
+    r_sum_apvadai = () => {
+        const underline = false
+        return [<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_apvadai_800x1200_white']?.['totalPrice']}</Text>
+        </View>,<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_apvadai_800x1200_black']?.['totalPrice']}</Text>
+        </View>,<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_apvadai_600x800_white']?.['totalPrice']}</Text>
+        </View>,<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_apvadai_600x800_black']?.['totalPrice']}</Text>
+        </View>,<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_apvadai_800x2000_mix']?.['totalPrice']}</Text>
+        </View>]
+    };
+
+    r_sum_dekos = () => {
+        const underline = false
+        return [<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_dekos_800x1200']?.['totalPrice']}</Text>
+        </View>,<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_dekos_1000x1200']?.['totalPrice']}</Text>
+        </View>]
+    };
+
+    r_sum_plokste = () => {
+        const underline = false
+        return [<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_plokste_800x1200_p']?.['totalPrice']}</Text>
+        </View>,<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_plokste_800x1200_s']?.['totalPrice']}</Text>
+        </View>]
+    };
+
+    r_sum_srotas = () => {
+        const underline = false
+        return [<View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table['r_srotas']?.['totalPrice']}</Text>
+        </View>]
+    };
+
+    elementResult = (element: any, underline: boolean) => {
         return (
             <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
                 <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table[element]?.['totalPrice']}</Text>
@@ -487,10 +1633,10 @@ export class Buy1 extends React.Component<MyProps, MyState> {
 
 
                 <View>
-                    {this.input('s_a1')}
-                    {this.input('s_a2')}
-                    {this.result('s_a1')}
-                    {this.result('s_a2')}
+                    {/*{this.input('s_a1')}*/}
+                    {/*{this.input('s_a2')}*/}
+                    {/*{this.result('s_a1')}*/}
+                    {/*{this.result('s_a2')}*/}
                     {/*<Button*/}
                     {/*    onPress={() => console.log(this.state.ChangeNumber)}*/}
                     {/*    title="Learn More"*/}
