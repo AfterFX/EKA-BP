@@ -362,6 +362,25 @@ export class Buy1 extends React.Component<MyProps, MyState> {
         })
     }
 
+    MyWebtutsComponent = async () => {
+        const todayDate = new Date().toISOString().slice(0, 10);
+        const BuyHistory = await AsyncStorage.getItem('@BuyHistory')
+        const BuyHistory2 = [//need add total and units
+            {id: 1, date: todayDate },
+            {id: 2, date: todayDate },
+            {id: 3, date: todayDate }
+        ]
+        const myObjArray = (BuyHistory != null ? JSON.parse([BuyHistory]) : BuyHistory2);
+        let lastElement = myObjArray.slice(-1)
+        myObjArray.push({id: Number(lastElement[0].id+1), date: todayDate});
+
+        // let lastElement = myObjArray.slice(-1)
+
+
+        BuyHistory == await AsyncStorage.setItem('@BuyHistory', JSON.stringify(myObjArray) );
+        console.log(BuyHistory);
+    };
+
     fadeAnim = new Animated.Value(0);
 
     onToggleSnackBar = () => this.setState({ visible: !this.state.visible });
@@ -437,7 +456,9 @@ export class Buy1 extends React.Component<MyProps, MyState> {
                                     style={styles.singleHeadLeftSide}
                                     borderRadius={0}
                                     color={'red'}
-                                    onPress={() => print(this.state.table, this.state.priceList).then(() => this.setState({table: []}))}
+                                    onPress={() => print(this.state.table, this.state.priceList).then(() => {
+                                        this.MyWebtutsComponent()
+                                    }).then(() => this.setState({table: []}))}
                                 >
                                 </Icon.Button>
                             </TouchableOpacity>
