@@ -76,6 +76,7 @@ function Datatable({
                 return (
                     <DataTable.Row key={i}>
                         {columns.map((headerItem, j) => {
+                            console.log(item)
                             return (
                                 <DataTable.Cell key={j}>
                                     {getValue(item, headerItem)}

@@ -362,24 +362,54 @@ export class Buy1 extends React.Component<MyProps, MyState> {
         })
     }
 
-    MyWebtutsComponent = async () => {
-        const todayDate = new Date().toISOString().slice(0, 10);
+    createHistory = async () => {
+        const date = new Date();
+        const todayDate = date.toISOString().slice(0, 10);
+        const time = date.getHours()+":"+date.getMinutes()+":"+ date.getSeconds();
         const BuyHistory = await AsyncStorage.getItem('@BuyHistory')
-        const BuyHistory2 = [//need add total and units
-            {id: 1, date: todayDate },
-            {id: 2, date: todayDate },
-            {id: 3, date: todayDate }
-        ]
-        const myObjArray = (BuyHistory != null ? JSON.parse([BuyHistory]) : BuyHistory2);
-        let lastElement = myObjArray.slice(-1)
-        myObjArray.push({id: Number(lastElement[0].id+1), date: todayDate});
+        const freshTableHistory = [//need add total and units
+                {id: 0, date: "", "time": "", "table": {} },
+            ]
+        const myObjArray = (BuyHistory != null ? JSON.parse([BuyHistory]) : freshTableHistory);
 
-        // let lastElement = myObjArray.slice(-1)
+        let lastKey = myObjArray.slice(-1) || 0
+        myObjArray.push({id: Number(lastKey[0].id+1), "date": todayDate, "time": time, "table": this.state.table});
 
 
-        BuyHistory == await AsyncStorage.setItem('@BuyHistory', JSON.stringify(myObjArray) );
-        console.log(BuyHistory);
+        return await AsyncStorage.setItem('@BuyHistory', JSON.stringify(myObjArray)).then(() => {this.setState({table: []})});
     };
+
+    // createHistory = async () => {
+    //     const todayDate = new Date().toISOString().slice(0, 10);
+    //     const BuyHistory = await AsyncStorage.getItem('@BuyHistory')
+    //     const BuyHistory2 = [//need add total and units
+    //         {id: 1, date: todayDate },
+    //         {id: 2, date: todayDate },
+    //         {id: 3, date: todayDate }
+    //     ]
+    //     const myObjArray = (BuyHistory != null ? JSON.parse([BuyHistory]) : BuyHistory2);
+    //     let lastElement = myObjArray.slice(-1)
+    //     myObjArray.push({id: Number(lastElement[0].id+1), date: todayDate});
+    //
+    //     // let lastElement = myObjArray.slice(-1)
+    //
+    //
+    //     BuyHistory == await AsyncStorage.setItem('@BuyHistory', JSON.stringify(myObjArray) );
+    //     console.log(BuyHistory);
+    // };
+
+    // createHistory = async () => {
+    //     const date = new Date();
+    //     const todayDate = date.toISOString().slice(0, 10);
+    //     const time = date.getHours()+":"+date.getMinutes()+":"+ date.getSeconds();
+    //     const BuyHistory = await AsyncStorage.getItem('@BuyHistory')
+    //     const freshTableHistory = {[0]: {"date": todayDate, "time": "", "table": ""}};
+    //     const myObjArray = (BuyHistory != null ? JSON.parse([BuyHistory]) : freshTableHistory);
+    //     const lastKey = Object.keys(myObjArray).pop() || 0;
+    //
+    //     myObjArray[Number(lastKey)+1] = {"date": todayDate, "time": time, "table": this.state.table};
+    //     return await AsyncStorage.setItem('@BuyHistory', JSON.stringify(myObjArray)).then(() => {this.setState({table: []})});
+    // };
 
     fadeAnim = new Animated.Value(0);
 
@@ -409,6 +439,19 @@ export class Buy1 extends React.Component<MyProps, MyState> {
 
 
     ToggleVisible = () => {(!this.state.visible)? this.fadeIn() : this.fadeOut()};
+
+    getTest = async () => {
+        const BuyHistory  = await AsyncStorage.getItem('@BuyHistory')
+
+        // const parseData = JSON.parse(BuyHistory)
+        // const mapData = new Map(parseData)
+        const dd = BuyHistory;
+
+        // const lastKey = Object.keys(dd).pop();
+
+        console.log(JSON.parse(dd))
+
+    }
 
 
     // console.log(JSON.stringify(this.state.table, null, ' '))
@@ -457,8 +500,8 @@ export class Buy1 extends React.Component<MyProps, MyState> {
                                     borderRadius={0}
                                     color={'red'}
                                     onPress={() => print(this.state.table, this.state.priceList).then(() => {
-                                        this.MyWebtutsComponent()
-                                    }).then(() => this.setState({table: []}))}
+                                        this.createHistory()
+                                    })}
                                 >
                                 </Icon.Button>
                             </TouchableOpacity>
@@ -563,12 +606,12 @@ export class Buy1 extends React.Component<MyProps, MyState> {
                     {/*    color="#841584"*/}
                     {/*    accessibilityLabel="Learn more about this purple button"*/}
                     {/*/>*/}
-                    {/*<Button*/}
-                    {/*    onPress={ this.getStorageTest}*/}
-                    {/*    title="Learn More"*/}
-                    {/*    color="#841584"*/}
-                    {/*    accessibilityLabel="Learn more about this purple button"*/}
-                    {/*/>*/}
+                    <Button
+                        onPress={ this.getTest}
+                        title="Learn More"
+                        color="#841584"
+                        accessibilityLabel="Learn more about this purple button"
+                    />
                 </View>
 
                         {this.state.visible && ( <View style={[styles.settingsContainer, {top: StatusBarHeight+(window.height/2)}]}>

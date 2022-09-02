@@ -2,8 +2,15 @@ import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Chip, Text } from 'react-native-paper';
 import Datatable from './Datatable';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default class App extends React.Component {
+
+    history = async () => {
+        return  await AsyncStorage.getItem('@BuyHistory')
+        // console.log(JSON.parse([BuyHistory]))
+    }
+
     render() {
         /*let datatable = Array(21)
           .fill()
@@ -12,7 +19,7 @@ export default class App extends React.Component {
             email: 'email' + (id + 1) + '@host.com',
           }));*/
 
-        let datatable = [
+        let datatable1 = [
             {
                 _id: '5d406a171ed43384972f04b5',
                 index: 0,
@@ -230,6 +237,10 @@ export default class App extends React.Component {
                 email: 'yvette.daugherty@chillium.us',
             },
         ];
+
+        let datatable = [this.history()]
+
+        console.log("awfawf", datatable)
         let page = 2;
 
         return (
@@ -243,19 +254,19 @@ export default class App extends React.Component {
                         },*/
                         {
                             name: 'Firstname',
-                            selector: 'name.first',
+                            selector: 'date',
                         },
                         {
                             name: 'Surname',
-                            selector: 'name.last',
+                            selector: 'id',
                         },
                         {
                             name: 'index',
-                            selector: 'index',
+                            selector: 'units',
                         },
                         {
                             name: 'age',
-                            selector: 'age',
+                            selector: 'time',
                         },
                         /*{
                           name: 'Full name',

@@ -67,7 +67,9 @@ export const createDynamicTable = (table: any, storedPrices: any) => {
         let result = table[element] * storedPrices[element];
         return (table[element])? Math.round(result * 100) / 100: '';
     }
-    const todayDate = new Date().toISOString().slice(0, 10);
+    const date = new Date();
+    const todayDate = date.toISOString().slice(0, 10);
+    const time = date.getHours()+":"+date.getMinutes()+":"+ date.getSeconds();
 
     const priceBox = 'border-left: 1px dashed #000000; border-right: 1px dashed #000000; border-top: 1px solid #000000; font-size: 10px;';
     const InputBox = 'border-left: 2px solid #000000; border-top: 1px solid #000000; font-size: 10px;';
@@ -104,7 +106,7 @@ export const createDynamicTable = (table: any, storedPrices: any) => {
             <td  align="center" valign=bottom><br></td>
             <td align="left" valign=middle><br></td>
             <td align="left" valign=middle><b><br></b></td>
-            <td style="height: 25px; border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; font-size: 20px" colspan=6 align="center" valign=middle>${todayDate}</td>
+            <td style="height: 25px; border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; font-size: 20px" colspan=6 align="center" valign=middle>${todayDate + " " + time}</td>
         </tr>
 
         <tr>
@@ -495,8 +497,9 @@ export const createDynamicTable = (table: any, storedPrices: any) => {
             <td height="20" align="left" valign=top><br></td>
             <td align="left" valign=top><br></td>
 
-            <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; font-size: 10px" colspan=1 align="center" valign=middle bgcolor="#FFFFFF"><b>Vnt.</b></td>
-            <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; font-size: 10px" colspan=6 align="center" valign=middle><b>Suma: EUR</b></td>
+            <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; font-size: 10px" colspan=1 align="center" valign=middle bgcolor="#FFFFFF"><b>Čekis:</b></td>
+            <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; font-size: 10px" colspan=3 align="center" valign=middle><b>Vnt.</b></td>
+            <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; font-size: 10px" colspan=3 align="center" valign=middle><b>Suma: EUR</b></td>
             <td align="center" valign=middle><i><br></i></td>
             <td align="center" valign=middle><b><br></b></td>
             <td align="center" valign=middle><br></td>
@@ -505,8 +508,11 @@ export const createDynamicTable = (table: any, storedPrices: any) => {
         <tr>
             <td height="20" align="left" valign=top><br></td>
             <td align="left" valign=top><br></td>
-            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; font-size: 30px" colspan=1 align="center" valign=middle><b>${countTotal(table, storedPrices)}</b></td>
-            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; font-size: 30px" colspan=6 align="center" valign=middle><b>${payTotal(table, storedPrices)}</b></td>
+                        <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; font-size: 30px" colspan=1 align="center" valign=middle><b></b></td>
+
+            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; font-size: 30px" colspan=3 align="center" valign=middle><b>${countTotal(table, storedPrices)}</b></td>
+            <td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; font-size: 30px" colspan=3 align="center" valign=middle><b>${payTotal(table, storedPrices)}</b></td>
+            <td align="center" valign=middle><i><br></i></td>
             <td align="center" valign=middle><i><br></i></td>
             <td align="center" valign=middle><b><br></b></td>
             <td align="center" valign=middle><br></td>
