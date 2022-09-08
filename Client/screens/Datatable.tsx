@@ -36,7 +36,7 @@ function Datatable({
     });
 
     const sort = (sortField: string | number) => {
-        var result = data.sort((a, b) => {
+        const result = data.sort((a, b) => {
             let [x, z] = sortAsc ? [a, b] : [b, a];
             return x[sortField] - z[sortField];
         });
@@ -76,7 +76,6 @@ function Datatable({
                 return (
                     <DataTable.Row key={i}>
                         {columns.map((headerItem, j) => {
-                            console.log(item)
                             return (
                                 <DataTable.Cell key={j}>
                                     {getValue(item, headerItem)}
