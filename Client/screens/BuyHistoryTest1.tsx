@@ -1,14 +1,125 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
+import {View, StyleSheet, Button, TouchableOpacity} from 'react-native';
 import { Chip, Text } from 'react-native-paper';
 import Datatable from './Datatable';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from '@react-navigation/native';
 
 export default class App extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            data : null,
+            table: {
+                s_a1:  {
+                    "totalPrice": 0,
+                    "units": 0,
+                },
+                s_a2:  {
+                    "totalPrice": 0,
+                    "units": 0,
+                },
+            }
+        };
+    }
+
+
+    componentDidMount() {
+        this.history().then(r => this.setState({ data : r }));
+
+    }
+
+    // componentDidUpdate(previousState){
+    //     if(previousState.data !== this.state.data){
+    //         // this.setState({
+    //         //     data: this.state.data
+    //         // });
+    //         console.log("aaaa")
+    //     }
+    // }
+
+
+
 
     history = async () => {
         return  await AsyncStorage.getItem('@BuyHistory')
         // console.log(JSON.parse([BuyHistory]))
+    }
+
+    resultOfTheDay = () => {
+        let content = JSON.parse(this.state.data);
+
+        // let sum = content.reduce(function(prev, current) {
+        //     console.log()
+        //     return prev + +current.id
+        // }, 0);
+        // console.log(sum)
+
+        // content.reduce(function(prev, current) {
+        //     console.log(current.table["s_a1"])
+        //     return prev + +current.id
+        // }, 0);
+
+        // content.map(function(d){
+        //
+        //     [d.table].forEach(v => {console.log(v)})
+        // })
+        let lol: any
+        let lol1: any
+        // content.map(function(d){
+        //     Object.entries(d.table).forEach(([key, val]) => {
+        //         // console.log(key); // the name of the current key.
+        //         // console.log(val.units); // the value of the current key.
+        //
+        //
+        //     });
+        //
+        // })
+
+        // https://stackoverflow.com/questions/15748656/javascript-reduce-on-object
+        //https://stackoverflow.com/questions/60089494/reduce-and-sum-array-of-objects-js
+            Object.entries(content).forEach(([key, val]) => {
+                // console.log(key); // the name of the current key.
+                // console.log(val); // the value of the current key.
+                Object.entries(val.table).forEach(([key1, val1]) => {
+                    // console.log(key1); // the name of the current key.
+                    // console.log(val.table); // the value of the current key.
+
+
+            });
+
+        const models = [
+            { id: 1, name: "samsung", seller_id: 1, count: 56 },
+            { id: 1, name: "samsung", seller_id: 2, count: 68 },
+            { id: 2, name: "nokia", seller_id: 2, count: 45 },
+            { id: 2, name: "nokia", seller_id: 3, count: 49 }
+        ];
+
+        const arr = content.reduce((acc, item) => {
+            let existItem = acc.find(({id}) => item.id === id);
+            if(existItem) {
+                existItem.count += item.count;
+            } else {
+                acc.push(item);
+            }
+            return acc;
+        }, []);
+
+        // console.log(arr);
+
+
+
+
+
+
+        // console.log(lol1)
+
+
+
+
+
     }
 
     render() {
@@ -19,7 +130,7 @@ export default class App extends React.Component {
             email: 'email' + (id + 1) + '@host.com',
           }));*/
 
-        let datatable1 = [
+        let datatable = [
             {
                 _id: '5d406a171ed43384972f04b5',
                 index: 0,
@@ -238,73 +349,112 @@ export default class App extends React.Component {
             },
         ];
 
-        let datatable = [this.history()]
 
-        console.log("awfawf", datatable)
-        let page = 2;
+
+        let page = 1;
 
         return (
             <View style={styles.container}>
-                <Datatable
-                    columns={[
-                        /*{
-                          name: 'Email',
-                          selector: 'email',
-                          cell: ({ email }) => <Chip mode="outlined">{email}</Chip>,
-                        },*/
-                        {
-                            name: 'Firstname',
-                            selector: 'date',
-                        },
-                        {
-                            name: 'Surname',
-                            selector: 'id',
-                        },
-                        {
-                            name: 'index',
-                            selector: 'units',
-                        },
-                        {
-                            name: 'age',
-                            selector: 'time',
-                        },
-                        /*{
-                          name: 'Full name',
-                          selector: 'name.last',
-                          cell: (row) => `${row.name.first} ${row.name.last}`,
-                        },
-                        {
-                          name: 'Full name',
-                          selector: 'name.last',
-                          cell: (row) => (
-                            <Text>
-                              {row.name.first} {row.name.last}
-                            </Text>
-                          ),
-                        },
-                        {
-                          name: 'Full name',
-                          selector: 'name.last',
-                          cell: ({ name: { first, last } }) => (
-                            <Text>
-                              {first} {last}
-                            </Text>
-                          ),
-                        },*/
-                    ]}
-                    defaultSortField={'name.last'}
-                    defaultSortAsc={true}
-                    data={datatable}
-                    //page={page}
-                    //perPage={4}
-                    paginationComponentOptions={(currentPage, totalPage) =>
-                        `${currentPage} di ${totalPage}`
-                    }
-                    style={{ backgroundColor: '#fff' }}
+                {this.state.data ?
+                    <Datatable
+                        columns={[
+                            /*{
+                              name: 'Email',
+                              selector: 'email',
+                              cell: ({ email }) => <Chip mode="outlined">{email}</Chip>,
+                            },*/
+                            {
+                                name: 'Nr.',
+                                selector: 'id',
+                            },
+                            {
+                                name: 'Kiekis',
+                                selector: 'countTotal',
+                            },
+                            {
+                                name: 'Suma',
+                                selector: 'payTotal',
+                                cell: (row: any) => (
+                                    <>
+                                        <Text>€{row.payTotal}</Text>
+                                    </>
+                                ),
+                            },
+                            // {
+                            //     name: 'Data',
+                            //     selector: 'date',
+                            // },
+                            {
+                                name: 'Laikas',
+                                selector: 'time',
+                            },
+                            {
+                                name: '',
+                                selector: '',
+                                cell: (row) => (
+                                    <>
+                                        <TouchableOpacity onPress={() => console.log(row.id)}>
+                                            <Text>Rodyti</Text>
+                                        </TouchableOpacity>
+                                    </>
+                                ),
+                            },
+                            /*{
+                              name: 'Full name',
+                              selector: 'name.last',
+                              cell: (row) => `${row.name.first} ${row.name.last}`,
+                            },
+                            {
+                              name: 'Full name',
+                              selector: 'name.last',
+                              cell: (row) => (
+                                <Text>
+                                  {row.name.first} {row.name.last}
+                                </Text>
+                              ),
+                            },
+                            {
+                              name: 'Full name',
+                              selector: 'name.last',
+                              cell: ({ name: { first, last } }) => (
+                                <Text>
+                                  {first} {last}
+                                </Text>
+                              ),
+                            },*/
+                        ]}
+                        defaultSortField={'name.last'}
+                        defaultSortAsc={true}
+                        data={JSON.parse(this.state.data)}
+                        page={page}
+                        perPage={5}
+                        paginationComponentOptions={(currentPage, totalPage) =>
+                            `${currentPage} di ${totalPage}`
+                        }
+                        style={{ backgroundColor: '#fff' }}
+                    /> : <></>}
+                <Button
+                    onPress={() => this.resultOfTheDay()}
+                    title="Learn More"
+                    color="#841584"
+                    accessibilityLabel="Learn more about this purple button"
+                />
+                <Button
+                    onPress={() => console.log("|")}
+                    title="console clr"
+                    color="green"
+                    accessibilityLabel="Learn more about this purple button"
                 />
             </View>
         );
     }
+//     Object {
+//     "s_a1": Object {
+//     "totalPrice": 100,
+//     "units": "2",
+// },
+// }
+
 }
 
 const styles = StyleSheet.create({
