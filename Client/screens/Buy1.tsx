@@ -367,15 +367,17 @@ export class Buy1 extends React.Component<MyProps, MyState> {
         const todayDate = date.toISOString().slice(0, 10);
         const time = date.getHours()+":"+date.getMinutes()+":"+ date.getSeconds();
         const BuyHistory = await AsyncStorage.getItem('@BuyHistory')
-        const freshTableHistory = [//need add total and units
-                {id: 0, date: "", "time": "", "table": {} },
-            ]
-        const myObjArray = (BuyHistory != null ? JSON.parse([BuyHistory]) : freshTableHistory);
-
-        let lastKey = myObjArray.slice(-1) || 0
-        myObjArray.push({id: Number(lastKey[0].id+1), "date": todayDate, "time": time, "table": this.state.table});
 
 
+        let myObjArray: any
+
+        if(BuyHistory != null){
+            myObjArray = JSON.parse([BuyHistory]);
+            let lastKey = myObjArray.slice(-1) || 0
+            myObjArray.push({id: Number(lastKey[0].id+1), "date": todayDate, "time": time, "table": this.state.table, "countTotal": countTotal(this.state.table, this.state.priceList), "payTotal": payTotal(this.state.table, this.state.priceList)});
+        }else{
+            myObjArray = [{id: 1, "date": todayDate, "time": time, "table": this.state.table, "countTotal": countTotal(this.state.table, this.state.priceList), "payTotal": payTotal(this.state.table, this.state.priceList)}];
+        }
         return await AsyncStorage.setItem('@BuyHistory', JSON.stringify(myObjArray)).then(() => {this.setState({table: []})});
     };
 
@@ -451,6 +453,10 @@ export class Buy1 extends React.Component<MyProps, MyState> {
 
         console.log(JSON.parse(dd))
 
+    }
+
+    destroy = async (value: string) => {
+        return await AsyncStorage.removeItem(value)
     }
 
 
@@ -610,6 +616,12 @@ export class Buy1 extends React.Component<MyProps, MyState> {
                         onPress={ this.getTest}
                         title="Learn More"
                         color="#841584"
+                        accessibilityLabel="Learn more about this purple button"
+                    />
+                    <Button
+                        onPress={ () => this.destroy("@BuyHistory")}
+                        title="Learn More"
+                        color="red"
                         accessibilityLabel="Learn more about this purple button"
                     />
                 </View>
