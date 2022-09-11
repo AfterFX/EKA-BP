@@ -497,7 +497,7 @@ export const createDynamicTable = (table: any, storedPrices: any) => {
             <td height="20" align="left" valign=top><br></td>
             <td align="left" valign=top><br></td>
 
-            <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; font-size: 10px" colspan=1 align="center" valign=middle bgcolor="#FFFFFF"><b>Čekis:</b></td>
+            <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; font-size: 10px" colspan=1 align="center" valign=middle bgcolor="#FFFFFF"><b>Kvitas:</b></td>
             <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; font-size: 10px" colspan=3 align="center" valign=middle><b>Vnt.</b></td>
             <td style="border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; font-size: 10px" colspan=3 align="center" valign=middle><b>Suma: EUR</b></td>
             <td align="center" valign=middle><i><br></i></td>
