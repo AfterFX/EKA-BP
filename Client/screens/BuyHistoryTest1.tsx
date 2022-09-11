@@ -21,14 +21,14 @@ export default class App extends React.Component {
             data : null,
             table: {},
             dialogVisible: false,
-            tableTitle: ['Title', 'Title2', 'Title3', 'Title4'],
+            tableTitle: ['A1', 'A2', 'B', '', 'LSD', 'SD', 'SD AP', 'PM', 'KNAUF', '', 'LSD, FIN', 'SD, perimetriniai', 'PM, perimetriniai, SD AP', '', 'CP1', 'CP6'],
             tableData: [
-                ['kiekis', '0', '0', '0', '0'],
-                ['kaina', '1', '1', '1', '1'],
-                ['viso', '0', '0', '0', '0'],
-                ['kiekis', '0', '0', '0', '0'],
-                ['kaina', '1', '1', '1', '1'],
-                ['viso', '0', '0', '0', '0']
+                ['kiekis', '0', '0', '0', '', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0'],
+                ['kaina',  '1', '1', '1', '', '1', '1', '1', '1', '1', '', '1', '1', '1', '1', '1', '1'],
+                ['viso',   '0', '0', '0', '', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0'],
+                ['kiekis', '0', '0', '0', '', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0'],
+                ['kaina',  '1', '1', '1', '', '1', '1', '1', '1', '1', '', '1', '1', '1', '1', '1', '1'],
+                ['viso',   '0', '0', '0', '', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0']
             ]
         };
     }
@@ -354,17 +354,17 @@ export default class App extends React.Component {
                                 <View style={styles.table_container}>
                                     <Table style={{flexDirection: 'row', width: window.width-100}} borderStyle={{borderWidth: 1}}>
                                         {/* Left Wrapper */}
-                                        <TableWrapper style={{width: 80}}>
+                                        <TableWrapper style={{width: 160}}>
                                             <Cell data="" style={styles.singleHead}/>
                                             <TableWrapper style={{flexDirection: 'row'}}>
-                                                <Col data={['H1', 'H2']} style={styles.head} heightArr={[60, 60]} textStyle={styles.text} />
-                                                <Col data={this.state.tableTitle} style={styles.title} heightArr={[30, 30, 30, 30]} textStyle={styles.titleText}/>
+                                                <Col data={['H1', 'H2', 'H3']} style={styles.head} heightArr={[120, 150, 150]} textStyle={styles.text} />
+                                                <Col data={this.state.tableTitle} style={styles.title} heightArr={[30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30]} textStyle={styles.titleText}/>
                                             </TableWrapper>
                                         </TableWrapper>
 
                                         {/* Right Wrapper */}
                                         <TableWrapper style={{flex:1}}>
-                                            <Cols data={this.state.tableData} heightArr={[40, 30, 30, 30, 30]} textStyle={styles.text}/>
+                                            <Cols data={this.state.tableData} heightArr={[40, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30]} textStyle={styles.text}/>
                                         </TableWrapper>
                                     </Table>
                                 </View>
