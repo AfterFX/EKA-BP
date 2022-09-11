@@ -1,9 +1,16 @@
 import * as React from 'react';
-import {View, StyleSheet, Button, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Button, TouchableOpacity, Dimensions, Alert} from 'react-native';
 import { Chip, Text } from 'react-native-paper';
 import Datatable from './Datatable';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from '@react-navigation/native';
+import {saveNewPrice} from "../components/functions";
+import Dialog from "react-native-dialog";
+import {Cell, Col, Cols, Row, Rows, Table, TableWrapper} from "react-native-table-component";
+
+
+const window = Dimensions.get("window");
+const screen = Dimensions.get("screen");
 
 export default class App extends React.Component {
 
@@ -12,16 +19,17 @@ export default class App extends React.Component {
 
         this.state = {
             data : null,
-            table: {
-                s_a1:  {
-                    "totalPrice": 0,
-                    "units": 0,
-                },
-                s_a2:  {
-                    "totalPrice": 0,
-                    "units": 0,
-                },
-            }
+            table: {},
+            dialogVisible: false,
+            tableTitle: ['Title', 'Title2', 'Title3', 'Title4'],
+            tableData: [
+                ['kiekis', '0', '0', '0', '0'],
+                ['kaina', '1', '1', '1', '1'],
+                ['viso', '0', '0', '0', '0'],
+                ['kiekis', '0', '0', '0', '0'],
+                ['kaina', '1', '1', '1', '1'],
+                ['viso', '0', '0', '0', '0']
+            ]
         };
     }
 
@@ -40,86 +48,69 @@ export default class App extends React.Component {
     //     }
     // }
 
+    elementButton = (value) => (
 
+            <View>
+                <Text>text</Text>
+            </View>
 
+    );
+
+    _alertIndex(value) {
+        Alert.alert(`This is column ${value}`);
+    }
+
+    showPriceEditor = async () => {
+        this.setState({ dialogVisible: true })
+    }
+    handleCancel = async () => {
+        this.setState({ dialogVisible: false })
+    };
 
     history = async () => {
         return  await AsyncStorage.getItem('@BuyHistory')
         // console.log(JSON.parse([BuyHistory]))
     }
+    handleSave = async () => {
+        // await saveNewPrice(this.state.editableProperty, this.state.OnChangePrice)
+        // await this.getStorage();//Refreshing numbers after save
+        return this.setState({ dialogVisible: false })
+    };
+
 
     resultOfTheDay = () => {
         let content = JSON.parse(this.state.data);
+        const table: never[] = [];
 
-        // let sum = content.reduce(function(prev, current) {
-        //     console.log()
-        //     return prev + +current.id
-        // }, 0);
-        // console.log(sum)
-
-        // content.reduce(function(prev, current) {
-        //     console.log(current.table["s_a1"])
-        //     return prev + +current.id
-        // }, 0);
-
-        // content.map(function(d){
-        //
-        //     [d.table].forEach(v => {console.log(v)})
-        // })
-        let lol: any
-        let lol1: any
-        // content.map(function(d){
-        //     Object.entries(d.table).forEach(([key, val]) => {
-        //         // console.log(key); // the name of the current key.
-        //         // console.log(val.units); // the value of the current key.
-        //
-        //
-        //     });
-        //
-        // })
-
-        // https://stackoverflow.com/questions/15748656/javascript-reduce-on-object
-        //https://stackoverflow.com/questions/60089494/reduce-and-sum-array-of-objects-js
-            Object.entries(content).forEach(([key, val]) => {
-                // console.log(key); // the name of the current key.
-                // console.log(val); // the value of the current key.
-                Object.entries(val.table).forEach(([key1, val1]) => {
-                    // console.log(key1); // the name of the current key.
-                    // console.log(val.table); // the value of the current key.
+        const generateState = (property: string, units: number) =>  {
+            return this.setState((previousState) => {
+                return {
+                    table: {
+                        ...previousState.table,
+                        [property]: {
+                            units: units
+                        }
+                    }
+                }
+            })
+        }
 
 
+        content.map(function(arr: any){
+            Object.entries(arr.table).forEach(([key, val]) => {
+                table.push({
+                    table: {
+                        [key]:{
+                            units: content.reduce((total, thing) => {
+                                generateState(key, total + (thing.table[key]?.units != undefined ? Number(thing.table[key]?.units) : 0))
+                                return total + (thing.table[key]?.units != undefined ? Number(thing.table[key]?.units) : 0)
+                            }, 0),
+                        }
+                    }
+
+                });
             });
-
-        const models = [
-            { id: 1, name: "samsung", seller_id: 1, count: 56 },
-            { id: 1, name: "samsung", seller_id: 2, count: 68 },
-            { id: 2, name: "nokia", seller_id: 2, count: 45 },
-            { id: 2, name: "nokia", seller_id: 3, count: 49 }
-        ];
-
-        const arr = content.reduce((acc, item) => {
-            let existItem = acc.find(({id}) => item.id === id);
-            if(existItem) {
-                existItem.count += item.count;
-            } else {
-                acc.push(item);
-            }
-            return acc;
-        }, []);
-
-        // console.log(arr);
-
-
-
-
-
-
-        // console.log(lol1)
-
-
-
-
-
+        })
     }
 
     render() {
@@ -355,6 +346,34 @@ export default class App extends React.Component {
 
         return (
             <View style={styles.container}>
+                <View>
+                    <Dialog.Container visible={this.state.dialogVisible}>
+                        <View style={{width: window.width-50}}>
+                            <Dialog.Title>Edit price</Dialog.Title>
+                            <Dialog.Description>
+                                <View style={styles.table_container}>
+                                    <Table style={{flexDirection: 'row', width: window.width-100}} borderStyle={{borderWidth: 1}}>
+                                        {/* Left Wrapper */}
+                                        <TableWrapper style={{width: 80}}>
+                                            <Cell data="" style={styles.singleHead}/>
+                                            <TableWrapper style={{flexDirection: 'row'}}>
+                                                <Col data={['H1', 'H2']} style={styles.head} heightArr={[60, 60]} textStyle={styles.text} />
+                                                <Col data={this.state.tableTitle} style={styles.title} heightArr={[30, 30, 30, 30]} textStyle={styles.titleText}/>
+                                            </TableWrapper>
+                                        </TableWrapper>
+
+                                        {/* Right Wrapper */}
+                                        <TableWrapper style={{flex:1}}>
+                                            <Cols data={this.state.tableData} heightArr={[40, 30, 30, 30, 30]} textStyle={styles.text}/>
+                                        </TableWrapper>
+                                    </Table>
+                                </View>
+                            </Dialog.Description>
+                        </View>
+                        <Dialog.Button label="Cancel" onPress={this.handleCancel} />
+                        <Dialog.Button label="Save" onPress={this.handleSave} />
+                    </Dialog.Container>
+                </View>
                 {this.state.data ?
                     <Datatable
                         columns={[
@@ -393,7 +412,7 @@ export default class App extends React.Component {
                                 selector: '',
                                 cell: (row) => (
                                     <>
-                                        <TouchableOpacity onPress={() => console.log(row.id)}>
+                                        <TouchableOpacity onPress={() => console.log(row)}>
                                             <Text>Rodyti</Text>
                                         </TouchableOpacity>
                                     </>
@@ -445,6 +464,18 @@ export default class App extends React.Component {
                     color="green"
                     accessibilityLabel="Learn more about this purple button"
                 />
+                <Button
+                    onPress={() => console.log(this.state.table)}
+                    title="console clr"
+                    color="green"
+                    accessibilityLabel="Learn more about this purple button"
+                />
+                <Button
+                    onPress={() => this.showPriceEditor()}
+                    title="Open modal"
+                    color="green"
+                    accessibilityLabel="Open modal"
+                />
             </View>
         );
     }
@@ -465,4 +496,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#ecf0f1',
         padding: 8,
     },
+    table_container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
+    singleHead: { width: 80, height: 40, backgroundColor: '#c8e1ff' },
+    head: { flex: 1, backgroundColor: '#c8e1ff' },
+    title: { flex: 2, backgroundColor: '#f6f8fa' },
+    titleText: { marginRight: 6, textAlign:'right' },
+    text: { textAlign: 'center' },
+    btn: { width: 58, height: 18, marginLeft: 15, backgroundColor: '#c8e1ff', borderRadius: 2 },
+    btnText: { textAlign: 'center' }
 });
