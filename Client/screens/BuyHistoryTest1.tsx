@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, StyleSheet, Button, TouchableOpacity, Dimensions, Alert} from 'react-native';
+import {View, StyleSheet, Button, TouchableOpacity, Dimensions, Alert, ScrollView} from 'react-native';
 import { Chip, Text } from 'react-native-paper';
 import Datatable from './Datatable';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -12,30 +12,43 @@ import {Cell, Col, Cols, Row, Rows, Table, TableWrapper} from "react-native-tabl
 const window = Dimensions.get("window");
 const screen = Dimensions.get("screen");
 
-export default class App extends React.Component {
+interface MyProps {
+
+}
+
+interface MyState {
+    data: any,
+    prices: any,
+    table: object,
+    dialogVisible: boolean,
+    itemTable: object,
+    itemTotalPriceTable: object
+    isTotal: boolean
+}
+
+export default class App extends React.Component<MyProps, MyState> {
 
     constructor(props) {
         super(props);
 
         this.state = {
             data : null,
+            prices: null,
             table: {},
             dialogVisible: false,
-            tableTitle: ['A1', 'A2', 'B', '', 'LSD', 'SD', 'SD AP', 'PM', 'KNAUF', '', 'LSD, FIN', 'SD, perimetriniai', 'PM, perimetriniai, SD AP', '', 'CP1', 'CP6'],
-            tableData: [
-                ['kiekis', '0', '0', '0', '', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0'],
-                ['kaina',  '1', '1', '1', '', '1', '1', '1', '1', '1', '', '1', '1', '1', '1', '1', '1'],
-                ['viso',   '0', '0', '0', '', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0'],
-                ['kiekis', '0', '0', '0', '', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0'],
-                ['kaina',  '1', '1', '1', '', '1', '1', '1', '1', '1', '', '1', '1', '1', '1', '1', '1'],
-                ['viso',   '0', '0', '0', '', '0', '0', '0', '0', '0', '', '0', '0', '0', '0', '0', '0']
-            ]
+            itemTable: {},
+            itemTotalPriceTable: {},
+            isTotal: false
         };
     }
 
 
+
+
+
     componentDidMount() {
         this.history().then(r => this.setState({ data : r }));
+        this.loadPrices().then(r => this.setState({ prices : JSON.parse(r) }));
 
     }
 
@@ -48,20 +61,102 @@ export default class App extends React.Component {
     //     }
     // }
 
-    elementButton = (value) => (
-
-            <View>
-                <Text>text</Text>
+    t = (value: any, underline: boolean) => {
+        return (
+            <View style={[{flex:1,justifyContent: "center",alignItems: "center"}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+                <Text style={[{fontSize: (25*0.56), padding: 2}]}>{value}</Text>
             </View>
+        )
+    }
+
+    tableTite = () => {
+        return [this.t('A1', false), this.t('A2', false), this.t('B', true),
+            this.t('LSD', false), this.t('SD', false), this.t('SD AP', false), this.t('PM', false), this.t('KNAUF', true),
+            this.t('LSD, FIN', false), this.t('SD, perimetriniai', false), this.t('PM, perimetriniai, SD AP', false), this.t('CP1', false), this.t('CP6', true),
+            this.t('LSD, SD', false), this.t('CP3', false), this.t('CP9', true),
+            this.t('PAROC', true),
+            this.t('KNAUF', true),
+            this.t('600x800', false), this.t('8000x800', false), this.t('1000x1000', false), this.t('1200x1200', false), this.t('1100x1300', false), this.t('Nestandartiniai padėklai', true),
+            this.t('800x1200 (šviesūs)', false), this.t('800x1200 (tamsūs)', false), this.t('600x800 (šviesūs)', false), this.t('600x800 (tamsūs)', false), this.t('nestandartai 800x2000', true),
+            this.t('800x1200', false), this.t('10000x1200', true),
+            this.t('Mediniai padėklai', false)]
+    }
+
+    MergeRecursive(obj1, obj2) {
+
+        for (const p in obj2) {
+            try {
+                // Property in destination object set; update its value.
+                if ( obj2[p].constructor==Object ) {
+                    obj1[p] = this.MergeRecursive(obj1[p], obj2[p]);
+
+                } else {
+                    obj1[p] = obj2[p];
+
+                }
+
+            } catch(e) {
+                // Property in destination object not set; create it and set its value.
+                obj1[p] = obj2[p];
+
+            }
+        }
+
+        return obj1;
+    }
+
+
+
+    tableBody = () => {
+        if(this.state.dialogVisible){
+        const table = this.state.itemTable.table;
+        const prices = this.state.prices;
+        const itemTotalPriceTable = this.state.itemTotalPriceTable
+
+            if(this.state.isTotal)
+                this.MergeRecursive(table, itemTotalPriceTable)
+
+
+
+
+            return [
+                ['kiekis', this.t(table["s_a1"]?.units, false),         this.t(table["s_a2"]?.units, false),        this.t(table["s_b2"]?.units, true),         this.t(table["s_lsd_800"]?.units, false),       this.t(table["s_sd_800"]?.units, false),        this.t(table["s_ap_800"]?.units, false),        this.t(table["s_pm_800"]?.units, false),        this.t(table["s_knauf_800"]?.units, true),      this.t(table["s_lsd_1000"]?.units, false),      this.t(table["s_sd_1000"]?.units, false),       this.t(table["s_pm_1000"]?.units, false),       this.t(table["s_cp1_1000"]?.units, false),      this.t(table["s_cp6_1000"]?.units, true),       this.t(table["s_sd_1140"]?.units, false),       this.t(table["s_cp3_1140"]?.units, false),      this.t(table["s_cp9_1140"]?.units, true),       this.t(table["s_paroc"]?.units, true),      this.t(table["s_knauf"]?.units, true),      this.t(table["s_600x800"]?.units, false),       this.t(table["s_800x800"]?.units, false),       this.t(table["s_1000x1000"]?.units, false),         this.t(table["s_1200x1200"]?.units, false),         this.t(table["s_1100x1300"]?.units, false),         this.t(table["s_1600x3000"]?.units, true),      this.t(table["s_apvadai_800x1200_white"]?.units, false),        this.t(table["s_apvadai_800x1200_black"]?.units, false),        this.t(table["s_apvadai_600x800_white"]?.units, false),         this.t(table["s_apvadai_600x800_black"]?.units, false),         this.t(table["s_apvadai_800x2000_mix"]?.units, true),       this.t(table["s_dekos_800x1200"]?.units, false),        this.t(table["s_dekos_1000x1200"]?.units, true),        this.t(table["s_srotas"]?.units, false)],
+                ['kaina',  this.t(prices["s_a1"], false),               this.t(prices["s_a2"], false),              this.t(prices["s_b2"], true),               this.t(prices["s_lsd_800"], false),             this.t(prices["s_sd_800"], false),              this.t(prices["s_ap_800"], false),              this.t(prices["s_pm_800"], false),              this.t(prices["s_knauf_800"], true),            this.t(prices["s_lsd_1000"], false),            this.t(prices["s_sd_1000"], false),             this.t(prices["s_pm_1000"], false),             this.t(prices["s_cp1_1000"], false),            this.t(prices["s_cp6_1000"], true),             this.t(prices["s_sd_1140"], false),             this.t(prices["s_cp3_1140"], false),            this.t(prices["s_cp9_1140"], true),             this.t(prices["s_paroc"], true),            this.t(prices["s_knauf"], true),            this.t(prices["s_600x800"], false),             this.t(prices["s_800x800"], false),             this.t(prices["s_1000x1000"], false),               this.t(prices["s_1200x1200"], false),               this.t(prices["s_1100x1300"], false),               this.t(prices["s_1600x3000"], true),            this.t(prices["s_apvadai_800x1200_white"], false),              this.t(prices["s_apvadai_800x1200_black"], false),              this.t(prices["s_apvadai_600x800_white"], false),               this.t(prices["s_apvadai_600x800_black"], false),               this.t(prices["s_apvadai_800x2000_mix"], true),             this.t(prices["s_dekos_800x1200"], false),              this.t(prices["s_dekos_1000x1200"], true),              this.t(prices["s_srotas"], false)],
+                ['viso',   this.t(table["s_a1"]?.totalPrice, false),    this.t(table["s_a2"]?.totalPrice, false),   this.t(table["s_b2"]?.totalPrice, true),    this.t(table["s_lsd_800"]?.totalPrice, false),  this.t(table["s_sd_800"]?.totalPrice, false),   this.t(table["s_ap_800"]?.totalPrice, false),   this.t(table["s_pm_800"]?.totalPrice, false),   this.t(table["s_knauf_800"]?.totalPrice, true), this.t(table["s_lsd_1000"]?.totalPrice, false), this.t(table["s_sd_1000"]?.totalPrice, false),  this.t(table["s_pm_1000"]?.totalPrice, false),  this.t(table["s_cp1_1000"]?.totalPrice, false), this.t(table["s_cp6_1000"]?.totalPrice, true),  this.t(table["s_sd_1140"]?.totalPrice, false),  this.t(table["s_cp3_1140"]?.totalPrice, false), this.t(table["s_cp9_1140"]?.totalPrice, true),  this.t(table["s_paroc"]?.totalPrice, true), this.t(table["s_knauf"]?.totalPrice, true), this.t(table["s_600x800"]?.totalPrice, false),  this.t(table["s_800x800"]?.totalPrice, false),  this.t(table["s_1000x1000"]?.totalPrice, false),    this.t(table["s_1200x1200"]?.totalPrice, false),    this.t(table["s_1100x1300"]?.totalPrice, false),    this.t(table["s_1600x3000"]?.totalPrice, true), this.t(table["s_apvadai_800x1200_white"]?.totalPrice, false),   this.t(table["s_apvadai_800x1200_black"]?.totalPrice, false),   this.t(table["s_apvadai_600x800_white"]?.totalPrice, false),    this.t(table["s_apvadai_600x800_black"]?.totalPrice, false),    this.t(table["s_apvadai_800x2000_mix"]?.totalPrice, true),  this.t(table["s_dekos_800x1200"]?.totalPrice, false),   this.t(table["s_dekos_1000x1200"]?.totalPrice, true),   this.t(table["s_srotas"]?.totalPrice, false)],
+
+                ['kiekis', this.t(table["r_a1"]?.units, false),         this.t(table["r_a2"]?.units, false),        this.t(table["r_b2"]?.units, true),         this.t(table["r_lsd_800"]?.units, false),       this.t(table["r_sd_800"]?.units, false),        this.t(table["r_ap_800"]?.units, false),        this.t(table["r_pm_800"]?.units, false),        this.t(table["r_knauf_800"]?.units, true),      this.t(table["r_lsd_1000"]?.units, false),      this.t(table["r_sd_1000"]?.units, false),       this.t(table["r_pm_1000"]?.units, false),       this.t(table["r_cp1_1000"]?.units, false),      this.t(table["r_cp6_1000"]?.units, true),       this.t(table["r_sd_1140"]?.units, false),       this.t(table["r_cp3_1140"]?.units, false),      this.t(table["r_cp9_1140"]?.units, true),       this.t(table["r_paroc"]?.units, true),      this.t(table["r_knauf"]?.units, true),      this.t(table["r_600x800"]?.units, false),       this.t(table["r_800x800"]?.units, false),       this.t(table["r_1000x1000"]?.units, false),         this.t(table["r_1200x1200"]?.units, false),         this.t(table["r_1100x1300"]?.units, false),         this.t(table["r_1600x3000"]?.units, true),      this.t(table["r_apvadai_800x1200_white"]?.units, false),        this.t(table["r_apvadai_800x1200_black"]?.units, false),        this.t(table["r_apvadai_600x800_white"]?.units, false),         this.t(table["r_apvadai_600x800_black"]?.units, false),         this.t(table["r_apvadai_800x2000_mix"]?.units, true),       this.t(table["r_dekos_800x1200"]?.units, false),        this.t(table["r_dekos_1000x1200"]?.units, true),        this.t(table["r_srotas"]?.units, false)],
+                ['kaina',  this.t(prices["r_a1"], false),               this.t(prices["r_a2"], false),              this.t(prices["r_b2"], true),               this.t(prices["r_lsd_800"], false),             this.t(prices["r_sd_800"], false),              this.t(prices["r_ap_800"], false),              this.t(prices["r_pm_800"], false),              this.t(prices["r_knauf_800"], true),            this.t(prices["r_lsd_1000"], false),            this.t(prices["r_sd_1000"], false),             this.t(prices["r_pm_1000"], false),             this.t(prices["r_cp1_1000"], false),            this.t(prices["r_cp6_1000"], true),             this.t(prices["r_sd_1140"], false),             this.t(prices["r_cp3_1140"], false),            this.t(prices["r_cp9_1140"], true),             this.t(prices["r_paroc"], true),            this.t(prices["r_knauf"], true),            this.t(prices["r_600x800"], false),             this.t(prices["r_800x800"], false),             this.t(prices["r_1000x1000"], false),               this.t(prices["r_1200x1200"], false),               this.t(prices["r_1100x1300"], false),               this.t(prices["r_1600x3000"], true),            this.t(prices["r_apvadai_800x1200_white"], false),              this.t(prices["r_apvadai_800x1200_black"], false),              this.t(prices["r_apvadai_600x800_white"], false),               this.t(prices["r_apvadai_600x800_black"], false),               this.t(prices["r_apvadai_800x2000_mix"], true),             this.t(prices["r_dekos_800x1200"], false),              this.t(prices["r_dekos_1000x1200"], true),              this.t(prices["r_srotas"], false)],
+                ['viso',   this.t(table["r_a1"]?.totalPrice, false),    this.t(table["r_a2"]?.totalPrice, false),   this.t(table["r_b2"]?.totalPrice, true),    this.t(table["r_lsd_800"]?.totalPrice, false),  this.t(table["r_sd_800"]?.totalPrice, false),   this.t(table["r_ap_800"]?.totalPrice, false),   this.t(table["r_pm_800"]?.totalPrice, false),   this.t(table["r_knauf_800"]?.totalPrice, true), this.t(table["r_lsd_1000"]?.totalPrice, false), this.t(table["r_sd_1000"]?.totalPrice, false),  this.t(table["r_pm_1000"]?.totalPrice, false),  this.t(table["r_cp1_1000"]?.totalPrice, false), this.t(table["r_cp6_1000"]?.totalPrice, true),  this.t(table["r_sd_1140"]?.totalPrice, false),  this.t(table["r_cp3_1140"]?.totalPrice, false), this.t(table["r_cp9_1140"]?.totalPrice, true),  this.t(table["r_paroc"]?.totalPrice, true), this.t(table["r_knauf"]?.totalPrice, true), this.t(table["r_600x800"]?.totalPrice, false),  this.t(table["r_800x800"]?.totalPrice, false),  this.t(table["r_1000x1000"]?.totalPrice, false),    this.t(table["r_1200x1200"]?.totalPrice, false),    this.t(table["r_1100x1300"]?.totalPrice, false),    this.t(table["r_1600x3000"]?.totalPrice, true), this.t(table["r_apvadai_800x1200_white"]?.totalPrice, false),   this.t(table["r_apvadai_800x1200_black"]?.totalPrice, false),   this.t(table["r_apvadai_600x800_white"]?.totalPrice, false),    this.t(table["r_apvadai_600x800_black"]?.totalPrice, false),    this.t(table["r_apvadai_800x2000_mix"]?.totalPrice, true),  this.t(table["r_dekos_800x1200"]?.totalPrice, false),   this.t(table["r_dekos_1000x1200"]?.totalPrice, true),   this.t(table["r_srotas"]?.totalPrice, false)],
+            ]
+        }else{
+            return [
+                ['kiekis', this.t(0, false), this.t(0, false), this.t(0, true), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, true), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, true), this.t(0, false), this.t(0, false), this.t(0, true), this.t(0, true), this.t(0, true), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, true), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, true), this.t(0, false), this.t(0, true), this.t(0, false)],
+                ['kaina',  this.t(1, false), this.t(1, false), this.t(1, true), this.t(1, false), this.t(1, false), this.t(1, false), this.t(1, false), this.t(1, true), this.t(1, false), this.t(1, false), this.t(1, false), this.t(1, false), this.t(1, true), this.t(1, false), this.t(1, false), this.t(1, true), this.t(1, true), this.t(1, true), this.t(1, false), this.t(1, false), this.t(1, false), this.t(1, false), this.t(1, false), this.t(1, true), this.t(1, false), this.t(1, false), this.t(1, false), this.t(1, false), this.t(1, true), this.t(1, false), this.t(1, true), this.t(1, false)],
+                ['viso',   this.t(0, false), this.t(0, false), this.t(0, true), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, true), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, true), this.t(0, false), this.t(0, false), this.t(0, true), this.t(0, true), this.t(0, true), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, true), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, true), this.t(0, false), this.t(0, true), this.t(0, false)],
+                ['kiekis', this.t(0, false), this.t(0, false), this.t(0, true), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, true), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, true), this.t(0, false), this.t(0, false), this.t(0, true), this.t(0, true), this.t(0, true), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, true), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, true), this.t(0, false), this.t(0, true), this.t(0, false)],
+                ['kaina',  this.t(1, false), this.t(1, false), this.t(1, true), this.t(1, false), this.t(1, false), this.t(1, false), this.t(1, false), this.t(1, true), this.t(1, false), this.t(1, false), this.t(1, false), this.t(1, false), this.t(1, true), this.t(1, false), this.t(1, false), this.t(1, true), this.t(1, true), this.t(1, true), this.t(1, false), this.t(1, false), this.t(1, false), this.t(1, false), this.t(1, false), this.t(1, true), this.t(1, false), this.t(1, false), this.t(1, false), this.t(1, false), this.t(1, true), this.t(1, false), this.t(1, true), this.t(1, false)],
+                ['viso',   this.t(0, false), this.t(0, false), this.t(0, true), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, true), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, true), this.t(0, false), this.t(0, false), this.t(0, true), this.t(0, true), this.t(0, true), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, true), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, false), this.t(0, true), this.t(0, false), this.t(0, true), this.t(0, false)]
+            ]
+        }
+
+
+    }
+
+
+    headText = (text: string) => (
+        <View style={[styles.head, {height: '100%', borderBottomWidth: 2, justifyContent: 'center'}]}>
+            <Text style={{ textAlign: 'center', width: 200, height: 184+(25/1.5),  transform: [{ rotate: '-90deg' }], fontSize: (25*0.56) }}>{text}</Text>
+        </View>
+        // text1: { textAlign: 'center', width: 200, height: 184+(size/1.5),  transform: [{ rotate: '-90deg' }], fontSize: (size*0.56) },
 
     );
 
-    _alertIndex(value) {
-        Alert.alert(`This is column ${value}`);
-    }
-
-    showPriceEditor = async () => {
-        this.setState({ dialogVisible: true })
+    showDialog = async (table: object, isTotal: boolean) => {
+        if(!isTotal){
+            this.setState({ dialogVisible: true, itemTable: table, isTotal })
+        }else{
+            this.setState({ dialogVisible: true, isTotal })
+        }
     }
     handleCancel = async () => {
         this.setState({ dialogVisible: false })
@@ -69,7 +164,10 @@ export default class App extends React.Component {
 
     history = async () => {
         return  await AsyncStorage.getItem('@BuyHistory')
-        // console.log(JSON.parse([BuyHistory]))
+    }
+
+    loadPrices = async () => {
+        return  await AsyncStorage.getItem('@Price')
     }
     handleSave = async () => {
         // await saveNewPrice(this.state.editableProperty, this.state.OnChangePrice)
@@ -82,19 +180,34 @@ export default class App extends React.Component {
         let content = JSON.parse(this.state.data);
         const table: never[] = [];
 
-        const generateState = (property: string, units: number) =>  {
+        const units = (property: string, units: number) =>  {
             return this.setState((previousState) => {
                 return {
-                    table: {
-                        ...previousState.table,
-                        [property]: {
-                            units: units
+                    itemTable: {
+                        table: {
+                            ...previousState.itemTable.table,
+                            [property]: {
+                                units: units
+                            }
                         }
                     }
                 }
             })
         }
 
+        const itemTotalPriceTable = (property: string, units: number) =>  {
+            return this.setState((previousState) => {
+                return {
+
+                    itemTotalPriceTable: {
+                        ...previousState.itemTotalPriceTable,
+                        [property]: {
+                            totalPrice: units
+                        }
+                    }
+                }
+            })
+        }
 
         content.map(function(arr: any){
             Object.entries(arr.table).forEach(([key, val]) => {
@@ -102,278 +215,81 @@ export default class App extends React.Component {
                     table: {
                         [key]:{
                             units: content.reduce((total, thing) => {
-                                generateState(key, total + (thing.table[key]?.units != undefined ? Number(thing.table[key]?.units) : 0))
+                                units(key, total + (thing.table[key]?.units != undefined ? Number(thing.table[key]?.units) : 0))
                                 return total + (thing.table[key]?.units != undefined ? Number(thing.table[key]?.units) : 0)
                             }, 0),
                         }
                     }
 
-                });
+                })
             });
         })
+
+        content.map(function(arr: any){
+            Object.entries(arr.table).forEach(([key, val]) => {
+                table.push({
+                    itemTotalPriceTable: {
+                        [key]:{
+                            units: content.reduce((total, thing) => {
+                                itemTotalPriceTable(key, total + (thing.table[key]?.totalPrice != undefined ? Number(thing.table[key]?.totalPrice) : 0))
+                                return total + (thing.table[key]?.totalPrice != undefined ? Number(thing.table[key]?.totalPrice) : 0)
+                            }, 0),
+                        }
+                    }
+                })
+            });
+        })
+
+        return table;
     }
 
     render() {
-        /*let datatable = Array(21)
-          .fill()
-          .map((obj, id) => ({
-            id: id + 1,
-            email: 'email' + (id + 1) + '@host.com',
-          }));*/
-
-        let datatable = [
-            {
-                _id: '5d406a171ed43384972f04b5',
-                index: 0,
-                age: 28,
-                eyeColor: 'brown',
-                name: {
-                    first: 'Myra',
-                    last: 'Navarro',
-                },
-                company: 'SUSTENZA',
-                email: 'myra.navarro@sustenza.net',
-            },
-            {
-                _id: '5d406a170db0f4b04d9a9acf',
-                index: 1,
-                age: 23,
-                eyeColor: 'blue',
-                name: {
-                    first: 'Harriett',
-                    last: 'Tanner',
-                },
-                company: 'VALPREAL',
-                email: 'harriett.tanner@valpreal.com',
-            },
-            {
-                _id: '5d406a17e95da8ff80a759c5',
-                index: 2,
-                age: 39,
-                eyeColor: 'blue',
-                name: {
-                    first: 'Vega',
-                    last: 'Hanson',
-                },
-                company: 'BEDLAM',
-                email: 'vega.hanson@bedlam.tv',
-            },
-            {
-                _id: '5d406a175505da190e6875ec',
-                index: 3,
-                age: 31,
-                eyeColor: 'blue',
-                name: {
-                    first: 'Rosemary',
-                    last: 'Fields',
-                },
-                company: 'QUAILCOM',
-                email: 'rosemary.fields@quailcom.me',
-            },
-            {
-                _id: '5d406a17ea96044c027f4e50',
-                index: 4,
-                age: 27,
-                eyeColor: 'brown',
-                name: {
-                    first: 'Dale',
-                    last: 'Wilkinson',
-                },
-                company: 'QIAO',
-                email: 'dale.wilkinson@qiao.org',
-            },
-            {
-                _id: '5d406a17c5fff1ff6653a555',
-                index: 5,
-                age: 25,
-                eyeColor: 'blue',
-                name: {
-                    first: 'Beatrice',
-                    last: 'Contreras',
-                },
-                company: 'ZENOLUX',
-                email: 'beatrice.contreras@zenolux.us',
-            },
-            {
-                _id: '5d406a17a199efcba25e1f26',
-                index: 6,
-                age: 34,
-                eyeColor: 'blue',
-                name: {
-                    first: 'Hancock',
-                    last: 'Wynn',
-                },
-                company: 'PLASMOS',
-                email: 'hancock.wynn@plasmos.co.uk',
-            },
-            {
-                _id: '5d406a17019a2a4544a4f134',
-                index: 7,
-                age: 40,
-                eyeColor: 'blue',
-                name: {
-                    first: 'Brown',
-                    last: 'Stanton',
-                },
-                company: 'SNACKTION',
-                email: 'brown.stanton@snacktion.name',
-            },
-            {
-                _id: '5d406a17e516dd71af8210d4',
-                index: 8,
-                age: 39,
-                eyeColor: 'blue',
-                name: {
-                    first: 'Barnes',
-                    last: 'Dunn',
-                },
-                company: 'PORTALINE',
-                email: 'barnes.dunn@portaline.ca',
-            },
-            {
-                _id: '5d406a17516936a025b73c33',
-                index: 9,
-                age: 34,
-                eyeColor: 'green',
-                name: {
-                    first: 'Blanche',
-                    last: 'Cherry',
-                },
-                company: 'ISOSWITCH',
-                email: 'blanche.cherry@isoswitch.io',
-            },
-            {
-                _id: '5d406a17527a4d2c6a7897dd',
-                index: 10,
-                age: 33,
-                eyeColor: 'blue',
-                name: {
-                    first: 'Gilliam',
-                    last: 'Farley',
-                },
-                company: 'AMTAS',
-                email: 'gilliam.farley@amtas.biz',
-            },
-            {
-                _id: '5d406a175ff11478c416c30b',
-                index: 11,
-                age: 26,
-                eyeColor: 'brown',
-                name: {
-                    first: 'Laura',
-                    last: 'Short',
-                },
-                company: 'FISHLAND',
-                email: 'laura.short@fishland.info',
-            },
-            {
-                _id: '5d406a1738181b471847339a',
-                index: 12,
-                age: 20,
-                eyeColor: 'brown',
-                name: {
-                    first: 'Moreno',
-                    last: 'Barber',
-                },
-                company: 'KEENGEN',
-                email: 'moreno.barber@keengen.net',
-            },
-            {
-                _id: '5d406a17a6bcae6fe3ad1735',
-                index: 13,
-                age: 30,
-                eyeColor: 'brown',
-                name: {
-                    first: 'Fischer',
-                    last: 'French',
-                },
-                company: 'INCUBUS',
-                email: 'fischer.french@incubus.com',
-            },
-            {
-                _id: '5d406a17600ca53e8f63f263',
-                index: 14,
-                age: 30,
-                eyeColor: 'brown',
-                name: {
-                    first: 'Donaldson',
-                    last: 'Carr',
-                },
-                company: 'SUNCLIPSE',
-                email: 'donaldson.carr@sunclipse.tv',
-            },
-            {
-                _id: '5d406a17530655789a27174f',
-                index: 15,
-                age: 35,
-                eyeColor: 'green',
-                name: {
-                    first: 'Sophia',
-                    last: 'Payne',
-                },
-                company: 'PRISMATIC',
-                email: 'sophia.payne@prismatic.me',
-            },
-            {
-                _id: '5d406a175dbc687b4c7669d8',
-                index: 16,
-                age: 34,
-                eyeColor: 'green',
-                name: {
-                    first: 'Simone',
-                    last: 'Pollard',
-                },
-                company: 'DIGIGEN',
-                email: 'simone.pollard@digigen.org',
-            },
-            {
-                _id: '5d406a179f35ed326a6a5567',
-                index: 17,
-                age: 28,
-                eyeColor: 'green',
-                name: {
-                    first: 'Yvette',
-                    last: 'Daugherty',
-                },
-                company: 'CHILLIUM',
-                email: 'yvette.daugherty@chillium.us',
-            },
-        ];
-
-
-
         let page = 1;
 
         return (
             <View style={styles.container}>
                 <View>
-                    <Dialog.Container visible={this.state.dialogVisible}>
-                        <View style={{width: window.width-50}}>
-                            <Dialog.Title>Edit price</Dialog.Title>
-                            <Dialog.Description>
-                                <View style={styles.table_container}>
-                                    <Table style={{flexDirection: 'row', width: window.width-100}} borderStyle={{borderWidth: 1}}>
-                                        {/* Left Wrapper */}
-                                        <TableWrapper style={{width: 160}}>
-                                            <Cell data="" style={styles.singleHead}/>
-                                            <TableWrapper style={{flexDirection: 'row'}}>
-                                                <Col data={['H1', 'H2', 'H3']} style={styles.head} heightArr={[120, 150, 150]} textStyle={styles.text} />
-                                                <Col data={this.state.tableTitle} style={styles.title} heightArr={[30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30]} textStyle={styles.titleText}/>
-                                            </TableWrapper>
-                                        </TableWrapper>
+                    {this.state.itemTable ?
+                        <Dialog.Container visible={this.state.dialogVisible}>
+                            <View style={{width: window.width - 50, height: window.height - 200}}>
+                                <ScrollView horizontal={false}>
+                                    <Dialog.Title>Edit price</Dialog.Title>
+                                    <Dialog.Description>
+                                        <View style={styles.table_container}>
+                                            <Table style={{flexDirection: 'row', width: window.width - 100}}
+                                                   borderStyle={{borderWidth: 1}}>
+                                                {/* Left Wrapper */}
+                                                <TableWrapper style={{width: 200}}>
+                                                    <Cell data="" style={styles.singleHead}/>
+                                                    <TableWrapper style={{flexDirection: 'row'}}>
+                                                        <Col
+                                                            data={[this.headText('H1'), this.headText('H2'), this.headText('H3'), this.headText('H4'), this.headText(''), this.headText(''), this.headText('H7'), this.headText('H8'), this.headText('H9'), '']}
+                                                            style={styles.head} width={20}
+                                                            heightArr={[90, 150, 150, 90, 30, 30, 180, 150, 60, 30]}
+                                                            textStyle={styles.text}/>
+                                                        <Col data={this.tableTite()} style={styles.title}
+                                                             heightArr={[30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30]}
+                                                             textStyle={styles.titleText}/>
+                                                    </TableWrapper>
+                                                </TableWrapper>
 
-                                        {/* Right Wrapper */}
-                                        <TableWrapper style={{flex:1}}>
-                                            <Cols data={this.state.tableData} heightArr={[40, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30]} textStyle={styles.text}/>
-                                        </TableWrapper>
-                                    </Table>
-                                </View>
-                            </Dialog.Description>
-                        </View>
-                        <Dialog.Button label="Cancel" onPress={this.handleCancel} />
-                        <Dialog.Button label="Save" onPress={this.handleSave} />
-                    </Dialog.Container>
+                                                {/* Right Wrapper */}
+                                                <TableWrapper style={{flex: 1}}>
+                                                    <Cols data={this.tableBody()}
+                                                          heightArr={[40, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30]}
+                                                          textStyle={styles.text}/>
+                                                </TableWrapper>
+                                            </Table>
+                                        </View>
+                                    </Dialog.Description>
+                                </ScrollView>
+                            </View>
+                            <Dialog.Button label="Cancel" onPress={this.handleCancel}/>
+                            <Dialog.Button label="Save" onPress={this.handleSave}/>
+                        </Dialog.Container>
+                    : <Text> </Text>}
                 </View>
+
                 {this.state.data ?
                     <Datatable
                         columns={[
@@ -412,7 +328,7 @@ export default class App extends React.Component {
                                 selector: '',
                                 cell: (row) => (
                                     <>
-                                        <TouchableOpacity onPress={() => console.log(row)}>
+                                        <TouchableOpacity onPress={() => this.showDialog(row, false)}>
                                             <Text>Rodyti</Text>
                                         </TouchableOpacity>
                                     </>
@@ -465,13 +381,19 @@ export default class App extends React.Component {
                     accessibilityLabel="Learn more about this purple button"
                 />
                 <Button
-                    onPress={() => console.log(this.state.table)}
-                    title="console clr"
+                    onPress={() => console.log(this.state.itemTotalPriceTable)}
+                    title="itemTotalPriceTable state"
                     color="green"
                     accessibilityLabel="Learn more about this purple button"
                 />
                 <Button
-                    onPress={() => this.showPriceEditor()}
+                    onPress={() => console.log(this.state.data)}
+                    title="data state"
+                    color="green"
+                    accessibilityLabel="Learn more about this purple button"
+                />
+                <Button
+                    onPress={() => this.showDialog({}, true)}
                     title="Open modal"
                     color="green"
                     accessibilityLabel="Open modal"
@@ -497,9 +419,9 @@ const styles = StyleSheet.create({
         padding: 8,
     },
     table_container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
-    singleHead: { width: 80, height: 40, backgroundColor: '#c8e1ff' },
+    singleHead: { width: 200, height: 40, backgroundColor: '#c8e1ff' },
     head: { flex: 1, backgroundColor: '#c8e1ff' },
-    title: { flex: 2, backgroundColor: '#f6f8fa' },
+    title: { flex: 9, backgroundColor: '#f6f8fa' },
     titleText: { marginRight: 6, textAlign:'right' },
     text: { textAlign: 'center' },
     btn: { width: 58, height: 18, marginLeft: 15, backgroundColor: '#c8e1ff', borderRadius: 2 },
