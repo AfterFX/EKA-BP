@@ -169,11 +169,6 @@ export default class App extends React.Component<MyProps, MyState> {
     loadPrices = async () => {
         return  await AsyncStorage.getItem('@Price')
     }
-    handleSave = async () => {
-        // await saveNewPrice(this.state.editableProperty, this.state.OnChangePrice)
-        // await this.getStorage();//Refreshing numbers after save
-        return this.setState({ dialogVisible: false })
-    };
 
 
     resultOfTheDay = () => {
@@ -245,7 +240,7 @@ export default class App extends React.Component<MyProps, MyState> {
 
     render() {
         let page = 1;
-
+        console.log(this.state.itemTable)
         return (
             <View style={styles.container}>
                 <View>
@@ -253,7 +248,15 @@ export default class App extends React.Component<MyProps, MyState> {
                         <Dialog.Container visible={this.state.dialogVisible}>
                             <View style={{width: window.width - 50, height: window.height - 200}}>
                                 <ScrollView horizontal={false}>
-                                    <Dialog.Title>Edit price</Dialog.Title>
+                                    <Dialog.Title>Istorija</Dialog.Title>
+                                    <View style={{flexDirection: 'row',}}>
+                                        <Text style={{flex: 1}}>Kiekis: {this.state.itemTable.countTotal}</Text>
+                                        <Text style={{flex: 1, textAlign: "right"}}>Data: {this.state.itemTable.date}</Text>
+                                    </View>
+                                    <View style={{flexDirection: 'row',}}>
+                                        <Text style={{flex: 1}}>Suma: €{this.state.itemTable.payTotal}</Text>
+                                        <Text style={{flex: 1, textAlign: "right"}}>Laikas: {this.state.itemTable.time}</Text>
+                                    </View>
                                     <Dialog.Description>
                                         <View style={styles.table_container}>
                                             <Table style={{flexDirection: 'row', width: window.width - 100}}
@@ -263,9 +266,9 @@ export default class App extends React.Component<MyProps, MyState> {
                                                     <Cell data="" style={styles.singleHead}/>
                                                     <TableWrapper style={{flexDirection: 'row'}}>
                                                         <Col
-                                                            data={[this.headText('H1'), this.headText('H2'), this.headText('H3'), this.headText('H4'), this.headText(''), this.headText(''), this.headText('H7'), this.headText('H8'), this.headText('H9'), '']}
+                                                            data={[this.headText('800x1200'), this.headText('1000x1200'), this.headText('1140'), this.headText(''), this.headText(''), this.headText('Nestandartai'), this.headText('Šarnyrai'), this.headText('Dekos'), '']}
                                                             style={styles.head} width={20}
-                                                            heightArr={[90, 150, 150, 90, 30, 30, 180, 150, 60, 30]}
+                                                            heightArr={[240, 150, 90, 30, 30, 180, 150, 60, 30]}
                                                             textStyle={styles.text}/>
                                                         <Col data={this.tableTite()} style={styles.title}
                                                              heightArr={[30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30]}
@@ -284,8 +287,7 @@ export default class App extends React.Component<MyProps, MyState> {
                                     </Dialog.Description>
                                 </ScrollView>
                             </View>
-                            <Dialog.Button label="Cancel" onPress={this.handleCancel}/>
-                            <Dialog.Button label="Save" onPress={this.handleSave}/>
+                            <Dialog.Button label="Uždaryti" onPress={this.handleCancel}/>
                         </Dialog.Container>
                     : <Text> </Text>}
                 </View>
