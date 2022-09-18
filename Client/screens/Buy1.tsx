@@ -90,6 +90,22 @@ export class Buy1 extends React.Component<MyProps, MyState> {
         }
     }
 
+    resetHistory = async () => {
+        const date = new Date();
+        const todayDate = date.toISOString().slice(0, 10);
+        await AsyncStorage.getItem('@BuyHistory').then((r) => {
+            const BuyHistory = JSON.parse(r)
+            if(BuyHistory != null){
+                console.log("1")
+                if(BuyHistory[0]["date"] != todayDate){
+                    console.log("2")
+                    return AsyncStorage.removeItem('@BuyHistory')
+                }
+            }
+        })
+
+    }
+
     tableState=(dir: string)=>{
 
         switch(dir) {
@@ -368,7 +384,6 @@ export class Buy1 extends React.Component<MyProps, MyState> {
         const time = date.getHours()+":"+date.getMinutes()+":"+ date.getSeconds();
         const BuyHistory = await AsyncStorage.getItem('@BuyHistory')
 
-
         let myObjArray: any
 
         if(BuyHistory != null){
@@ -506,7 +521,7 @@ export class Buy1 extends React.Component<MyProps, MyState> {
                                     borderRadius={0}
                                     color={'red'}
                                     onPress={() => print(this.state.table, this.state.priceList).then(() => {
-                                        this.createHistory()
+                                        this.resetHistory().then(() => this.createHistory())
                                     })}
                                 >
                                 </Icon.Button>
