@@ -26,7 +26,7 @@ const window = Dimensions.get("window");
 const screen = Dimensions.get("screen");
 
 interface MyProps {
-
+    route: any
 }
 
 interface MyState {
@@ -51,7 +51,6 @@ export class Buy1 extends React.Component<MyProps, MyState> {
 
     constructor(props: any) {
         super(props);
-
         this.state = {
             isMain: true,
             foo: false,
@@ -74,6 +73,7 @@ export class Buy1 extends React.Component<MyProps, MyState> {
     componentDidMount() {
         console.log('componentDidMount() lifecycle');
         this.getStorage().then(() => console.log("prices loaded..."))
+        this.props.route.params?.isMain? this.setState({ isMain: !this.state.isMain }) : false; //comes from history
         // Trigger update
         this.setState({ foo: !this.state.foo });
     }

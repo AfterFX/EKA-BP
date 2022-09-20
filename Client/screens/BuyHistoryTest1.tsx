@@ -13,7 +13,7 @@ const window = Dimensions.get("window");
 const screen = Dimensions.get("screen");
 
 interface MyProps {
-
+    navigation: any
 }
 
 interface MyState {
@@ -240,11 +240,10 @@ export default class App extends React.Component<MyProps, MyState> {
 
     render() {
         let page = 1;
-        console.log(this.state.itemTable)
         return (
             <View style={styles.container}>
                 <View>
-                    {this.state.itemTable ?
+                    {this.state.data ?
                         <Dialog.Container visible={this.state.dialogVisible}>
                             <View style={{width: window.width - 50, height: window.height - 200}}>
                                 <ScrollView horizontal={false}>
@@ -293,7 +292,7 @@ export default class App extends React.Component<MyProps, MyState> {
                 </View>
 
                 {this.state.data ?
-                    <Datatable
+                    <><Datatable
                         columns={[
                             /*{
                               name: 'Email',
@@ -365,41 +364,47 @@ export default class App extends React.Component<MyProps, MyState> {
                         data={JSON.parse(this.state.data)}
                         page={page}
                         perPage={5}
-                        paginationComponentOptions={(currentPage, totalPage) =>
-                            `${currentPage} di ${totalPage}`
-                        }
-                        style={{ backgroundColor: '#fff' }}
-                    /> : <></>}
-                <Button
-                    onPress={() => this.resultOfTheDay()}
-                    title="Learn More"
-                    color="#841584"
-                    accessibilityLabel="Learn more about this purple button"
-                />
-                <Button
-                    onPress={() => console.log("|")}
-                    title="console clr"
-                    color="green"
-                    accessibilityLabel="Learn more about this purple button"
-                />
-                <Button
-                    onPress={() => console.log(this.state.itemTotalPriceTable)}
-                    title="itemTotalPriceTable state"
-                    color="green"
-                    accessibilityLabel="Learn more about this purple button"
-                />
-                <Button
-                    onPress={() => console.log(this.state.data)}
-                    title="data state"
-                    color="green"
-                    accessibilityLabel="Learn more about this purple button"
-                />
-                <Button
-                    onPress={() => this.showDialog({}, true)}
-                    title="Open modal"
-                    color="green"
-                    accessibilityLabel="Open modal"
-                />
+                        paginationComponentOptions={(currentPage, totalPage) => `${currentPage} di ${totalPage}`}
+                        style={{backgroundColor: '#fff'}}/>
+                        <Button
+                            onPress={() => this.resultOfTheDay()}
+                            title="Learn More"
+                            color="#841584"
+                            accessibilityLabel="Learn more about this purple button"
+                        />
+                        <Button
+                            onPress={() => console.log("|")}
+                            title="console clr"
+                            color="green"
+                            accessibilityLabel="Learn more about this purple button"
+                        />
+                        <Button
+                            onPress={() => console.log(this.state.itemTotalPriceTable)}
+                            title="itemTotalPriceTable state"
+                            color="green"
+                            accessibilityLabel="Learn more about this purple button"
+                        />
+                        <Button
+                            onPress={() => console.log(this.state.data)}
+                            title="data state"
+                            color="green"
+                            accessibilityLabel="Learn more about this purple button"
+                        />
+                        <Button
+                            onPress={() => this.showDialog({}, true)}
+                            title="Open modal"
+                            color="green"
+                            accessibilityLabel="Open modal"
+                        />
+                    </> : <><Text style={styles.emptyText}>Istorija tuščia </Text>
+                            <Button
+                            title="Naujas pirkimas"
+                            onPress={() => {
+                                this.props.navigation.navigate('Pirkimas1', {
+                                    isMain: true
+                                });
+                            }}/></>
+                }
             </View>
         );
     }
@@ -426,6 +431,7 @@ const styles = StyleSheet.create({
     title: { flex: 9, backgroundColor: '#f6f8fa' },
     titleText: { marginRight: 6, textAlign:'right' },
     text: { textAlign: 'center' },
+    emptyText: { fontSize: 20, textAlign: "center", backgroundColor: '#D0D0D0FF' },
     btn: { width: 58, height: 18, marginLeft: 15, backgroundColor: '#c8e1ff', borderRadius: 2 },
     btnText: { textAlign: 'center' }
 });
