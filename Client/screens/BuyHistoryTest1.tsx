@@ -7,6 +7,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import {saveNewPrice} from "../components/functions";
 import Dialog from "react-native-dialog";
 import {Cell, Col, Cols, Row, Rows, Table, TableWrapper} from "react-native-table-component";
+import {StatusBar} from "expo-status-bar";
 
 
 const window = Dimensions.get("window");
@@ -260,6 +261,7 @@ export default class App extends React.Component<MyProps, MyState> {
         let page = 1;
         return (
             <View style={styles.container}>
+                <StatusBar style="dark" />
                 <View>
                     {this.state.data ?
                         <Dialog.Container visible={this.state.dialogVisible}>
