@@ -23,7 +23,9 @@ interface MyState {
     dialogVisible: boolean,
     itemTable: object,
     itemTotalPriceTable: object
-    isTotal: boolean
+    isTotal: boolean,
+    historyTotalCount: number
+    historyPayTotal: number
 }
 
 export default class App extends React.Component<MyProps, MyState> {
@@ -38,7 +40,9 @@ export default class App extends React.Component<MyProps, MyState> {
             dialogVisible: false,
             itemTable: {},
             itemTotalPriceTable: {},
-            isTotal: false
+            isTotal: false,
+            historyTotalCount: 0,
+            historyPayTotal: 0
         };
     }
 
@@ -175,6 +179,9 @@ export default class App extends React.Component<MyProps, MyState> {
         let content = JSON.parse(this.state.data);
         const table: never[] = [];
 
+        let historyTotalCount: number
+        let historyPayTotal: number
+
         const units = (property: string, units: number) =>  {
             return this.setState((previousState) => {
                 return {
@@ -206,6 +213,15 @@ export default class App extends React.Component<MyProps, MyState> {
 
         content.map(function(arr: any){
             Object.entries(arr.table).forEach(([key, val]) => {
+                historyTotalCount = content.reduce(
+                    (previousValue: any, currentValue: { countTotal: number; }) => previousValue + currentValue.countTotal,
+                    0,
+                );
+                historyPayTotal = content.reduce(
+                    (previousValue: any, currentValue: { payTotal: number; }) => previousValue + currentValue.payTotal,
+                    0,
+                );
+
                 table.push({
                     table: {
                         [key]:{
@@ -219,6 +235,7 @@ export default class App extends React.Component<MyProps, MyState> {
                 })
             });
         })
+
 
         content.map(function(arr: any){
             Object.entries(arr.table).forEach(([key, val]) => {
@@ -234,7 +251,8 @@ export default class App extends React.Component<MyProps, MyState> {
                 })
             });
         })
-
+        !this.state?.isTotal? this.setState({historyTotalCount}) : 0;
+        !this.state?.isTotal? this.setState({historyPayTotal}) : 0;
         return table;
     }
 
@@ -247,13 +265,13 @@ export default class App extends React.Component<MyProps, MyState> {
                         <Dialog.Container visible={this.state.dialogVisible}>
                             <View style={{width: window.width - 50, height: window.height - 200}}>
                                 <ScrollView horizontal={false}>
-                                    <Dialog.Title>Istorija</Dialog.Title>
+                                    <Dialog.Title>{this.state.isTotal? "Dienos istorija" : "Istorija"}</Dialog.Title>
                                     <View style={{flexDirection: 'row',}}>
-                                        <Text style={{flex: 1}}>Kiekis: {this.state.itemTable.countTotal}</Text>
+                                        <Text style={{flex: 1}}>Kiekis: {this.state.isTotal? this.state.historyTotalCount : this.state.itemTable.countTotal}</Text>
                                         <Text style={{flex: 1, textAlign: "right"}}>Data: {this.state.itemTable.date}</Text>
                                     </View>
                                     <View style={{flexDirection: 'row',}}>
-                                        <Text style={{flex: 1}}>Suma: €{this.state.itemTable.payTotal}</Text>
+                                        <Text style={{flex: 1}}>Suma: €{this.state.isTotal? this.state.historyPayTotal : this.state.itemTable.payTotal}</Text>
                                         <Text style={{flex: 1, textAlign: "right"}}>Laikas: {this.state.itemTable.time}</Text>
                                     </View>
                                     <Dialog.Description>
@@ -363,36 +381,15 @@ export default class App extends React.Component<MyProps, MyState> {
                         defaultSortAsc={true}
                         data={JSON.parse(this.state.data)}
                         page={page}
-                        perPage={5}
+                        perPage={10}
                         paginationComponentOptions={(currentPage, totalPage) => `${currentPage} di ${totalPage}`}
                         style={{backgroundColor: '#fff'}}/>
                         <Button
-                            onPress={() => this.resultOfTheDay()}
-                            title="Learn More"
-                            color="#841584"
-                            accessibilityLabel="Learn more about this purple button"
-                        />
-                        <Button
-                            onPress={() => console.log("|")}
-                            title="console clr"
-                            color="green"
-                            accessibilityLabel="Learn more about this purple button"
-                        />
-                        <Button
-                            onPress={() => console.log(this.state.itemTotalPriceTable)}
-                            title="itemTotalPriceTable state"
-                            color="green"
-                            accessibilityLabel="Learn more about this purple button"
-                        />
-                        <Button
-                            onPress={() => console.log(this.state.data)}
-                            title="data state"
-                            color="green"
-                            accessibilityLabel="Learn more about this purple button"
-                        />
-                        <Button
-                            onPress={() => this.showDialog({}, true)}
-                            title="Open modal"
+                            onPress={() => {
+                                this.resultOfTheDay()
+                                this.showDialog({}, true)
+                            }}
+                            title="Rodyti dienos rezultatus"
                             color="green"
                             accessibilityLabel="Open modal"
                         />
