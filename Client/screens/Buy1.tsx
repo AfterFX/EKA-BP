@@ -10,7 +10,7 @@ import {
     View
 } from "react-native";
 import TextField from "../components/TextField";
-import {countTotal, destroy, payTotal, price, print, saveNewPrice} from "../components/functions";
+import {countTotal, destroyStorage, payTotal, price, print, saveNewPrice} from "../components/functions";
 import Dialog from "react-native-dialog";
 import {StatusBar} from "expo-status-bar";
 import {useEffect, useRef} from "react";
@@ -473,9 +473,6 @@ export class Buy1 extends React.Component<MyProps, MyState> {
 
     }
 
-    destroy = async (value: string) => {
-        return await AsyncStorage.removeItem(value)
-    }
 
     saveWindowSize = async () => {
         this.setState({ isTouchEnded: true })
@@ -642,7 +639,7 @@ export class Buy1 extends React.Component<MyProps, MyState> {
                         accessibilityLabel="Learn more about this purple button"
                     />
                     <Button
-                        onPress={ () => this.destroy("@BuyHistory")}
+                        onPress={ () => destroyStorage("@BuyHistory")}
                         title="Learn More"
                         color="red"
                         accessibilityLabel="Learn more about this purple button"

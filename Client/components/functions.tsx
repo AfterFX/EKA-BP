@@ -13,7 +13,9 @@ const getStorage = async () => {
     }
 }
 
-
+export const destroyStorage = async (value: string) => {
+    return await AsyncStorage.removeItem(value)
+}
 
 export const price = (property: any, newPriceObject: any, storedPrices: any) => {
     let result = (newPriceObject[property].units).toString() * storedPrices?.[property]

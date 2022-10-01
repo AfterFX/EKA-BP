@@ -1,10 +1,10 @@
 import * as React from 'react';
-import {View, StyleSheet, Button, TouchableOpacity, Dimensions, Alert, ScrollView} from 'react-native';
+import {View, StyleSheet, Button, TouchableOpacity, Dimensions, Alert, ScrollView, Pressable} from 'react-native';
 import { Chip, Text } from 'react-native-paper';
 import Datatable from './Datatable';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from '@react-navigation/native';
-import {saveNewPrice} from "../components/functions";
+import {destroyStorage, saveNewPrice} from "../components/functions";
 import Dialog from "react-native-dialog";
 import {Cell, Col, Cols, Row, Rows, Table, TableWrapper} from "react-native-table-component";
 import {StatusBar} from "expo-status-bar";
@@ -127,11 +127,11 @@ export default class App extends React.Component<MyProps, MyState> {
             return [
                 ['kiekis', this.t(table["s_a1"]?.units, false),         this.t(table["s_a2"]?.units, false),        this.t(table["s_b2"]?.units, true),         this.t(table["s_lsd_800"]?.units, false),       this.t(table["s_sd_800"]?.units, false),        this.t(table["s_ap_800"]?.units, false),        this.t(table["s_pm_800"]?.units, false),        this.t(table["s_knauf_800"]?.units, true),      this.t(table["s_lsd_1000"]?.units, false),      this.t(table["s_sd_1000"]?.units, false),       this.t(table["s_pm_1000"]?.units, false),       this.t(table["s_cp1_1000"]?.units, false),      this.t(table["s_cp6_1000"]?.units, true),       this.t(table["s_sd_1140"]?.units, false),       this.t(table["s_cp3_1140"]?.units, false),      this.t(table["s_cp9_1140"]?.units, true),       this.t(table["s_paroc"]?.units, true),      this.t(table["s_knauf"]?.units, true),      this.t(table["s_600x800"]?.units, false),       this.t(table["s_800x800"]?.units, false),       this.t(table["s_1000x1000"]?.units, false),         this.t(table["s_1200x1200"]?.units, false),         this.t(table["s_1100x1300"]?.units, false),         this.t(table["s_1600x3000"]?.units, true),      this.t(table["s_apvadai_800x1200_white"]?.units, false),        this.t(table["s_apvadai_800x1200_black"]?.units, false),        this.t(table["s_apvadai_600x800_white"]?.units, false),         this.t(table["s_apvadai_600x800_black"]?.units, false),         this.t(table["s_apvadai_800x2000_mix"]?.units, true),       this.t(table["s_dekos_800x1200"]?.units, false),        this.t(table["s_dekos_1000x1200"]?.units, true),        this.t(table["s_srotas"]?.units, false)],
                 ['kaina',  this.t(prices["s_a1"], false),               this.t(prices["s_a2"], false),              this.t(prices["s_b2"], true),               this.t(prices["s_lsd_800"], false),             this.t(prices["s_sd_800"], false),              this.t(prices["s_ap_800"], false),              this.t(prices["s_pm_800"], false),              this.t(prices["s_knauf_800"], true),            this.t(prices["s_lsd_1000"], false),            this.t(prices["s_sd_1000"], false),             this.t(prices["s_pm_1000"], false),             this.t(prices["s_cp1_1000"], false),            this.t(prices["s_cp6_1000"], true),             this.t(prices["s_sd_1140"], false),             this.t(prices["s_cp3_1140"], false),            this.t(prices["s_cp9_1140"], true),             this.t(prices["s_paroc"], true),            this.t(prices["s_knauf"], true),            this.t(prices["s_600x800"], false),             this.t(prices["s_800x800"], false),             this.t(prices["s_1000x1000"], false),               this.t(prices["s_1200x1200"], false),               this.t(prices["s_1100x1300"], false),               this.t(prices["s_1600x3000"], true),            this.t(prices["s_apvadai_800x1200_white"], false),              this.t(prices["s_apvadai_800x1200_black"], false),              this.t(prices["s_apvadai_600x800_white"], false),               this.t(prices["s_apvadai_600x800_black"], false),               this.t(prices["s_apvadai_800x2000_mix"], true),             this.t(prices["s_dekos_800x1200"], false),              this.t(prices["s_dekos_1000x1200"], true),              this.t(prices["s_srotas"], false)],
-                ['viso',   this.t(table["s_a1"]?.totalPrice, false),    this.t(table["s_a2"]?.totalPrice, false),   this.t(table["s_b2"]?.totalPrice, true),    this.t(table["s_lsd_800"]?.totalPrice, false),  this.t(table["s_sd_800"]?.totalPrice, false),   this.t(table["s_ap_800"]?.totalPrice, false),   this.t(table["s_pm_800"]?.totalPrice, false),   this.t(table["s_knauf_800"]?.totalPrice, true), this.t(table["s_lsd_1000"]?.totalPrice, false), this.t(table["s_sd_1000"]?.totalPrice, false),  this.t(table["s_pm_1000"]?.totalPrice, false),  this.t(table["s_cp1_1000"]?.totalPrice, false), this.t(table["s_cp6_1000"]?.totalPrice, true),  this.t(table["s_sd_1140"]?.totalPrice, false),  this.t(table["s_cp3_1140"]?.totalPrice, false), this.t(table["s_cp9_1140"]?.totalPrice, true),  this.t(table["s_paroc"]?.totalPrice, true), this.t(table["s_knauf"]?.totalPrice, true), this.t(table["s_600x800"]?.totalPrice, false),  this.t(table["s_800x800"]?.totalPrice, false),  this.t(table["s_1000x1000"]?.totalPrice, false),    this.t(table["s_1200x1200"]?.totalPrice, false),    this.t(table["s_1100x1300"]?.totalPrice, false),    this.t(table["s_1600x3000"]?.totalPrice, true), this.t(table["s_apvadai_800x1200_white"]?.totalPrice, false),   this.t(table["s_apvadai_800x1200_black"]?.totalPrice, false),   this.t(table["s_apvadai_600x800_white"]?.totalPrice, false),    this.t(table["s_apvadai_600x800_black"]?.totalPrice, false),    this.t(table["s_apvadai_800x2000_mix"]?.totalPrice, true),  this.t(table["s_dekos_800x1200"]?.totalPrice, false),   this.t(table["s_dekos_1000x1200"]?.totalPrice, true),   this.t(table["s_srotas"]?.totalPrice, false)],
+                ['viso',   this.t(table["s_a1"]?.totalPrice || '', false),    this.t(table["s_a2"]?.totalPrice || '', false),   this.t(table["s_b2"]?.totalPrice || '', true),    this.t(table["s_lsd_800"]?.totalPrice || '', false),  this.t(table["s_sd_800"]?.totalPrice || '', false),   this.t(table["s_ap_800"]?.totalPrice || '', false),   this.t(table["s_pm_800"]?.totalPrice || '', false),   this.t(table["s_knauf_800"]?.totalPrice || '', true), this.t(table["s_lsd_1000"]?.totalPrice || '', false), this.t(table["s_sd_1000"]?.totalPrice || '', false),  this.t(table["s_pm_1000"]?.totalPrice || '', false),  this.t(table["s_cp1_1000"]?.totalPrice || '', false), this.t(table["s_cp6_1000"]?.totalPrice || '', true),  this.t(table["s_sd_1140"]?.totalPrice || '', false),  this.t(table["s_cp3_1140"]?.totalPrice || '', false), this.t(table["s_cp9_1140"]?.totalPrice || '', true),  this.t(table["s_paroc"]?.totalPrice || '', true), this.t(table["s_knauf"]?.totalPrice || '', true), this.t(table["s_600x800"]?.totalPrice || '', false),  this.t(table["s_800x800"]?.totalPrice || '', false),  this.t(table["s_1000x1000"]?.totalPrice || '', false),    this.t(table["s_1200x1200"]?.totalPrice || '', false),    this.t(table["s_1100x1300"]?.totalPrice || '', false),    this.t(table["s_1600x3000"]?.totalPrice || '', true), this.t(table["s_apvadai_800x1200_white"]?.totalPrice || '', false),   this.t(table["s_apvadai_800x1200_black"]?.totalPrice || '', false),   this.t(table["s_apvadai_600x800_white"]?.totalPrice || '', false),    this.t(table["s_apvadai_600x800_black"]?.totalPrice || '', false),    this.t(table["s_apvadai_800x2000_mix"]?.totalPrice || '', true),  this.t(table["s_dekos_800x1200"]?.totalPrice || '', false),   this.t(table["s_dekos_1000x1200"]?.totalPrice || '', true),   this.t(table["s_srotas"]?.totalPrice || '', false)],
 
                 ['kiekis', this.t(table["r_a1"]?.units, false),         this.t(table["r_a2"]?.units, false),        this.t(table["r_b2"]?.units, true),         this.t(table["r_lsd_800"]?.units, false),       this.t(table["r_sd_800"]?.units, false),        this.t(table["r_ap_800"]?.units, false),        this.t(table["r_pm_800"]?.units, false),        this.t(table["r_knauf_800"]?.units, true),      this.t(table["r_lsd_1000"]?.units, false),      this.t(table["r_sd_1000"]?.units, false),       this.t(table["r_pm_1000"]?.units, false),       this.t(table["r_cp1_1000"]?.units, false),      this.t(table["r_cp6_1000"]?.units, true),       this.t(table["r_sd_1140"]?.units, false),       this.t(table["r_cp3_1140"]?.units, false),      this.t(table["r_cp9_1140"]?.units, true),       this.t(table["r_paroc"]?.units, true),      this.t(table["r_knauf"]?.units, true),      this.t(table["r_600x800"]?.units, false),       this.t(table["r_800x800"]?.units, false),       this.t(table["r_1000x1000"]?.units, false),         this.t(table["r_1200x1200"]?.units, false),         this.t(table["r_1100x1300"]?.units, false),         this.t(table["r_1600x3000"]?.units, true),      this.t(table["r_apvadai_800x1200_white"]?.units, false),        this.t(table["r_apvadai_800x1200_black"]?.units, false),        this.t(table["r_apvadai_600x800_white"]?.units, false),         this.t(table["r_apvadai_600x800_black"]?.units, false),         this.t(table["r_apvadai_800x2000_mix"]?.units, true),       this.t(table["r_dekos_800x1200"]?.units, false),        this.t(table["r_dekos_1000x1200"]?.units, true),        this.t(table["r_srotas"]?.units, false)],
                 ['kaina',  this.t(prices["r_a1"], false),               this.t(prices["r_a2"], false),              this.t(prices["r_b2"], true),               this.t(prices["r_lsd_800"], false),             this.t(prices["r_sd_800"], false),              this.t(prices["r_ap_800"], false),              this.t(prices["r_pm_800"], false),              this.t(prices["r_knauf_800"], true),            this.t(prices["r_lsd_1000"], false),            this.t(prices["r_sd_1000"], false),             this.t(prices["r_pm_1000"], false),             this.t(prices["r_cp1_1000"], false),            this.t(prices["r_cp6_1000"], true),             this.t(prices["r_sd_1140"], false),             this.t(prices["r_cp3_1140"], false),            this.t(prices["r_cp9_1140"], true),             this.t(prices["r_paroc"], true),            this.t(prices["r_knauf"], true),            this.t(prices["r_600x800"], false),             this.t(prices["r_800x800"], false),             this.t(prices["r_1000x1000"], false),               this.t(prices["r_1200x1200"], false),               this.t(prices["r_1100x1300"], false),               this.t(prices["r_1600x3000"], true),            this.t(prices["r_apvadai_800x1200_white"], false),              this.t(prices["r_apvadai_800x1200_black"], false),              this.t(prices["r_apvadai_600x800_white"], false),               this.t(prices["r_apvadai_600x800_black"], false),               this.t(prices["r_apvadai_800x2000_mix"], true),             this.t(prices["r_dekos_800x1200"], false),              this.t(prices["r_dekos_1000x1200"], true),              this.t(prices["r_srotas"], false)],
-                ['viso',   this.t(table["r_a1"]?.totalPrice, false),    this.t(table["r_a2"]?.totalPrice, false),   this.t(table["r_b2"]?.totalPrice, true),    this.t(table["r_lsd_800"]?.totalPrice, false),  this.t(table["r_sd_800"]?.totalPrice, false),   this.t(table["r_ap_800"]?.totalPrice, false),   this.t(table["r_pm_800"]?.totalPrice, false),   this.t(table["r_knauf_800"]?.totalPrice, true), this.t(table["r_lsd_1000"]?.totalPrice, false), this.t(table["r_sd_1000"]?.totalPrice, false),  this.t(table["r_pm_1000"]?.totalPrice, false),  this.t(table["r_cp1_1000"]?.totalPrice, false), this.t(table["r_cp6_1000"]?.totalPrice, true),  this.t(table["r_sd_1140"]?.totalPrice, false),  this.t(table["r_cp3_1140"]?.totalPrice, false), this.t(table["r_cp9_1140"]?.totalPrice, true),  this.t(table["r_paroc"]?.totalPrice, true), this.t(table["r_knauf"]?.totalPrice, true), this.t(table["r_600x800"]?.totalPrice, false),  this.t(table["r_800x800"]?.totalPrice, false),  this.t(table["r_1000x1000"]?.totalPrice, false),    this.t(table["r_1200x1200"]?.totalPrice, false),    this.t(table["r_1100x1300"]?.totalPrice, false),    this.t(table["r_1600x3000"]?.totalPrice, true), this.t(table["r_apvadai_800x1200_white"]?.totalPrice, false),   this.t(table["r_apvadai_800x1200_black"]?.totalPrice, false),   this.t(table["r_apvadai_600x800_white"]?.totalPrice, false),    this.t(table["r_apvadai_600x800_black"]?.totalPrice, false),    this.t(table["r_apvadai_800x2000_mix"]?.totalPrice, true),  this.t(table["r_dekos_800x1200"]?.totalPrice, false),   this.t(table["r_dekos_1000x1200"]?.totalPrice, true),   this.t(table["r_srotas"]?.totalPrice, false)],
+                ['viso',   this.t(table["r_a1"]?.totalPrice || '', false),    this.t(table["r_a2"]?.totalPrice || '', false),   this.t(table["r_b2"]?.totalPrice || '', true),    this.t(table["r_lsd_800"]?.totalPrice || '', false),  this.t(table["r_sd_800"]?.totalPrice || '', false),   this.t(table["r_ap_800"]?.totalPrice || '', false),   this.t(table["r_pm_800"]?.totalPrice || '', false),   this.t(table["r_knauf_800"]?.totalPrice || '', true), this.t(table["r_lsd_1000"]?.totalPrice || '', false), this.t(table["r_sd_1000"]?.totalPrice || '', false),  this.t(table["r_pm_1000"]?.totalPrice || '', false),  this.t(table["r_cp1_1000"]?.totalPrice || '', false), this.t(table["r_cp6_1000"]?.totalPrice || '', true),  this.t(table["r_sd_1140"]?.totalPrice || '', false),  this.t(table["r_cp3_1140"]?.totalPrice || '', false), this.t(table["r_cp9_1140"]?.totalPrice || '', true),  this.t(table["r_paroc"]?.totalPrice || '', true), this.t(table["r_knauf"]?.totalPrice || '', true), this.t(table["r_600x800"]?.totalPrice || '', false),  this.t(table["r_800x800"]?.totalPrice || '', false),  this.t(table["r_1000x1000"]?.totalPrice || '', false),    this.t(table["r_1200x1200"]?.totalPrice || '', false),    this.t(table["r_1100x1300"]?.totalPrice || '', false),    this.t(table["r_1600x3000"]?.totalPrice || '', true), this.t(table["r_apvadai_800x1200_white"]?.totalPrice || '', false),   this.t(table["r_apvadai_800x1200_black"]?.totalPrice || '', false),   this.t(table["r_apvadai_600x800_white"]?.totalPrice || '', false),    this.t(table["r_apvadai_600x800_black"]?.totalPrice || '', false),    this.t(table["r_apvadai_800x2000_mix"]?.totalPrice || '', true),  this.t(table["r_dekos_800x1200"]?.totalPrice || '', false),   this.t(table["r_dekos_1000x1200"]?.totalPrice || '', true),   this.t(table["r_srotas"]?.totalPrice || '', false)],
             ]
         }else{
             return [
@@ -146,6 +146,22 @@ export default class App extends React.Component<MyProps, MyState> {
 
 
     }
+
+     AlertDestroy = () =>
+        Alert.alert(
+            "Pranešimas",
+            "Ar tikrai ištrinti?",
+            [
+                {
+                    text: "Atšaukti",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                },
+                { text: "Gerai", onPress: () => {
+                        destroyStorage("@BuyHistory").then(() => this.setState({data: ''}))
+                } }
+            ]
+        );
 
 
     headText = (text: string) => (
@@ -244,8 +260,8 @@ export default class App extends React.Component<MyProps, MyState> {
                     itemTotalPriceTable: {
                         [key]:{
                             units: content.reduce((total, thing) => {
-                                itemTotalPriceTable(key, total + (thing.table[key]?.totalPrice != undefined ? Number(thing.table[key]?.totalPrice) : 0))
-                                return total + (thing.table[key]?.totalPrice != undefined ? Number(thing.table[key]?.totalPrice) : 0)
+                                itemTotalPriceTable(key, total + (thing.table[key]?.totalPrice || '' != undefined ? Number(thing.table[key]?.totalPrice || '') : 0))
+                                return total + (thing.table[key]?.totalPrice || '' != undefined ? Number(thing.table[key]?.totalPrice || '') : 0)
                             }, 0),
                         }
                     }
@@ -395,14 +411,14 @@ export default class App extends React.Component<MyProps, MyState> {
                             color="green"
                             accessibilityLabel="Open modal"
                         />
-                    </> : <><Text style={styles.emptyText}>Istorija tuščia </Text>
-                            <Button
-                            title="Naujas pirkimas"
+                        <Button title={"2-Button Alert"} onPress={this.AlertDestroy} />
+                    </> : <View style={{alignItems: 'center', justifyContent: 'center'}}><Text style={styles.emptyText}>Istorija tuščia </Text>
+                            <Pressable style={styles.button}
                             onPress={() => {
                                 this.props.navigation.navigate('Pirkimas1', {
                                     isMain: true
                                 });
-                            }}/></>
+                            }}><Text style={styles.text1}>Naujas pirkimas</Text></Pressable></View>
                 }
             </View>
         );
@@ -417,13 +433,7 @@ export default class App extends React.Component<MyProps, MyState> {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        paddingTop: 34,
-        backgroundColor: '#ecf0f1',
-        padding: 8,
-    },
+    container: {flex: 1, justifyContent: 'center', paddingTop: 34, backgroundColor: '#ecf0f1', padding: 8},
     table_container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
     singleHead: { width: 200, height: 40, backgroundColor: '#c8e1ff' },
     head: { flex: 1, backgroundColor: '#c8e1ff' },
@@ -432,5 +442,7 @@ const styles = StyleSheet.create({
     text: { textAlign: 'center' },
     emptyText: { fontSize: 20, textAlign: "center", backgroundColor: '#D0D0D0FF' },
     btn: { width: 58, height: 18, marginLeft: 15, backgroundColor: '#c8e1ff', borderRadius: 2 },
-    btnText: { textAlign: 'center' }
+    btnText: { textAlign: 'center' },
+    button: { width: 200, alignItems: 'center', justifyContent: 'center', paddingVertical: 12, paddingHorizontal: 32, borderRadius: 4, elevation: 3, backgroundColor: 'black'},
+    text1: {fontSize: 16, lineHeight: 21, fontWeight: 'bold', letterSpacing: 0.25, color: 'white'},
 });
