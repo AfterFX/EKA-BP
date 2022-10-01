@@ -70,12 +70,16 @@ export class Buy1 extends React.Component<MyProps, MyState> {
         };
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+
         console.log('componentDidMount() lifecycle');
         this.getStorage().then(() => console.log("prices loaded..."))
-        this.props.route.params?.isMain? this.setState({ isMain: !this.state.isMain }) : false; //comes from history
+        this.props.route.params?.isMain ? this.setState({isMain: !this.state.isMain}) : false; //comes from history
         // Trigger update
-        this.setState({ foo: !this.state.foo });
+        this.setState({foo: !this.state.foo});
+
+        await AsyncStorage.getItem('@windowSize').then((r) => console.log(this.setState({size: Math.round(r) || 25})))
+
     }
 
     getStorage = async () => {
@@ -85,8 +89,8 @@ export class Buy1 extends React.Component<MyProps, MyState> {
             // setStoredPrices(jsonValue != null ? JSON.parse(jsonValue) : pricesIndex)
             this.setState({ priceList: jsonValue != null ? JSON.parse(jsonValue) : pricesIndex })
             return jsonValue != null ? JSON.parse(jsonValue) : pricesIndex;
-        } catch(e) {
-            // read error
+        } catch(e: any) {
+            console.log("getStorage error: ", e)
         }
     }
 
@@ -96,7 +100,6 @@ export class Buy1 extends React.Component<MyProps, MyState> {
         await AsyncStorage.getItem('@BuyHistory').then((r) => {
             const BuyHistory = JSON.parse(r)
             if(BuyHistory != null){
-                console.log("1")
                 if(BuyHistory[0]["date"] != todayDate){
                     console.log("2")
                     return AsyncStorage.removeItem('@BuyHistory')
@@ -474,6 +477,11 @@ export class Buy1 extends React.Component<MyProps, MyState> {
         return await AsyncStorage.removeItem(value)
     }
 
+    saveWindowSize = async () => {
+        this.setState({ isTouchEnded: true })
+        await AsyncStorage.setItem('@windowSize', String(this.state.size))
+    }
+
 
     // console.log(JSON.stringify(this.state.table, null, ' '))
     render() {
@@ -663,7 +671,7 @@ export class Buy1 extends React.Component<MyProps, MyState> {
                                         maximumValue={50}
                                         minimumTrackTintColor="#FFFFFF"
                                         maximumTrackTintColor="#000000"
-                                        onTouchEnd={() => this.setState({ isTouchEnded: true })}
+                                        onTouchEnd={() => this.saveWindowSize()}
                                         onTouchStart={() => this.setState({ isTouchEnded: false })}
                                         onValueChange={newNumber => (!this.state.isTouchEnded)? this.setState({ size: newNumber }) : this.setState({ size: this.state.size })}
                                         // onSlidingStart={newNumber => setSize(newNumber)}
