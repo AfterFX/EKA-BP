@@ -415,7 +415,7 @@ export default class App extends React.Component<MyProps, MyState> {
                     </> : <View style={{alignItems: 'center', justifyContent: 'center'}}><Text style={styles.emptyText}>Istorija tuščia </Text>
                             <Pressable style={styles.button}
                             onPress={() => {
-                                this.props.navigation.navigate('Pirkimas1', {
+                                this.props.navigation.navigate('Pirkimas', {
                                     isMain: true
                                 });
                             }}><Text style={styles.text1}>Naujas pirkimas</Text></Pressable></View>

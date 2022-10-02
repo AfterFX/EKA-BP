@@ -1,226 +1,247 @@
 import * as React from 'react';
-import { StatusBar } from 'expo-status-bar';
-import Slider from '@react-native-community/slider';
 import {
-    Text,
-    View,
-    StyleSheet,
+    Animated,
     Button,
-    Dimensions,
-    Alert,
-    Platform,
+    Dimensions, ScrollView,
+    StyleSheet,
+    Text,
     TouchableOpacity,
-    ImageBackground,
     useWindowDimensions,
-    ScrollView, TextInput, Animated, SafeAreaView
-} from 'react-native';
-import { Table, TableWrapper,Col, Cols, Cell } from 'react-native-table-component';
-import * as Print from 'expo-print';
-
-
-// Required to save to cache
-import * as FileSystem from 'expo-file-system';
-// ExcelJS
-import ExcelJS from 'exceljs';
-// Share excel via share dialog
-import * as Sharing from 'expo-sharing';
-// From @types/node/buffer
-import { Buffer as NodeBuffer } from 'buffer';
-
-import {
-    Avatar,
-    WelcomeImage,
-    PageTitle,
-    SubTitle,
-    StyledFormArea,
-    StyledButton,
-    InnerContainer,
-    WelcomeContainer,
-    ButtonText,
-    Line, TextLinkContent, TextLink, priceText, PriceView,
-    StatusBarHeight
-} from '../components/styles';
-
-
-import {useEffect, useRef, useState} from "react";
-import {price, payTotal, countTotal, print, destroy, saveNewPrice} from "../components/functions";
-
-import pricesIndex from "../price.json"; // Get list of prices
+    View
+} from "react-native";
 import TextField from "../components/TextField";
+import {countTotal, destroyStorage, payTotal, price, print, saveNewPrice} from "../components/functions";
 import Dialog from "react-native-dialog";
+import {StatusBar} from "expo-status-bar";
+import {useEffect, useRef} from "react";
+import {StatusBarHeight, TextLink, TextLinkContent} from "../components/styles";
+import Slider from "@react-native-community/slider";
+import Icon from "react-native-vector-icons/AntDesign";
+import {Col, Cols, Table, TableWrapper} from "react-native-table-component";
+import {State, TapGestureHandler} from "react-native-gesture-handler";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import pricesIndex from "../price.json";
 
+const window = Dimensions.get("window");
+const screen = Dimensions.get("screen");
 
-import Icon from 'react-native-vector-icons/AntDesign';
-import { TapGestureHandler, State } from 'react-native-gesture-handler';
+interface MyProps {
+    route: any
+}
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+interface MyState {
+    isMain: boolean,
+    foo: boolean,
+    text: string,
+    result: any,
+    table: any,
+    priceList: any
+    dialogVisible: boolean,
+    OnChangePrice: string,
+    getEditableProperty: string,
+    size: number,
+    visible: boolean,
+    isTouchEnded: boolean,
+    error: null,
+    editableProperty: string,
+    counter: number
+}
 
+export class Buy extends React.Component<MyProps, MyState> {
 
-
-
-// This returns a local uri that can be shared
-const generateShareableExcel = async (): Promise<string> => {
-    const now = new Date();
-    const fileName = 'YourFilename.xlsx';
-    const fileUri = FileSystem.cacheDirectory + fileName;
-    return new Promise<string>((resolve, reject) => {
-        const workbook = new ExcelJS.Workbook();
-        workbook.creator = 'Me';
-        workbook.created = now;
-        workbook.modified = now;
-        // Add a sheet to work on
-        const worksheet = workbook.addWorksheet('My Sheet', {});
-        // Just some columns as used on ExcelJS Readme
-        worksheet.columns = [
-            { header: 'Id', key: 'id', width: 10 },
-            { header: 'Name', key: 'name', width: 32 },
-            { header: 'D.O.B.', key: 'dob', width: 10, }
-        ];
-        // Add some test data
-        worksheet.addRow({ id: 1, name: 'John Doe', dob: new Date(1970, 1, 1) });
-        worksheet.addRow({ id: 2, name: 'Jane Doe', dob: new Date(1969, 2, 3) });
-
-        // Test styling
-
-        // Style first row
-        worksheet.getRow(1).font = {
-            name: 'Comic Sans MS', family: 4, size: 16, underline: 'double', bold: true
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            isMain: true,
+            foo: false,
+            text: '',
+            result: '',
+            table: {},
+            priceList: '',
+            dialogVisible: false,
+            OnChangePrice: '',
+            getEditableProperty: '',
+            size: 25,
+            visible: false,
+            isTouchEnded: true,
+            error: null,
+            editableProperty: '',
+            counter: 0
         };
-        // Style second column
-        worksheet.eachRow((row, rowNumber) => {
-            row.getCell(2).font = {
-                name: 'Arial Black',
-                color: { argb: '#FF00FF00' },
-                family: 2,
-                size: 14,
-                bold: true
-            };
-            row.getCell("D").font = {
-                name: 'Arial Black',
-                color: { argb: '6A006A00' },
-                family: 2,
-                size: 5,
-                bold: true
-            };
-        });
+    }
 
-        // Write to file
-        workbook.xlsx.writeBuffer().then((buffer: ExcelJS.Buffer) => {
-            // Do this to use base64 encoding
-            const nodeBuffer = NodeBuffer.from(buffer);
-            const bufferStr = nodeBuffer.toString('base64');
-            FileSystem.writeAsStringAsync(fileUri, bufferStr, {
-                encoding: FileSystem.EncodingType.Base64
-            }).then(() => {
-                resolve(fileUri);
-            });
-        });
-    });
-}
+    async componentDidMount() {
 
-const shareExcel = async () => {
-    const shareableExcelUri: string = await generateShareableExcel();
-    Sharing.shareAsync(shareableExcelUri, {
-        mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // Android
-        dialogTitle: 'Your dialog title here', // Android and Web
-        UTI: 'com.microsoft.excel.xlsx' // iOS
-    }).catch(error => {
-        console.error('Error', error);
-    }).then(() => {
-        console.log('Return from sharing dialog');
-    });
-}
-function _alertIndex(value: string) {
-    Alert.alert(`This is column ${value}`);
-}
-const elementButton = (value: string) => (
-    <TouchableOpacity onPress={() => _alertIndex(value)}>
-        <View style={styles.btn}>
-            <Text style={styles.btnText}>button</Text>
-        </View>
-    </TouchableOpacity>
-);
+        console.log('componentDidMount() lifecycle');
+        this.getStorage().then(() => console.log("prices loaded..."))
+        this.props.route.params?.isMain ? this.setState({isMain: !this.state.isMain}) : false; //comes from history
+        // Trigger update
+        this.setState({foo: !this.state.foo});
 
+        await AsyncStorage.getItem('@windowSize').then((r) => console.log(this.setState({size: Math.round(r) || 25})))
 
-const Buy = ({ navigation }) => {
-    const [isMain, setIsMain] = useState(true);
-    const [ChangeNumber, onChangeNumber] = useState<String>('');
-    const [error, setError] = useState<string | null>(null)
-    const [size, setSize] = useState(25);
+    }
 
-    //settings
-    const [visible, setVisible] = useState(false);
-    const onToggleSnackBar = () => setVisible(!visible);
-    const fadeAnim = useRef(new Animated.Value(0)).current;
-    const [isTouchEnded, setIsTouchEnded] = useState(true);
-
-    const [dialogVisible, setDialogVisible] = useState(false);
-    const [getEditableElement, setGetEditableElement] = useState(''); //get the element that is being edited
-
-
-    const [OnChangePrice, setOnChangePrice] = useState('Klaida: 9159.');
-
-    const { width, height } = useWindowDimensions();
-
-    const [storedPrices, setStoredPrices] = useState<{[key: string]: string}>({});
-
-
-    const getStorage = async () => {
+    getStorage = async () => {
         try {
             const jsonValue = await AsyncStorage.getItem('@Price')
             jsonValue != null ? JSON.parse(jsonValue) : await AsyncStorage.mergeItem('@Price', JSON.stringify(pricesIndex) ); //            JSON.stringify({s_a1: 50 })
-            setStoredPrices(jsonValue != null ? JSON.parse(jsonValue) : pricesIndex)
+            // setStoredPrices(jsonValue != null ? JSON.parse(jsonValue) : pricesIndex)
+            this.setState({ priceList: jsonValue != null ? JSON.parse(jsonValue) : pricesIndex })
             return jsonValue != null ? JSON.parse(jsonValue) : pricesIndex;
-        } catch(e) {
-            // read error
+        } catch(e: any) {
+            console.log("getStorage error: ", e)
         }
     }
 
-    //Load price if not exits in storage
-    useEffect(() => { if (Object.keys(storedPrices).length === 0) {(getStorage().then(r => {
-        return setStoredPrices(r)
-    }))}}, [storedPrices])
+    resetHistory = async () => {
+        const date = new Date();
+        const todayDate = date.toISOString().slice(0, 10);
+        await AsyncStorage.getItem('@BuyHistory').then((r) => {
+            const BuyHistory = JSON.parse(r)
+            if(BuyHistory != null){
+                if(BuyHistory[0]["date"] != todayDate){
+                    console.log("2")
+                    return AsyncStorage.removeItem('@BuyHistory')
+                }
+            }
+        })
 
-    const elementCol = (value: any) => (
-            <View style={styles.colBlue}>
-                <Text style={{fontSize: (size*0.51)}}>{value}</Text>
-            </View>
-    );
+    }
 
+    tableState=(dir: string)=>{
 
-    const handleChange = (name: any, value: any) => {
-        const re = /^[0-9\b]+$/;
-        if (value === '' || re.test(value))
-        onChangeNumber({
-            ...ChangeNumber,
-            [name]: value,
-        });
-    };
-    const elementInput = (id: any, underline: boolean) =>{
-    return (
+        switch(dir) {
 
-            <TextField
-                style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
-                value={ChangeNumber[id]}
-                label=""
-                errorText={error}
-                fontSizeC={(size*0.56)}
-                onChangeText={newNumber => handleChange(id, newNumber)}
-                textAlign={"center"}
-                keyboardType={"phone-pad"}
-            />
+            case 'tableTitle_1':
+                return [this.t('EUR A1', false), this.t('EUR A', false), this.t('EUR B', false), this.t('', true), this.t('LSD', true), this.t('SD', false), this.t('SD AP', false), this.t('PM', false), this.t('KNAUF', true)]
+            case 'tableTitle_3':
+                return [this.t('LSD, FIN', false), this.t('SD, perimetriniai', false), this.t('PM, perimetriniai, SD AP', false), this.t('', false), this.t('CP1', false), this.t('CP6', true)]
 
-    )};
+            case 'tableTitle_4':
+                return [this.t('LSD, SD', false), this.t('CP3', false), this.t('CP9', true)]
+            case 'tableTitle_5':
+                return [this.t('PAROC', true)]
+            case 'tableTitle_6':
+                return [this.t('KNAUF', true)]
+            case 'tableTitle_7':
+                return [this.t('600x800', false), this.t('800x800', false), this.t('1000x1000', false), this.t('', false), this.t('1200x1200', false), this.t('1100x1300', false), this.t('Nestandartiniai padėlai', true)]
+            case 'tableTitle_8':
+                return [this.t('800x1200 (šviesūs)', false), this.t('800x1200 (tamsūs)', false), this.t('600x800 (šviesūs)', false), this.t('600x800 (tamsūs)', false), this.t('nestandartai 800x2000', true)]
+            case 'tableTitle_9':
+                return [this.t('800x1200', false), this.t('1000x1200', true)]
+            case 'tableTitle_10':
+                return [this.t('2,8 - 3,2', false), this.t('6 - 10', true)]
+            case 'tableTitle_11':
+                return [this.t('Mediniai padėklai', true)]
+            case 'tableData':
+                return [
+                    [this.elementCol('Kiekis')],
+                    [this.elementCol('Kaina € /vnt')],
+                    [this.elementCol('Suma')],
+                    [this.elementCol('Kiekis')],
+                    [this.elementCol('Kaina € /vnt')],
+                    [this.elementCol('Suma')],
+                ]
+            case 'tableData_1':
+                return [
+                    [this.elementInput('s_a1', false), this.elementInput('s_a2', false), this.elementInput('s_b2', false), this.elementInput('s_lpm_800', true), this.elementInput('s_lsd_800', true), this.elementInput('s_sd_800', false), this.elementInput('s_ap_800', false), this.elementInput('s_pm_800', false), this.elementInput('s_knauf_800', true)],
+                    [this.elementPrice('s_a1', false), this.elementPrice('s_a2', false), this.elementPrice('s_b2', false), this.elementPrice('s_lpm_800', true), this.elementPrice('s_lsd_800', true), this.elementPrice('s_sd_800', false), this.elementPrice('s_ap_800', false), this.elementPrice('s_pm_800', false), this.elementPrice('s_knauf_800', true)],
+                    [this.elementResult('s_a1', false), this.elementResult('s_a2', false), this.elementResult('s_b2', false), this.elementResult('s_lpm_800', true), this.elementResult('s_lsd_800', true), this.elementResult('s_sd_800', false), this.elementResult('s_ap_800', false), this.elementResult('s_pm_800', false), this.elementResult('s_knauf_800', true)],
+                    [this.elementInput('r_a1', false), this.elementInput('r_a2', false), this.elementInput('r_b2', false), this.elementInput('r_lpm_800', true), this.elementInput('r_lsd_800', true), this.elementInput('r_sd_800', false), this.elementInput('r_ap_800', false), this.elementInput('r_pm_800', false), this.elementInput('r_knauf_800', true)],
+                    [this.elementPrice('r_a1', false), this.elementPrice('r_a2', false), this.elementPrice('r_b2', false), this.elementPrice('r_lpm_800', true), this.elementPrice('r_lsd_800', true), this.elementPrice('r_sd_800', false), this.elementPrice('r_ap_800', false), this.elementPrice('r_pm_800', false), this.elementPrice('r_knauf_800', true)],
+                    [this.elementResult('r_a1', false), this.elementResult('r_a2', false), this.elementResult('r_b2', false), this.elementResult('r_lpm_800', true), this.elementResult('r_lsd_800', true), this.elementResult('r_sd_800', false), this.elementResult('r_ap_800', false), this.elementResult('r_pm_800', false), this.elementResult('r_knauf_800', true)]
+                ]
+            case 'tableData_3':
+                return [
+                    [this.elementInput('s_lsd_1000', false), this.elementInput('s_sd_1000', false), this.elementInput('s_pm_1000', false), this.elementInput('s_knauf_1000', false), this.elementInput('s_cp1_1000', false), this.elementInput('s_cp6_1000', true)],
+                    [this.elementPrice('s_lsd_1000', false), this.elementPrice('s_sd_1000', false), this.elementPrice('s_pm_1000', false), this.elementPrice('s_knauf_1000', false), this.elementPrice('s_cp1_1000', false), this.elementPrice('s_cp6_1000', true)],
+                    [this.elementResult('s_lsd_1000', false), this.elementResult('s_sd_1000', false), this.elementResult('s_pm_1000', false), this.elementResult('s_knauf_1000', false), this.elementResult('s_cp1_1000', false), this.elementResult('s_cp6_1000', true)],
+                    [this.elementInput('r_lsd_1000', false), this.elementInput('r_sd_1000', false), this.elementInput('r_pm_1000', false), this.elementInput('r_knauf_1000', false), this.elementInput('r_cp1_1000', false), this.elementInput('r_cp6_1000', true)],
+                    [this.elementPrice('r_lsd_1000', false), this.elementPrice('r_sd_1000', false), this.elementPrice('r_pm_1000', false), this.elementPrice('r_knauf_1000', false), this.elementPrice('r_cp1_1000', false), this.elementPrice('r_cp6_1000', true)],
+                    [this.elementResult('r_lsd_1000', false), this.elementResult('r_sd_1000', false), this.elementResult('r_pm_1000', false), this.elementResult('r_knauf_1000', false), this.elementResult('r_cp1_1000', false), this.elementResult('r_cp6_1000', true)]
+                ]
+            case 'tableData_4':
+                return [
+                    [this.elementInput('s_sd_1140', false), this.elementInput('s_cp3_1140', false), this.elementInput('s_cp9_1140', true)],
+                    [this.elementPrice('s_sd_1140', false), this.elementPrice('s_cp3_1140', false), this.elementPrice('s_cp9_1140', true)],
+                    [this.elementResult('s_sd_1140', false), this.elementResult('s_cp3_1140', false), this.elementResult('s_cp9_1140', true)],
+                    [this.elementInput('r_sd_1140', false), this.elementInput('r_cp3_1140', false), this.elementInput('r_cp9_1140', true)],
+                    [this.elementPrice('r_sd_1140', false), this.elementPrice('r_cp3_1140', false), this.elementPrice('r_cp9_1140', true)],
+                    [this.elementResult('r_sd_1140', false), this.elementResult('r_cp3_1140', false), this.elementResult('r_cp9_1140', true)]
+                ]
+            case 'tableData_5':
+                return [
+                    [this.elementInput('s_paroc', true)],
+                    [this.elementPrice('s_paroc', true)],
+                    [this.elementResult('s_paroc', true)],
+                    [this.elementInput('r_paroc', true)],
+                    [this.elementPrice('r_paroc', true)],
+                    [this.elementResult('r_paroc', true)]
+                ]
+            case 'tableData_6':
+                return [
+                    [this.elementInput('s_knauf', true)],
+                    [this.elementPrice('s_knauf', true)],
+                    [this.elementResult('s_knauf', true)],
+                    [this.elementInput('r_knauf', true)],
+                    [this.elementPrice('r_knauf', true)],
+                    [this.elementResult('r_knauf', true)]
+                ]
+            case 'tableData_7':
+                return [
+                    [this.elementInput('s_600x800', false), this.elementInput('s_800x800', false), this.elementInput('s_1000x1000', false), this.elementInput('', false), this.elementInput('s_1200x1200', false), this.elementInput('s_1100x1300', false), this.elementInput('s_1600x3000', true)],
+                    [this.elementPrice('s_600x800', false), this.elementPrice('s_800x800', false), this.elementPrice('s_1000x1000', false), this.elementPrice('', false), this.elementPrice('s_1200x1200', false), this.elementPrice('s_1100x1300',false), this.elementPrice('s_1600x3000', true)],
+                    [this.elementResult('s_600x800', false), this.elementResult('s_800x800', false), this.elementResult('s_1000x1000', false), this.elementResult('', false), this.elementResult('s_1200x1200', false), this.elementResult('s_1100x1300', false), this.elementResult('s_1600x3000', true)],
+                    [this.elementInput('r_600x800', false), this.elementInput('r_800x800', false), this.elementInput('r_1000x1000', false), this.elementInput('', false), this.elementInput('r_1200x1200', false), this.elementInput('r_1100x1300', false), this.elementInput('r_1600x3000', true)],
+                    [this.elementPrice('r_600x800', false), this.elementPrice('r_800x800', false), this.elementPrice('r_1000x1000', false), this.elementPrice('', false), this.elementPrice('r_1200x1200', false), this.elementPrice('r_1100x1300', false), this.elementPrice('r_1600x3000', true)],
+                    [this.elementResult('r_600x800', false), this.elementResult('r_800x800', false), this.elementResult('r_1000x1000', false), this.elementResult('', false), this.elementResult('r_1200x1200', false), this.elementResult('r_1100x1300', false), this.elementResult('r_1600x3000', true)]
+                ]
+            case 'tableData_8':
+                return [
+                    [this.elementInput('s_apvadai_800x1200_white', false), this.elementInput('s_apvadai_800x1200_black', false), this.elementInput('s_apvadai_600x800_white', false), this.elementInput('s_apvadai_600x800_black', false), this.elementInput('s_apvadai_800x2000_mix', true)],
+                    [this.elementPrice('s_apvadai_800x1200_white', false), this.elementPrice('s_apvadai_800x1200_black', false), this.elementPrice('s_apvadai_600x800_white', false), this.elementPrice('s_apvadai_600x800_black', false), this.elementPrice('s_apvadai_800x2000_mix', true)],
+                    [this.elementResult('s_apvadai_800x1200_white', false), this.elementResult('s_apvadai_800x1200_black', false), this.elementResult('s_apvadai_600x800_white', false), this.elementResult('s_apvadai_600x800_black', false), this.elementResult('s_apvadai_800x2000_mix', true)],
+                    [this.elementInput('r_apvadai_800x1200_white', false), this.elementInput('r_apvadai_800x1200_black', false), this.elementInput('r_apvadai_600x800_white', false), this.elementInput('r_apvadai_600x800_black', false), this.elementInput('r_apvadai_800x2000_mix', true)],
+                    [this.elementPrice('r_apvadai_800x1200_white', false), this.elementPrice('r_apvadai_800x1200_black', false), this.elementPrice('r_apvadai_600x800_white', false), this.elementPrice('r_apvadai_600x800_black', false), this.elementPrice('r_apvadai_800x2000_mix', true)],
+                    [this.elementResult('r_apvadai_800x1200_white', false), this.elementResult('r_apvadai_800x1200_black', false), this.elementResult('r_apvadai_600x800_white', false), this.elementResult('r_apvadai_600x800_black', false), this.elementResult('r_apvadai_800x2000_mix', true)]
+                ]
+            case 'tableData_9':
+                return [
+                    [this.elementInput('s_dekos_800x1200', false), this.elementInput('s_dekos_1000x1200', true)],
+                    [this.elementPrice('s_dekos_800x1200', false), this.elementPrice('s_dekos_1000x1200', true)],
+                    [this.elementResult('s_dekos_800x1200', false), this.elementResult('s_dekos_1000x1200', true)],
+                    [this.elementInput('r_dekos_800x1200', false), this.elementInput('r_dekos_1000x1200', true)],
+                    [this.elementPrice('r_dekos_800x1200', false), this.elementPrice('r_dekos_1000x1200', true)],
+                    [this.elementResult('r_dekos_800x1200', false), this.elementResult('r_dekos_1000x1200', true)]
+                ]
+            case 'tableData_10':
+                return [
+                    [this.elementInput('s_plokste_800x1200_p', false), this.elementInput('s_plokste_800x1200_s', true)],
+                    [this.elementPrice('s_plokste_800x1200_p', false), this.elementPrice('s_plokste_800x1200_s', true)],
+                    [this.elementResult('s_plokste_800x1200_p', false), this.elementResult('s_plokste_800x1200_s', true)],
+                    [this.elementInput('r_plokste_800x1200_p', false), this.elementInput('r_plokste_800x1200_s', true)],
+                    [this.elementPrice('r_plokste_800x1200_p', false), this.elementPrice('r_plokste_800x1200_s', true)],
+                    [this.elementResult('r_plokste_800x1200_p', false), this.elementResult('r_plokste_800x1200_s', true)]
+                ]
+            case 'tableData_11':
+                return [
+                    [this.elementInput('s_remontas', true)],
+                    [this.elementPrice('s_remontas', true)],
+                    [this.elementResult('s_remontas', true)],
+                    [this.elementInput('r_remontas', true)],
+                    [this.elementPrice('r_remontas', true)],
+                    [this.elementResult('r_remontas', true)]
+                ]
+            default:
+                return "lol";
 
-    const elementResult = (element: any, underline: boolean) =>{
-        return (
-            <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
-                <Text style={{fontSize: (size > 40? 22 : size*0.56)}}>{price(element, ChangeNumber, storedPrices)}</Text>
-            </View>
-        )
-    };
+        }
 
-    function DoubleTapButton({ onDoubleTap, children }) {
+    }
+    flex = [1, 1, 1, 1, 1, 1];
+
+    DoubleTapButton({ onDoubleTap, children }) {
         const onHandlerStateChange = ({ nativeEvent }) => {
             if (nativeEvent.state === State.ACTIVE) {
                 onDoubleTap && onDoubleTap();
@@ -236,362 +257,433 @@ const Buy = ({ navigation }) => {
         );
     }
 
-    const showPriceEditor = async (element: string) => {
-        setOnChangePrice(storedPrices[element])
-        setGetEditableElement(element);//sets editor what shows
-        setDialogVisible(true);
+    t = (value: any, underline: boolean) => (
+        <View style={[{height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+            <Text style={[{fontSize: (this.state.size*0.56), padding: 2}]}>{value}</Text>
+        </View>
+    );
+
+    headText = (text: string) => (
+        <View style={[styles.head, {height: '100%', borderBottomWidth: 2, justifyContent: 'center'}]}>
+            <Text style={{ textAlign: 'center', width: 200, height: 184+(this.state.size/1.5),  transform: [{ rotate: '-90deg' }], fontSize: (this.state.size*0.56) }}>{text}</Text>
+        </View>
+        // text1: { textAlign: 'center', width: 200, height: 184+(size/1.5),  transform: [{ rotate: '-90deg' }], fontSize: (size*0.56) },
+
+    );
+
+    elementCol = (value: any) => (
+        <View style={styles.colBlue}>
+            <Text style={{fontSize: this.state.size*0.51}}>{value}</Text>
+        </View>
+    );
+
+    showPriceEditor = async (property: string) => {
+        this.setState({ OnChangePrice: this.state.priceList[property] })
+        this.setState({ editableProperty: property })//sets editor what shows
+        this.setState({ dialogVisible: true })
     };
 
-    const ChangePrice = async (value: string) => {
+    inputChangePrice = async (property: any, newNumber: any) => {
+        const re = /^[0-9]*\.?[0-9]*$/;
+        if (newNumber === '' || re.test(newNumber))
+            this.OnChange(property, newNumber)
+    };
+
+    elementInput = (property: any, underline: boolean) => {
+        // console.log( this.state.counter++)
+        return (
+
+            <TextField
+                style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
+                value={this.state.table[property]?.units}
+                label=""
+                errorText={this.state.error}
+                fontSizeC={(this.state.size*0.56)}
+                // onChangeText={newNumber => this.OnChange(property, newNumber)}
+                onChangeText={newNumber => this.inputChangePrice(property, newNumber)}
+                textAlign={"center"}
+                keyboardType={"phone-pad"}
+            />
+
+        )
+    };
+
+    elementResult = (property: any, underline: boolean) =>{
+        return (
+            <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+                <Text style={{fontSize: (this.state.size > 40? 22 : this.state.size*0.56)}}>{this.state.table[property]?.['totalPrice'] || ''}</Text>
+            </View>
+        )
+    };
+
+    elementPrice = (property: string, underline: boolean) => (
+        <this.DoubleTapButton onDoubleTap={() => this.showPriceEditor(property)}>
+            <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
+                <Text style={{fontSize: (this.state.size*0.56), textAlign: "center"}}>{this.state.priceList[property]}</Text>
+            </View>
+        </this.DoubleTapButton>
+    );
+
+    OnChange = (property: string, value: any) =>{
+        this.setState((previousState) => {
+            return {
+                table: {
+                    ...previousState.table,
+                    [property]: {"units": value, "totalPrice": value*this.state.priceList[property] }
+                }
+            }
+        });
+
+        this.setState({ text: value })
+        this.setState({ result: value*2 })
+    }
+    input = (property: string) =>{
+        return (
+            <TextField style={{width: 250, height: 20}}
+                       value={this.state.table[property]}
+                       label=""
+                       onChangeText={newNumber => this.OnChange(property, newNumber)}
+                       textAlign={"center"}
+                       keyboardType={"phone-pad"}
+            />
+        )
+    }
+
+    result = (property: string) =>{
+        return (
+            <View style={{width: 250, height: 20}}>
+                <Text>{this.state.table[property]?.['totalPrice']}</Text>
+            </View>
+        )
+    }
+
+
+    ChangePrice = async (value: string) => {
         const re = /^[0-9]*\.?[0-9]*$/;
         if (value === '' || re.test(value))
-        setOnChangePrice(value)
+            this.setState({ OnChangePrice: value })
     };
 
-    const handleCancel = async () => {
-        return setDialogVisible(false);
+    handleCancel = async () => {
+        this.setState({ dialogVisible: false })
     };
 
-    const handleSave = async () => {
-        await saveNewPrice(getEditableElement, OnChangePrice)
-        await getStorage();//Refreshing numbers after save
-        return setDialogVisible(false);
+    handleSave = async () => {
+        await saveNewPrice(this.state.editableProperty, this.state.OnChangePrice)
+        await this.getStorage();//Refreshing numbers after save
+        return this.setState({ dialogVisible: false })
     };
 
-    const elementPrice = (element: string, underline: boolean) => (
-        <DoubleTapButton onDoubleTap={() => showPriceEditor(element)}>
-            <View style={[styles.colResult, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
-                <Text style={{fontSize: (size*0.56), textAlign: "center"}}>{storedPrices[element]}</Text>
-            </View>
-        </DoubleTapButton>
-    );
-
-    const t = (value: any, underline: boolean) => (
-        <View style={[{height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}>
-            <Text style={[{fontSize: (size*0.56), padding: 2}]}>{value}</Text>
-        </View>
-    );
-
-    const headText = (text: string) => (
-        <View style={[styles.head, {height: '100%', borderBottomWidth: 2, justifyContent: 'center'}]}>
-            <Text style={{ textAlign: 'center', width: 200, height: 184+(size/1.5),  transform: [{ rotate: '-90deg' }], fontSize: (size*0.56) }}>{text}</Text>
-        </View>
-    // text1: { textAlign: 'center', width: 200, height: 184+(size/1.5),  transform: [{ rotate: '-90deg' }], fontSize: (size*0.56) },
-
-);
-
-    const ObjectResize = () => {
+    ObjectResize = () => {
         return StyleSheet.create({
             priceText: {
                 textAlign: "center",
-                fontSize: (size*0.56)
+                fontSize: (this.state.size*0.56)
             },
-            text1: { textAlign: 'center', width: 200, height: 184+(size/1.5),  transform: [{ rotate: '-90deg' }], fontSize: (size*0.56) },
-            title1: { position: 'relative', flexDirection: 'column', flex: 9-((size/10)-2)},
-            text: { fontSize: (size*0.56)},
-            singleHead: {maxHeight: 10.5+(size*2), width: 100}
+            text1: { textAlign: 'center', width: 200, height: 184+(this.state.size/1.5),  transform: [{ rotate: '-90deg' }], fontSize: (this.state.size*0.56) },
+            title1: { position: 'relative', flexDirection: 'column', flex: 9-((this.state.size/10)-2)},
+            text: { fontSize: (this.state.size*0.56)},
+            singleHead: {maxHeight: 10.5+(this.state.size*2), width: 100}
         })
     }
 
+    createHistory = async () => {
+        const date = new Date();
+        const todayDate = date.toISOString().slice(0, 10);
+        const time = date.getHours()+":"+date.getMinutes()+":"+ date.getSeconds();
+        const BuyHistory = await AsyncStorage.getItem('@BuyHistory')
 
+        let myObjArray: any
 
-    let state = {
-        tableTitle_1: [t('EUR A1', false), t('EUR A', false), t('EUR B', false), t('', true), t('LSD', true), t('SD', false), t('SD AP', false), t('PM', false), t('KNAUF', true)],
-        tableTitle_3: [t('LSD, FIN', false), t('SD, perimetriniai', false), t('PM, perimetriniai, SD AP', false), t('', false), t('CP1', false), t('CP6', true)],
-        tableTitle_4: [t('LSD, SD', false), t('CP3', false), t('CP9', true)],
-        tableTitle_5: [t('PAROC', true)],
-        tableTitle_6: [t('KNAUF', true)],
-        tableTitle_7: [t('600x800', false), t('800x800', false), t('1000x1000', false), t('', false), t('1200x1200', false), t('1100x1300', false), t('Nestandartiniai padėlai', true)],
-        tableTitle_8: [t('800x1200 (šviesūs)', false), t('800x1200 (tamsūs)', false), t('600x800 (šviesūs)', false), t('600x800 (tamsūs)', false), t('nestandartai 800x2000', true)],
-        tableTitle_9: [t('800x1200', false), t('1000x1200', true)],
-        tableTitle_10: [t('2,8 - 3,2', false), t('6 - 10', true)],
-        tableTitle_11: [t('Mediniai padėklai', true)],
-        tableData: [
-                [elementCol('Kiekis')],
-            [elementCol('Kaina € /vnt')],
-            [elementCol('Suma')],
-            [elementCol('Kiekis')],
-            [elementCol('Kaina € /vnt')],
-            [elementCol('Suma')],
-        ],
-        tableData_1: [
-                [elementInput('s_a1', false), elementInput('s_a2', false), elementInput('s_b2', false), elementInput('s_lpm_800', true), elementInput('s_lsd_800', true), elementInput('s_sd_800', false), elementInput('s_ap_800', false), elementInput('s_pm_800', false), elementInput('s_knauf_800', true)],
-            [elementPrice('s_a1', false), elementPrice('s_a2', false), elementPrice('s_b2', false), elementPrice('s_lpm_800', true), elementPrice('s_lsd_800', true), elementPrice('s_sd_800', false), elementPrice('s_ap_800', false), elementPrice('s_pm_800', false), elementPrice('s_knauf_800', true)],
-            [elementResult('s_a1', false), elementResult('s_a2', false), elementResult('s_b2', false), elementResult('s_lpm_800', true), elementResult('s_lsd_800', true), elementResult('s_sd_800', false), elementResult('s_ap_800', false), elementResult('s_pm_800', false), elementResult('s_knauf_800', true)],
-            [elementInput('r_a1', false), elementInput('r_a2', false), elementInput('r_b2', false), elementInput('r_lpm_800', true), elementInput('r_lsd_800', true), elementInput('r_sd_800', false), elementInput('r_ap_800', false), elementInput('r_pm_800', false), elementInput('r_knauf_800', true)],
-            [elementPrice('r_a1', false), elementPrice('r_a2', false), elementPrice('r_b2', false), elementPrice('r_lpm_800', true), elementPrice('r_lsd_800', true), elementPrice('r_sd_800', false), elementPrice('r_ap_800', false), elementPrice('r_pm_800', false), elementPrice('r_knauf_800', true)],
-            [elementResult('r_a1', false), elementResult('r_a2', false), elementResult('r_b2', false), elementResult('r_lpm_800', true), elementResult('r_lsd_800', true), elementResult('r_sd_800', false), elementResult('r_ap_800', false), elementResult('r_pm_800', false), elementResult('r_knauf_800', true)],
-        ],
-        tableData_3: [
-            [elementInput('s_lsd_1000', false), elementInput('s_sd_1000', false), elementInput('s_pm_1000', false), elementInput('s_knauf_1000', false), elementInput('s_cp1_1000', false), elementInput('s_cp6_1000', true)],
-            [elementPrice('s_lsd_1000', false), elementPrice('s_sd_1000', false), elementPrice('s_pm_1000', false), elementPrice('s_knauf_1000', false), elementPrice('s_cp1_1000', false), elementPrice('s_cp6_1000', true)],
-            [elementResult('s_lsd_1000', false), elementResult('s_sd_1000', false), elementResult('s_pm_1000', false), elementResult('s_knauf_1000', false), elementResult('s_cp1_1000', false), elementResult('s_cp6_1000', true)],
-            [elementInput('r_lsd_1000', false), elementInput('r_sd_1000', false), elementInput('r_pm_1000', false), elementInput('r_knauf_1000', false), elementInput('r_cp1_1000', false), elementInput('r_cp6_1000', true)],
-            [elementPrice('r_lsd_1000', false), elementPrice('r_sd_1000', false), elementPrice('r_pm_1000', false), elementPrice('r_knauf_1000', false), elementPrice('r_cp1_1000', false), elementPrice('r_cp6_1000', true)],
-            [elementResult('r_lsd_1000', false), elementResult('r_sd_1000', false), elementResult('r_pm_1000', false), elementResult('r_knauf_1000', false), elementResult('r_cp1_1000', false), elementResult('r_cp6_1000', true)],
-        ],
-        tableData_4: [
-            [elementInput('s_sd_1140', false), elementInput('s_cp3_1140', false), elementInput('s_cp9_1140', true)],
-            [elementPrice('s_sd_1140', false), elementPrice('s_cp3_1140', false), elementPrice('s_cp9_1140', true)],
-            [elementResult('s_sd_1140', false), elementResult('s_cp3_1140', false), elementResult('s_cp9_1140', true)],
-            [elementInput('r_sd_1140', false), elementInput('r_cp3_1140', false), elementInput('r_cp9_1140', true)],
-            [elementPrice('r_sd_1140', false), elementPrice('r_cp3_1140', false), elementPrice('r_cp9_1140', true)],
-            [elementResult('r_sd_1140', false), elementResult('r_cp3_1140', false), elementResult('r_cp9_1140', true)],
-        ],
-        tableData_5: [
-            [elementInput('s_paroc', true)],
-            [elementPrice('s_paroc', true)],
-            [elementResult('s_paroc', true)],
-            [elementInput('r_paroc', true)],
-            [elementPrice('r_paroc', true)],
-            [elementResult('r_paroc', true)],
-        ],
-        tableData_6: [
-            [elementInput('s_knauf', true)],
-            [elementPrice('s_knauf', true)],
-            [elementResult('s_knauf', true)],
-            [elementInput('r_knauf', true)],
-            [elementPrice('r_knauf', true)],
-            [elementResult('r_knauf', true)],
-        ],
-        tableData_7: [
-            [elementInput('s_600x800', false), elementInput('s_800x800', false), elementInput('s_1000x1000', false), elementInput('', false), elementInput('s_1200x1200', false), elementInput('s_1100x1300', false), elementInput('s_1600x3000', true)],
-            [elementPrice('s_600x800', false), elementPrice('s_800x800', false), elementPrice('s_1000x1000', false), elementPrice('', false), elementPrice('s_1200x1200', false), elementPrice('s_1100x1300',false), elementPrice('s_1600x3000', true)],
-            [elementResult('s_600x800', false), elementResult('s_800x800', false), elementResult('s_1000x1000', false), elementResult('', false), elementResult('s_1200x1200', false), elementResult('s_1100x1300', false), elementResult('s_1600x3000', true)],
-            [elementInput('r_600x800', false), elementInput('r_800x800', false), elementInput('r_1000x1000', false), elementInput('', false), elementInput('r_1200x1200', false), elementInput('r_1100x1300', false), elementInput('r_1600x3000', true)],
-            [elementPrice('r_600x800', false), elementPrice('r_800x800', false), elementPrice('r_1000x1000', false), elementPrice('', false), elementPrice('r_1200x1200', false), elementPrice('r_1100x1300', false), elementPrice('r_1600x3000', true)],
-            [elementResult('r_600x800', false), elementResult('r_800x800', false), elementResult('r_1000x1000', false), elementResult('', false), elementResult('r_1200x1200', false), elementResult('r_1100x1300', false), elementResult('r_1600x3000', true)],
-        ],
-        tableData_8: [
-            [elementInput('s_apvadai_800x1200_white', false), elementInput('s_apvadai_800x1200_black', false), elementInput('s_apvadai_600x800_white', false), elementInput('s_apvadai_600x800_black', false), elementInput('s_apvadai_800x2000_mix', true)],
-            [elementPrice('s_apvadai_800x1200_white', false), elementPrice('s_apvadai_800x1200_black', false), elementPrice('s_apvadai_600x800_white', false), elementPrice('s_apvadai_600x800_black', false), elementPrice('s_apvadai_800x2000_mix', true)],
-            [elementResult('s_apvadai_800x1200_white', false), elementResult('s_apvadai_800x1200_black', false), elementResult('s_apvadai_600x800_white', false), elementResult('s_apvadai_600x800_black', false), elementResult('s_apvadai_800x2000_mix', true)],
-            [elementInput('r_apvadai_800x1200_white', false), elementInput('r_apvadai_800x1200_black', false), elementInput('r_apvadai_600x800_white', false), elementInput('r_apvadai_600x800_black', false), elementInput('r_apvadai_800x2000_mix', true)],
-            [elementPrice('r_apvadai_800x1200_white', false), elementPrice('r_apvadai_800x1200_black', false), elementPrice('r_apvadai_600x800_white', false), elementPrice('r_apvadai_600x800_black', false), elementPrice('r_apvadai_800x2000_mix', true)],
-            [elementResult('r_apvadai_800x1200_white', false), elementResult('r_apvadai_800x1200_black', false), elementResult('r_apvadai_600x800_white', false), elementResult('r_apvadai_600x800_black', false), elementResult('r_apvadai_800x2000_mix', true)],
-        ],
-        tableData_9: [
-            [elementInput('s_dekos_800x1200', false), elementInput('s_dekos_1000x1200', true)],
-            [elementPrice('s_dekos_800x1200', false), elementPrice('s_dekos_1000x1200', true)],
-            [elementResult('s_dekos_800x1200', false), elementResult('s_dekos_1000x1200', true)],
-            [elementInput('r_dekos_800x1200', false), elementInput('r_dekos_1000x1200', true)],
-            [elementPrice('r_dekos_800x1200', false), elementPrice('r_dekos_1000x1200', true)],
-            [elementResult('r_dekos_800x1200', false), elementResult('r_dekos_1000x1200', true)],
-        ],
-        tableData_10: [
-            [elementInput('s_plokste_800x1200_p', false), elementInput('s_plokste_800x1200_s', true)],
-            [elementPrice('s_plokste_800x1200_p', false), elementPrice('s_plokste_800x1200_s', true)],
-            [elementResult('s_plokste_800x1200_p', false), elementResult('s_plokste_800x1200_s', true)],
-            [elementInput('r_plokste_800x1200_p', false), elementInput('r_plokste_800x1200_s', true)],
-            [elementPrice('r_plokste_800x1200_p', false), elementPrice('r_plokste_800x1200_s', true)],
-            [elementResult('r_plokste_800x1200_p', false), elementResult('r_plokste_800x1200_s', true)],
-        ],
-        tableData_11: [
-            [elementInput('s_remontas', true)],
-            [elementPrice('s_remontas', true)],
-            [elementResult('s_remontas', true)],
-            [elementInput('r_remontas', true)],
-            [elementPrice('r_remontas', true)],
-            [elementResult('r_remontas', true)],
-        ]
-    }
+        if(BuyHistory != null){
+            myObjArray = JSON.parse([BuyHistory]);
+            let lastKey = myObjArray.slice(-1) || 0
+            myObjArray.push({id: Number(lastKey[0].id+1), "date": todayDate, "time": time, "table": this.state.table, "countTotal": countTotal(this.state.table, this.state.priceList), "payTotal": payTotal(this.state.table, this.state.priceList)});
+        }else{
+            myObjArray = [{id: 1, "date": todayDate, "time": time, "table": this.state.table, "countTotal": countTotal(this.state.table, this.state.priceList), "payTotal": payTotal(this.state.table, this.state.priceList)}];
+        }
+        return await AsyncStorage.setItem('@BuyHistory', JSON.stringify(myObjArray)).then(() => {this.setState({table: []})});
+    };
 
+    // createHistory = async () => {
+    //     const todayDate = new Date().toISOString().slice(0, 10);
+    //     const BuyHistory = await AsyncStorage.getItem('@BuyHistory')
+    //     const BuyHistory2 = [//need add total and units
+    //         {id: 1, date: todayDate },
+    //         {id: 2, date: todayDate },
+    //         {id: 3, date: todayDate }
+    //     ]
+    //     const myObjArray = (BuyHistory != null ? JSON.parse([BuyHistory]) : BuyHistory2);
+    //     let lastElement = myObjArray.slice(-1)
+    //     myObjArray.push({id: Number(lastElement[0].id+1), date: todayDate});
+    //
+    //     // let lastElement = myObjArray.slice(-1)
+    //
+    //
+    //     BuyHistory == await AsyncStorage.setItem('@BuyHistory', JSON.stringify(myObjArray) );
+    //     console.log(BuyHistory);
+    // };
 
-    const flex = [1, 1, 1, 1, 1, 1];
+    // createHistory = async () => {
+    //     const date = new Date();
+    //     const todayDate = date.toISOString().slice(0, 10);
+    //     const time = date.getHours()+":"+date.getMinutes()+":"+ date.getSeconds();
+    //     const BuyHistory = await AsyncStorage.getItem('@BuyHistory')
+    //     const freshTableHistory = {[0]: {"date": todayDate, "time": "", "table": ""}};
+    //     const myObjArray = (BuyHistory != null ? JSON.parse([BuyHistory]) : freshTableHistory);
+    //     const lastKey = Object.keys(myObjArray).pop() || 0;
+    //
+    //     myObjArray[Number(lastKey)+1] = {"date": todayDate, "time": time, "table": this.state.table};
+    //     return await AsyncStorage.setItem('@BuyHistory', JSON.stringify(myObjArray)).then(() => {this.setState({table: []})});
+    // };
 
+    fadeAnim = new Animated.Value(0);
 
+    onToggleSnackBar = () => this.setState({ visible: !this.state.visible });
 
-    const fadeIn = () => {
+    fadeIn = () => {
         // Will change fadeAnim value to 1 in 5 seconds
-        onToggleSnackBar();
-        Animated.timing(fadeAnim, {
+        this.onToggleSnackBar();
+        Animated.timing(this.fadeAnim, {
             useNativeDriver: false,
             toValue: 1,
             duration: 1000
         }).start();
     };
 
-    const fadeOut = () => {
+    fadeOut = () => {
         // Will change fadeAnim value to 0 in 3 seconds
-        Animated.timing(fadeAnim, {
+        Animated.timing(this.fadeAnim, {
             useNativeDriver: false,
             toValue: 0,
             duration: 1000
         }).start(() => {
-            onToggleSnackBar();
+            this.onToggleSnackBar();
         });
     };
 
-    const ToggleVisible = () => {(!visible)? fadeIn() : fadeOut()};
-    return (
-        <View style={[styles.container]}>
 
-            {/*price editor*/}
-            <View>
-                <Dialog.Container visible={dialogVisible}>
-                    <Dialog.Title>Edit price</Dialog.Title>
-                    <Dialog.Input value={OnChangePrice || ''} onChangeText={newValue => (ChangePrice(newValue))} keyboardType={"phone-pad"} style={{width: 100, alignSelf: 'center', textAlign: 'center'}}/>
-                    <Dialog.Description>
-                        {getEditableElement}
-                    </Dialog.Description>
-                    <Dialog.Button label="Cancel" onPress={handleCancel} />
-                    <Dialog.Button label="Save" onPress={handleSave} />
-                </Dialog.Container>
-            </View>
 
-            <StatusBar style="dark" />
-                {isMain && (
+    ToggleVisible = () => {(!this.state.visible)? this.fadeIn() : this.fadeOut()};
+
+    getTest = async () => {
+        const BuyHistory  = await AsyncStorage.getItem('@BuyHistory')
+
+        // const parseData = JSON.parse(BuyHistory)
+        // const mapData = new Map(parseData)
+        const dd = BuyHistory;
+
+        // const lastKey = Object.keys(dd).pop();
+
+        console.log(JSON.parse(dd))
+
+    }
+
+
+    saveWindowSize = async () => {
+        this.setState({ isTouchEnded: true })
+        await AsyncStorage.setItem('@windowSize', String(this.state.size))
+    }
+
+
+    // console.log(JSON.stringify(this.state.table, null, ' '))
+    render() {
+    // console.log(this.state.counter++)
+        return (
+            <View style={[styles.container]}>
+                {/*price editor*/}
+                <View>
+                    <Dialog.Container visible={this.state.dialogVisible}>
+                        <Dialog.Title>Edit price</Dialog.Title>
+                        <Dialog.Input value={(this.state.OnChangePrice).toString() || ''} onChangeText={newValue => (this.ChangePrice(newValue))} keyboardType={"phone-pad"} style={{width: 100, alignSelf: 'center', textAlign: 'center'}}/>
+                        <Dialog.Description>
+                            {this.state.getEditableProperty}
+                        </Dialog.Description>
+                        <Dialog.Button label="Cancel" onPress={this.handleCancel} />
+                        <Dialog.Button label="Save" onPress={this.handleSave} />
+                    </Dialog.Container>
+                </View>
+                <StatusBar style="dark" />
+
+                {this.state.isMain && (
                     <>
                         {/*<Button title='Generate Excel' onPress={shareExcel}/>*/}
-                        <Button title='Naujas pirkimas' onPress={() => setIsMain(false)}/>
+                        <Button title='Naujas pirkimas' onPress={() => this.setState({ isMain: false })}/>
                         {/*    <TextLink onPress={() => setIsMain(false)}>*/}
                         {/*        <TextLinkContent>New Buyer</TextLinkContent>*/}
                         {/*    </TextLink>*/}
                     </>
                 )}
-                {!isMain && (
+                {!this.state.isMain && (
                     <>
-
-
-                        <Text style={[ObjectResize().text, {textAlign: 'center'}]}>Viso prekių: {countTotal(ChangeNumber, storedPrices)}</Text>
-                        <Text style={[ObjectResize().text, {textAlign: 'center'}]}>Viso EUR: {payTotal(ChangeNumber, storedPrices)}</Text>
-                        <TouchableOpacity onPress={() => ToggleVisible()} style={{ }}>
-                            <Text style={ObjectResize().text}>{visible ? 'Slėpti' : 'Nustatymai'}</Text>
+                        <Text style={[this.ObjectResize().text, {textAlign: 'center'}]}>Viso prekių: {countTotal(this.state.table, this.state.priceList)}</Text>
+                        <Text style={[this.ObjectResize().text, {textAlign: 'center'}]}>Viso EUR: {payTotal(this.state.table, this.state.priceList)}</Text>
+                        <TouchableOpacity onPress={() => this.ToggleVisible()} style={{ }}>
+                            <Text style={this.ObjectResize().text}>{this.state.visible ? 'Slėpti' : 'Nustatymai'}</Text>
                         </TouchableOpacity>
+
                         <Table style={{flexDirection: 'row'}} borderStyle={{borderWidth: 1}}>
                             {/* Left Wrapper */}
-                                <TouchableOpacity style={ObjectResize().singleHead}>
-                                        <Icon.Button
-                                            name="printer"
-                                            size={size*1.6}
-                                            style={styles.singleHeadLeftSide}
-                                            borderRadius={0}
-                                            color={'red'}
-                                            onPress={() => print(ChangeNumber, onChangeNumber, setIsMain, storedPrices)}
-                                        >
-                                        </Icon.Button>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={[ObjectResize().singleHead, {borderTopWidth: 1, borderRightWidth: 1}]}>
-                                    <Icon.Button
-                                        name="delete"
-                                        size={size*1.6}
-                                        style={styles.singleHeadRightSide}
-                                        borderRadius={0}
-                                        color={'green'}
-                                        onPress={() => destroy(onChangeNumber)}
-                                    >
-                                    </Icon.Button>
-                                </TouchableOpacity>
+                            <TouchableOpacity style={this.ObjectResize().singleHead}>
+                                <Icon.Button
+                                    name="printer"
+                                    size={this.state.size*1.6}
+                                    style={styles.singleHeadLeftSide}
+                                    borderRadius={0}
+                                    color={'red'}
+                                    onPress={() => print(this.state.table, this.state.priceList).then(() => {
+                                        this.resetHistory().then(() => this.createHistory())
+                                    })}
+                                >
+                                </Icon.Button>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={[this.ObjectResize().singleHead, {borderTopWidth: 1, borderRightWidth: 1}]}>
+                                <Icon.Button
+                                    name="delete"
+                                    size={this.state.size*1.6}
+                                    style={styles.singleHeadRightSide}
+                                    borderRadius={0}
+                                    color={'green'}
+                                    onPress={() => {
+                                        this.setState({table: []})
+                                        console.log(this.state.table)
+                                    }}
+                                >
+                                </Icon.Button>
+                            </TouchableOpacity>
 
                             {/* Right Wrapper */}
                             <TableWrapper style={{flex:1}}>
-                                <Cols data={[['Sveiki'], ['Remontas']]} heightArr={[size]} style={{backgroundColor: '#c8e1ff', height: size}} textStyle={{ textAlign: 'center', fontWeight: "bold", fontSize: (size*0.56) }}/>
-                                <Cols data={state.tableData} heightArr={[size+10]} flexArr={flex} textStyle={styles.text}/>
+                                <Cols data={[['Sveiki'], ['Remontas']]} heightArr={[this.state.size]} style={{backgroundColor: '#c8e1ff', height: this.state.size}} textStyle={{ textAlign: 'center', fontWeight: "bold", fontSize: (this.state.size*0.56) }}/>
+                                <Cols data={this.tableState("tableData")} heightArr={[this.state.size+10]} flexArr={this.flex} textStyle={styles.text}/>
 
                             </TableWrapper>
                         </Table>
-                    <ScrollView horizontal={false}>
-                        <Table style={{flexDirection: 'row'}} borderStyle={{borderWidth: 1}}>
-                                    {/* Left Wrapper */}
-                        <TableWrapper style={{width: 200}}>
-                            <TableWrapper style={{flexDirection: 'row'}}>
-                                <Col data={[headText('800x1200')]} heightArr={[9*size, 60]} />
-                                <Col data={state.tableTitle_1} style={ObjectResize().title1} heightArr={[size, size, size, size, size, size, size, size, size]} textStyle={styles.titleText}/>
-                            </TableWrapper>
-                            <TableWrapper style={{flexDirection: 'row'}}>
-                                <Col data={[headText('1000x1200')]} style={styles.head} heightArr={[6*size, 60]} textStyle={ObjectResize().text1} />
-                                <Col data={state.tableTitle_3} style={ObjectResize().title1} heightArr={[size, size, size, size, size, size, size]} textStyle={styles.titleText}/>
-                            </TableWrapper>
-                            <TableWrapper style={{flexDirection: 'row'}}>
-                                <Col data={[headText('1140')]} style={styles.head} heightArr={[3*size, 60]} textStyle={ObjectResize().text1} />
-                                <Col data={state.tableTitle_4} style={ObjectResize().title1} heightArr={[size, size, size]} textStyle={styles.titleText}/>
-                            </TableWrapper>
-                            <TableWrapper style={{flexDirection: 'row'}}>
-                                <Col data={[headText('')]} style={styles.head} heightArr={[size, 60]} textStyle={ObjectResize().text1} />
-                                <Col data={state.tableTitle_5} style={ObjectResize().title1} heightArr={[size]} textStyle={styles.titleText}/>
-                            </TableWrapper>
-                            <TableWrapper style={{flexDirection: 'row'}}>
-                                <Col data={[headText('')]} style={styles.head} heightArr={[size, 60]} textStyle={ObjectResize().text1} />
-                                <Col data={state.tableTitle_6} style={ObjectResize().title1} heightArr={[size]} textStyle={styles.titleText}/>
-                            </TableWrapper>
-                            <TableWrapper style={{flexDirection: 'row'}}>
-                                <Col data={[headText('Nestandartai')]} style={styles.head} heightArr={[7*size, 60]} textStyle={ObjectResize().text1} />
-                                <Col data={state.tableTitle_7} style={ObjectResize().title1} heightArr={[size, size, size, size, size, size, size]} textStyle={styles.titleText}/>
-                            </TableWrapper>
-                            <TableWrapper style={{flexDirection: 'row'}}>
-                                <Col data={[headText('Šarnyrai')]} style={styles.head} heightArr={[5*size, 60]} textStyle={ObjectResize().text1} />
-                                <Col data={state.tableTitle_8} style={ObjectResize().title1} heightArr={[size, size, size, size, size]} textStyle={styles.titleText}/>
-                            </TableWrapper>
-                            <TableWrapper style={{flexDirection: 'row'}}>
-                                <Col data={[headText('Dekos')]} style={styles.head} heightArr={[2*size, 60]} textStyle={ObjectResize().text1} />
-                                <Col data={state.tableTitle_9} style={ObjectResize().title1} heightArr={[size, size]} textStyle={styles.titleText}/>
-                            </TableWrapper>
-                            {/*<TableWrapper style={{flexDirection: 'row'}}>*/}
-                            {/*    <Col data={[headText('Plokštė')]} style={styles.head} heightArr={[2*size, 60]} textStyle={ObjectResize().text1} />*/}
-                            {/*    <Col data={state.tableTitle_10} style={ObjectResize().title1} heightArr={[size, size]} textStyle={styles.titleText}/>*/}
-                            {/*</TableWrapper>*/}
-                            <TableWrapper style={{flexDirection: 'row'}}>
-                                <Col data={[headText('')]} style={styles.head} heightArr={[size, 60]} textStyle={ObjectResize().text1} />
-                                <Col data={state.tableTitle_11} style={ObjectResize().title1} heightArr={[size]} textStyle={styles.titleText}/>
-                            </TableWrapper>
-                        </TableWrapper>
+                        <ScrollView horizontal={false}>
+                            <Table style={{flexDirection: 'row'}} borderStyle={{borderWidth: 1}}>
+                                {/* Left Wrapper */}
+                                <TableWrapper style={{width: 200}}>
+                                    <TableWrapper style={{flexDirection: 'row'}}>
+                                        <Col data={[this.headText('800x1200')]} heightArr={[9*this.state.size, 60]} />
+                                        <Col data={this.tableState("tableTitle_1")} style={this.ObjectResize().title1} heightArr={[this.state.size, this.state.size, this.state.size, this.state.size, this.state.size, this.state.size, this.state.size, this.state.size, this.state.size]} textStyle={styles.titleText}/>
+                                    </TableWrapper>
+                                    <TableWrapper style={{flexDirection: 'row'}}>
+                                        <Col data={[this.headText('1000x1200')]} style={styles.head} heightArr={[6*this.state.size, 60]} textStyle={this.ObjectResize().text1} />
+                                        <Col data={this.tableState("tableTitle_3")} style={this.ObjectResize().title1} heightArr={[this.state.size, this.state.size, this.state.size, this.state.size, this.state.size, this.state.size, this.state.size]} textStyle={styles.titleText}/>
+                                    </TableWrapper>
+                                    <TableWrapper style={{flexDirection: 'row'}}>
+                                        <Col data={[this.headText('1140')]} style={styles.head} heightArr={[3*this.state.size, 60]} textStyle={this.ObjectResize().text1} />
+                                        <Col data={this.tableState("tableTitle_4")} style={this.ObjectResize().title1} heightArr={[this.state.size, this.state.size, this.state.size]} textStyle={styles.titleText}/>
+                                    </TableWrapper>
+                                    <TableWrapper style={{flexDirection: 'row'}}>
+                                        <Col data={[this.headText('')]} style={styles.head} heightArr={[this.state.size, 60]} textStyle={this.ObjectResize().text1} />
+                                        <Col data={this.tableState("tableTitle_5")} style={this.ObjectResize().title1} heightArr={[this.state.size]} textStyle={styles.titleText}/>
+                                    </TableWrapper>
+                                    <TableWrapper style={{flexDirection: 'row'}}>
+                                        <Col data={[this.headText('')]} style={styles.head} heightArr={[this.state.size, 60]} textStyle={this.ObjectResize().text1} />
+                                        <Col data={this.tableState("tableTitle_6")} style={this.ObjectResize().title1} heightArr={[this.state.size]} textStyle={styles.titleText}/>
+                                    </TableWrapper>
+                                    <TableWrapper style={{flexDirection: 'row'}}>
+                                        <Col data={[this.headText('Nestandartai')]} style={styles.head} heightArr={[7*this.state.size, 60]} textStyle={this.ObjectResize().text1} />
+                                        <Col data={this.tableState("tableTitle_7")} style={this.ObjectResize().title1} heightArr={[this.state.size, this.state.size, this.state.size, this.state.size, this.state.size, this.state.size, this.state.size]} textStyle={styles.titleText}/>
+                                    </TableWrapper>
+                                    <TableWrapper style={{flexDirection: 'row'}}>
+                                        <Col data={[this.headText('Šarnyrai')]} style={styles.head} heightArr={[5*this.state.size, 60]} textStyle={this.ObjectResize().text1} />
+                                        <Col data={this.tableState("tableTitle_8")} style={this.ObjectResize().title1} heightArr={[this.state.size, this.state.size, this.state.size, this.state.size, this.state.size]} textStyle={styles.titleText}/>
+                                    </TableWrapper>
+                                    <TableWrapper style={{flexDirection: 'row'}}>
+                                        <Col data={[this.headText('Dekos')]} style={styles.head} heightArr={[2*this.state.size, 60]} textStyle={this.ObjectResize().text1} />
+                                        <Col data={this.tableState("tableTitle_9")} style={this.ObjectResize().title1} heightArr={[this.state.size, this.state.size]} textStyle={styles.titleText}/>
+                                    </TableWrapper>
+                                    {/*<TableWrapper style={{flexDirection: 'row'}}>*/}
+                                    {/*    <Col data={[headText('Plokštė')]} style={styles.head} heightArr={[2*size, 60]} textStyle={this.ObjectResize().text1} />*/}
+                                    {/*    <Col data={state.tableTitle_10} style={ObjectResize().title1} heightArr={[size, size]} textStyle={styles.titleText}/>*/}
+                                    {/*</TableWrapper>*/}
+                                    <TableWrapper style={{flexDirection: 'row'}}>
+                                        <Col data={[this.headText('')]} style={styles.head} heightArr={[this.state.size, 60]} textStyle={this.ObjectResize().text1} />
+                                        <Col data={this.tableState("tableTitle_11")} style={this.ObjectResize().title1} heightArr={[this.state.size]} textStyle={styles.titleText}/>
+                                    </TableWrapper>
+                                </TableWrapper>
 
-                                    {/* Right Wrapper */}
-                        <TableWrapper style={{flex:1}}>
-                            <Cols data={state.tableData_1} heightArr={[size, size, size, size, size, size, size, size, size]} flexArr={flex} textStyle={ObjectResize().priceText}/>
-                            <Cols data={state.tableData_3} heightArr={[size, size, size, size, size, size]} flexArr={flex} textStyle={ObjectResize().priceText}/>
-                            <Cols data={state.tableData_4} heightArr={[size, size, size]} flexArr={flex} textStyle={ObjectResize().priceText}/>
-                            <Cols data={state.tableData_5} heightArr={[size]} flexArr={flex} textStyle={ObjectResize().priceText}/>
-                            <Cols data={state.tableData_6} heightArr={[size]} flexArr={flex} textStyle={ObjectResize().priceText}/>
-                            <Cols data={state.tableData_7} heightArr={[size, size, size, size, size, size, size, size]} flexArr={flex} textStyle={ObjectResize().priceText}/>
-                            <Cols data={state.tableData_8} heightArr={[size, size, size, size, size]} flexArr={flex} textStyle={ObjectResize().priceText}/>
-                            <Cols data={state.tableData_9} heightArr={[size, size]} flexArr={flex} textStyle={ObjectResize().priceText}/>
-                            {/*<Cols data={state.tableData_10} heightArr={[size, size]} flexArr={flex} textStyle={ObjectResize().priceText}/>*/}
-                            <Cols data={state.tableData_11} heightArr={[size]} flexArr={flex} textStyle={ObjectResize().priceText}/>
-                        </TableWrapper>
+                                {/* Right Wrapper */}
+                                <TableWrapper style={{flex:1}}>
+                                    <Cols data={this.tableState("tableData_1")} heightArr={[this.state.size, this.state.size, this.state.size, this.state.size, this.state.size, this.state.size, this.state.size, this.state.size, this.state.size]} flexArr={this.flex} textStyle={this.ObjectResize().priceText}/>
+                                    <Cols data={this.tableState("tableData_3")} heightArr={[this.state.size, this.state.size, this.state.size, this.state.size, this.state.size, this.state.size]} flexArr={this.flex} textStyle={this.ObjectResize().priceText}/>
+                                    <Cols data={this.tableState("tableData_4")} heightArr={[this.state.size, this.state.size, this.state.size]} flexArr={this.flex} textStyle={this.ObjectResize().priceText}/>
+                                    <Cols data={this.tableState("tableData_5")} heightArr={[this.state.size]} flexArr={this.flex} textStyle={this.ObjectResize().priceText}/>
+                                    <Cols data={this.tableState("tableData_6")} heightArr={[this.state.size]} flexArr={this.flex} textStyle={this.ObjectResize().priceText}/>
+                                    <Cols data={this.tableState("tableData_7")} heightArr={[this.state.size, this.state.size, this.state.size, this.state.size, this.state.size, this.state.size, this.state.size, this.state.size]} flexArr={this.flex} textStyle={this.ObjectResize().priceText}/>
+                                    <Cols data={this.tableState("tableData_8")} heightArr={[this.state.size, this.state.size, this.state.size, this.state.size, this.state.size]} flexArr={this.flex} textStyle={this.ObjectResize().priceText}/>
+                                    <Cols data={this.tableState("tableData_9")} heightArr={[this.state.size, this.state.size]} flexArr={this.flex} textStyle={this.ObjectResize().priceText}/>
+                                    {/*<Cols data={state.tableData_10} heightArr={[size, size]} flexArr={flex} textStyle={ObjectResize().priceText}/>*/}
+                                    <Cols data={this.tableState("tableData_11")} heightArr={[this.state.size]} flexArr={this.flex} textStyle={this.ObjectResize().priceText}/>
+                                </TableWrapper>
 
-                    </Table>
-                        <TextLink onPress={() => setIsMain(true)}>
-                            <TextLinkContent>Back to main </TextLinkContent>
-                        </TextLink>
-                    </ScrollView>
-                        {visible && ( <View style={[styles.settingsContainer, {top: StatusBarHeight+(height/2)}]}>
+                            </Table>
+                            <TextLink onPress={() => this.setState({ isMain: true })}>
+                                <TextLinkContent>Back to main </TextLinkContent>
+                            </TextLink>
+                        </ScrollView>
+
+
+
+                <View>
+                    {/*{this.input('s_a1')}*/}
+                    {/*{this.input('s_a2')}*/}
+                    {/*{this.result('s_a1')}*/}
+                    {/*{this.result('s_a2')}*/}
+                    {/*<Button*/}
+                    {/*    onPress={() => console.log(this.state.ChangeNumber)}*/}
+                    {/*    title="Learn More"*/}
+                    {/*    color="#841584"*/}
+                    {/*    accessibilityLabel="Learn more about this purple button"*/}
+                    {/*/>*/}
+                    {/*<Button*/}
+                    {/*    onPress={ this.getTest}*/}
+                    {/*    title="Learn More"*/}
+                    {/*    color="#841584"*/}
+                    {/*    accessibilityLabel="Learn more about this purple button"*/}
+                    {/*/>*/}
+                </View>
+
+                        {this.state.visible && ( <View style={[styles.settingsContainer, {top: StatusBarHeight+(window.height/2)}]}>
                             <Animated.View
                                 style={[
                                     styles.fadingContainer,
                                     {
                                         // Bind opacity to animated value
-                                        opacity: fadeAnim,
+                                        opacity: this.fadeAnim,
                                     }
                                 ]}
                             >
 
-                                <Text onPress={() => ToggleVisible()} style={[styles.sizeText, { position: 'absolute', right: 5}]}>X</Text>
+                                <Text onPress={() => this.ToggleVisible()} style={[styles.sizeText, { position: 'absolute', right: 5}]}>X</Text>
                                 <Text style={styles.sizeText}>Turinio dydis</Text>
                                 <View style={styles.settings}>
-                                    <Text style={styles.sizeValue}>{Math.round(size)}</Text>
+                                    <Text style={styles.sizeValue}>{Math.round(this.state.size)}</Text>
                                     <Slider
                                         style={styles.slider}
-                                        value={isTouchEnded ? size : size}//not done
+                                        value={this.state.isTouchEnded ? this.state.size : this.state.size}//not done
                                         minimumValue={25}
                                         maximumValue={50}
                                         minimumTrackTintColor="#FFFFFF"
                                         maximumTrackTintColor="#000000"
-                                        onTouchEnd={() => setIsTouchEnded(true)}
-                                        onTouchStart={() => setIsTouchEnded(false)}
-                                        onValueChange={newNumber => (!isTouchEnded)? setSize(newNumber) : setSize(size)}
+                                        onTouchEnd={() => this.saveWindowSize()}
+                                        onTouchStart={() => this.setState({ isTouchEnded: false })}
+                                        onValueChange={newNumber => (!this.state.isTouchEnded)? this.setState({ size: newNumber }) : this.setState({ size: this.state.size })}
                                         // onSlidingStart={newNumber => setSize(newNumber)}
-                                        onSlidingComplete={newNumber => setSize(newNumber)}
+                                        onSlidingComplete={newNumber => this.setState({ size: newNumber })}
                                     />
                                 </View>
                             </Animated.View>
                         </View> ) }
                     </>
                 )}
-        </View>
-    );
-};
-// console.log(Dimensions.get('window'))
+            </View>
+        )
+    }
+}
+
 
 const styles = StyleSheet.create({
 
@@ -677,5 +769,3 @@ const styles = StyleSheet.create({
     sizeValue: {paddingBottom: 2},
     slider: {width: 200, height: 40}
 });
-
-export default Buy;
