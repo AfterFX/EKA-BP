@@ -46,7 +46,7 @@ function Datatable({
             ...prev,
             sortField,
             sortAsc: prev.sortField === sortField ? !prev.sortAsc : true,
-            //datatable: result,
+            datatable: result,
         }));
     };
 
