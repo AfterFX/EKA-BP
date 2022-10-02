@@ -84,7 +84,6 @@ const RootStack = () => {
                                                 <IconButton icon="alert-outline" onPress={() => alert('Tuščia.')} color={DefaultTheme.colors.notification} />
                                             ) }} name="Sveiki" component={Welcome}/>
                                         <Drawer.Screen options={{ headerTintColor: tertiary }} name="Pirkimas" component={Buy}/>
-                                        {/*<Drawer.Screen options={{ headerTintColor: primary }} name="BuyHistory" component={BuyHistory}/>*/}
                                         <Drawer.Screen options={{ headerTintColor: tertiary, unmountOnBlur:true }} name="Istorija" component={BuyHistory}/>
                                     </>
                             </Drawer.Navigator>
