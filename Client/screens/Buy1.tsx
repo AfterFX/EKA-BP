@@ -283,6 +283,12 @@ export class Buy1 extends React.Component<MyProps, MyState> {
         this.setState({ dialogVisible: true })
     };
 
+    inputChangePrice = async (property: any, newNumber: any) => {
+        const re = /^[0-9]*\.?[0-9]*$/;
+        if (newNumber === '' || re.test(newNumber))
+            this.OnChange(property, newNumber)
+    };
+
     elementInput = (property: any, underline: boolean) => {
         // console.log( this.state.counter++)
         return (
@@ -294,7 +300,7 @@ export class Buy1 extends React.Component<MyProps, MyState> {
                 errorText={this.state.error}
                 fontSizeC={(this.state.size*0.56)}
                 // onChangeText={newNumber => this.OnChange(property, newNumber)}
-                onChangeText={newNumber => this.OnChange(property, newNumber)}
+                onChangeText={newNumber => this.inputChangePrice(property, newNumber)}
                 textAlign={"center"}
                 keyboardType={"phone-pad"}
             />
@@ -632,18 +638,12 @@ export class Buy1 extends React.Component<MyProps, MyState> {
                     {/*    color="#841584"*/}
                     {/*    accessibilityLabel="Learn more about this purple button"*/}
                     {/*/>*/}
-                    <Button
-                        onPress={ this.getTest}
-                        title="Learn More"
-                        color="#841584"
-                        accessibilityLabel="Learn more about this purple button"
-                    />
-                    <Button
-                        onPress={ () => destroyStorage("@BuyHistory")}
-                        title="Learn More"
-                        color="red"
-                        accessibilityLabel="Learn more about this purple button"
-                    />
+                    {/*<Button*/}
+                    {/*    onPress={ this.getTest}*/}
+                    {/*    title="Learn More"*/}
+                    {/*    color="#841584"*/}
+                    {/*    accessibilityLabel="Learn more about this purple button"*/}
+                    {/*/>*/}
                 </View>
 
                         {this.state.visible && ( <View style={[styles.settingsContainer, {top: StatusBarHeight+(window.height/2)}]}>
