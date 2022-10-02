@@ -518,7 +518,7 @@ export class Buy extends React.Component<MyProps, MyState> {
                     <>
                         <Text style={[this.ObjectResize().text, {textAlign: 'center'}]}>Viso prekių: {countTotal(this.state.table, this.state.priceList)}</Text>
                         <Text style={[this.ObjectResize().text, {textAlign: 'center'}]}>Viso EUR: {payTotal(this.state.table, this.state.priceList)}</Text>
-                        <TouchableOpacity onPress={() => this.ToggleVisible()} style={{ }}>
+                        <TouchableOpacity onPress={() => this.ToggleVisible()} style={{alignSelf: 'flex-end'}}>
                             <Text style={this.ObjectResize().text}>{this.state.visible ? 'Slėpti' : 'Nustatymai'}</Text>
                         </TouchableOpacity>
 
