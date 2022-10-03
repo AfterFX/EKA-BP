@@ -459,12 +459,12 @@ export const createDynamicTable = (table: any, storedPrices: any) => {
         </tr>
         <tr>
             <td style="border-top: 1px solid #000000; font-size: 12px" colspan=2 align="left" valign=middle bgcolor="#FFFFFF">Dekos 1000 x 1200 mm.</td>
-            <td style="${InputBox}" align="center" valign=middle bgcolor="#FFE796"><b>${table['s_dekos_1000x1200']?.units || ''}</b></td>
-            <td style="${priceBox}" align="center" valign=middle bgcolor="#FFFFFF">${storedPrices['s_dekos_1000x1200']}</td>
-            <td style="${totalPriceLeftSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${table['s_dekos_1000x1200']?.totalPrice || ''}</i></td>
-            <td style="${InputBox}" align="center" valign=bottom bgcolor="#FFE796"><b>${table['r_dekos_1000x1200']?.units || ''}</b></td>
-            <td style="${priceBox}" align="center" valign=middle bgcolor="#FFFFFF">${storedPrices['r_dekos_1000x1200']}</td>
-            <td style="${totalPriceRightSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${table['r_dekos_1000x1200']?.totalPrice || ''}</i></td>
+            <td style="${InputBox}" align="center" valign=middle bgcolor="#FFE796"><b>${table['s_dekos_1140x1140']?.units || ''}</b></td>
+            <td style="${priceBox}" align="center" valign=middle bgcolor="#FFFFFF">${storedPrices['s_dekos_1140x1140']}</td>
+            <td style="${totalPriceLeftSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${table['s_dekos_1140x1140']?.totalPrice || ''}</i></td>
+            <td style="${InputBox}" align="center" valign=bottom bgcolor="#FFE796"><b>${table['r_dekos_1140x1140']?.units || ''}</b></td>
+            <td style="${priceBox}" align="center" valign=middle bgcolor="#FFFFFF">${storedPrices['r_dekos_1140x1140']}</td>
+            <td style="${totalPriceRightSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${table['r_dekos_1140x1140']?.totalPrice || ''}</i></td>
         </tr>
         <!--<tr>
             <td style="border: 1px solid #000000; border-right: 2px solid #000000; font-size: 12px" rowspan=2 height="20" align="center" valign=middle bgcolor="#D9D9D9"><b>Plok&scaron;t&#279;</b></td>
