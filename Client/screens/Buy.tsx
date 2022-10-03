@@ -129,7 +129,7 @@ export class Buy extends React.Component<MyProps, MyState> {
             case 'tableTitle_8':
                 return [this.t('800x1200 (šviesūs)', false), this.t('800x1200 (tamsūs)', false), this.t('600x800 (šviesūs)', false), this.t('600x800 (tamsūs)', false), this.t('nestandartai 800x2000', true)]
             case 'tableTitle_9':
-                return [this.t('800x1200', false), this.t('1000x1200', true)]
+                return [this.t('800x1200', false), this.t('1140x1140', true)]
             case 'tableTitle_10':
                 return [this.t('2,8 - 3,2', false), this.t('6 - 10', true)]
             case 'tableTitle_11':
@@ -208,12 +208,12 @@ export class Buy extends React.Component<MyProps, MyState> {
                 ]
             case 'tableData_9':
                 return [
-                    [this.elementInput('s_dekos_800x1200', false), this.elementInput('s_dekos_1000x1200', true)],
-                    [this.elementPrice('s_dekos_800x1200', false), this.elementPrice('s_dekos_1000x1200', true)],
-                    [this.elementResult('s_dekos_800x1200', false), this.elementResult('s_dekos_1000x1200', true)],
-                    [this.elementInput('r_dekos_800x1200', false), this.elementInput('r_dekos_1000x1200', true)],
-                    [this.elementPrice('r_dekos_800x1200', false), this.elementPrice('r_dekos_1000x1200', true)],
-                    [this.elementResult('r_dekos_800x1200', false), this.elementResult('r_dekos_1000x1200', true)]
+                    [this.elementInput('s_dekos_800x1200', false), this.elementInput('s_dekos_1140x1140', true)],
+                    [this.elementPrice('s_dekos_800x1200', false), this.elementPrice('s_dekos_1140x1140', true)],
+                    [this.elementResult('s_dekos_800x1200', false), this.elementResult('s_dekos_1140x1140', true)],
+                    [this.elementInput('r_dekos_800x1200', false), this.elementInput('r_dekos_1140x1140', true)],
+                    [this.elementPrice('r_dekos_800x1200', false), this.elementPrice('r_dekos_1140x1140', true)],
+                    [this.elementResult('r_dekos_800x1200', false), this.elementResult('r_dekos_1140x1140', true)]
                 ]
             case 'tableData_10':
                 return [
@@ -226,12 +226,12 @@ export class Buy extends React.Component<MyProps, MyState> {
                 ]
             case 'tableData_11':
                 return [
-                    [this.elementInput('s_remontas', true)],
-                    [this.elementPrice('s_remontas', true)],
-                    [this.elementResult('s_remontas', true)],
-                    [this.elementInput('r_remontas', true)],
-                    [this.elementPrice('r_remontas', true)],
-                    [this.elementResult('r_remontas', true)]
+                    [this.elementInput('s_srotas', true)],
+                    [this.elementPrice('s_srotas', true)],
+                    [this.elementResult('s_srotas', true)],
+                    [this.elementInput('r_srotas', true)],
+                    [this.elementPrice('r_srotas', true)],
+                    [this.elementResult('r_srotas', true)]
                 ]
             default:
                 return "lol";
@@ -325,11 +325,12 @@ export class Buy extends React.Component<MyProps, MyState> {
     );
 
     OnChange = (property: string, value: any) =>{
+        const count = value*this.state.priceList[property];
         this.setState((previousState) => {
             return {
                 table: {
                     ...previousState.table,
-                    [property]: {"units": value, "totalPrice": value*this.state.priceList[property] }
+                    [property]: {"units": value, "totalPrice": Math.round(count * 100) / 100 }
                 }
             }
         });
