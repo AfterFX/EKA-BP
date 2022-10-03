@@ -458,7 +458,7 @@ export const createDynamicTable = (table: any, storedPrices: any) => {
             <td style="${totalPriceRightSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${table['r_dekos_800x1200']?.totalPrice || ''}</i></td>
         </tr>
         <tr>
-            <td style="border-top: 1px solid #000000; font-size: 12px" colspan=2 align="left" valign=middle bgcolor="#FFFFFF">Dekos 1000 x 1200 mm.</td>
+            <td style="border-top: 1px solid #000000; font-size: 12px" colspan=2 align="left" valign=middle bgcolor="#FFFFFF">Dekos 1140 x 1140 mm.</td>
             <td style="${InputBox}" align="center" valign=middle bgcolor="#FFE796"><b>${table['s_dekos_1140x1140']?.units || ''}</b></td>
             <td style="${priceBox}" align="center" valign=middle bgcolor="#FFFFFF">${storedPrices['s_dekos_1140x1140']}</td>
             <td style="${totalPriceLeftSideBox}" align="center" valign=middle bgcolor="#FFFFFF"><i>${table['s_dekos_1140x1140']?.totalPrice || ''}</i></td>
