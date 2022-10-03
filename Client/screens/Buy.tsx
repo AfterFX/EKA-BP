@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+    Alert,
     Animated,
     Button,
     Dimensions, ScrollView,
@@ -358,6 +359,22 @@ export class Buy extends React.Component<MyProps, MyState> {
         )
     }
 
+    clearTable = () =>
+        Alert.alert(
+            "Pranešimas",
+            "Ar tikrai ištrinti?",
+            [
+                {
+                    text: "Atšaukti",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                },
+                { text: "Gerai", onPress: () => {
+                        this.setState({table: []})
+                    } }
+            ]
+        );
+
 
     ChangePrice = async (value: string) => {
         const re = /^[0-9]*\.?[0-9]*$/;
@@ -384,7 +401,7 @@ export class Buy extends React.Component<MyProps, MyState> {
             text1: { textAlign: 'center', width: 200, height: 184+(this.state.size/1.5),  transform: [{ rotate: '-90deg' }], fontSize: (this.state.size*0.56) },
             title1: { position: 'relative', flexDirection: 'column', flex: 9-((this.state.size/10)-2)},
             text: { fontSize: (this.state.size*0.56)},
-            singleHead: {maxHeight: 10.5+(this.state.size*2), width: 100}
+            singleHead: {maxHeight: 10.5+(this.state.size*2), width: 200}
         })
     }
 
@@ -523,7 +540,7 @@ export class Buy extends React.Component<MyProps, MyState> {
                             <Text style={this.ObjectResize().text}>{this.state.visible ? 'Slėpti' : 'Nustatymai'}</Text>
                         </TouchableOpacity>
 
-                        <Table style={{flexDirection: 'row'}} borderStyle={{borderWidth: 1}}>
+                        <Table style={{flexDirection: 'row'}} borderStyle={{borderWidth: 1, borderRightWidth: 1}}>
                             {/* Left Wrapper */}
                             <TouchableOpacity style={this.ObjectResize().singleHead}>
                                 <Icon.Button
@@ -535,20 +552,6 @@ export class Buy extends React.Component<MyProps, MyState> {
                                     onPress={() => print(this.state.table, this.state.priceList).then(() => {
                                         this.resetHistory().then(() => this.createHistory())
                                     })}
-                                >
-                                </Icon.Button>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={[this.ObjectResize().singleHead, {borderTopWidth: 1, borderRightWidth: 1}]}>
-                                <Icon.Button
-                                    name="delete"
-                                    size={this.state.size*1.6}
-                                    style={styles.singleHeadRightSide}
-                                    borderRadius={0}
-                                    color={'green'}
-                                    onPress={() => {
-                                        this.setState({table: []})
-                                        console.log(this.state.table)
-                                    }}
                                 >
                                 </Icon.Button>
                             </TouchableOpacity>
@@ -621,9 +624,13 @@ export class Buy extends React.Component<MyProps, MyState> {
                                 </TableWrapper>
 
                             </Table>
-                            <TextLink onPress={() => this.setState({ isMain: true })}>
-                                <TextLinkContent>Back to main </TextLinkContent>
-                            </TextLink>
+                            <View style={{paddingTop: 50}}>
+                                <Button color="red" title={"išvalyti lentele"} onPress={this.clearTable} />
+                                <TextLink onPress={() => this.setState({ isMain: true })}>
+                                    <TextLinkContent>Grįžti į pagrindinį </TextLinkContent>
+                                </TextLink>
+                            </View>
+
                         </ScrollView>
 
 
@@ -689,7 +696,7 @@ export class Buy extends React.Component<MyProps, MyState> {
 const styles = StyleSheet.create({
 
     container: { flex: 1, padding: 16, paddingTop: 80 },
-    singleHeadLeftSide: {width: 110, height: '100%', justifyContent: 'center', alignItems: 'center', backgroundColor: 'green', borderTopWidth: 1,  },
+    singleHeadLeftSide: {width: 219, height: '100%', justifyContent: 'center', alignItems: 'center', backgroundColor: 'green', borderTopWidth: 1,  },
     singleHeadRightSide: {width: 110, height: '100%', justifyContent: 'center', alignItems: 'center', backgroundColor: 'red' },
     head: { flex: 1, backgroundColor: '#D0D0D0FF'},
     line: { position: 'absolute', flexDirection: 'column',  top: 75, width: 60, right: 0 },
