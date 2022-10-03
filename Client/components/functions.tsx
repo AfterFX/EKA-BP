@@ -36,7 +36,7 @@ export const payTotal = (number: Array<String>, storedPrices: any) => {
     Object.keys(number).map(function(key, index) {
             totalPrice += Number(price(key, number, storedPrices));
     });
-    return totalPrice;
+    return Math.round(totalPrice * 100) / 100;
 }
 
 export const saveNewPrice = async (element: any, value: any) => {
