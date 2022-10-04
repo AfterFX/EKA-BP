@@ -53,9 +53,9 @@ export const saveNewPrice = async (element: any, value: any) => {
     }
 }
 
-export const print = async (number: String, storedPrices: { [p: string]: string }) => {
+export const print = async (isHistory: boolean, tableObject: object, storedPrices: { [p: string]: string }) => {
     await Print.printAsync({
-        html: createDynamicTable(number, storedPrices).html,
+        html: createDynamicTable(isHistory, tableObject, storedPrices).html,
     })
 }
 
@@ -64,14 +64,12 @@ export const destroy = async (onChangeNumber: (value: (((prevState: Array<String
 }
 
 
-export const createDynamicTable = (table: any, storedPrices: any) => {
-    const priceTotal = (element: any) => {
-        let result = table[element] * storedPrices[element];
-        return (table[element])? Math.round(result * 100) / 100: '';
-    }
+export const createDynamicTable = (isHistory: boolean, tableObject: any, storedPrices: any) => {
+    const table = tableObject.table;
+
     const date = new Date();
-    const todayDate = date.toISOString().slice(0, 10);
-    const time = date.getHours()+":"+date.getMinutes()+":"+ date.getSeconds();
+    const todayDate = isHistory? tableObject.date : date.toISOString().slice(0, 10);
+    const time = isHistory? tableObject.time : date.getHours()+":"+date.getMinutes()+":"+ date.getSeconds();
 
     const priceBox = 'border-left: 1px dashed #000000; border-right: 1px dashed #000000; border-top: 1px solid #000000; font-size: 12px;';
     const InputBox = 'border-left: 2px solid #000000; border-top: 1px solid #000000; font-size: 12px;';

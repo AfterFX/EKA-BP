@@ -4,10 +4,11 @@ import { Chip, Text } from 'react-native-paper';
 import Datatable from './Datatable';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from '@react-navigation/native';
-import {destroyStorage, saveNewPrice} from "../components/functions";
+import {destroyStorage, print, saveNewPrice} from "../components/functions";
 import Dialog from "react-native-dialog";
 import {Cell, Col, Cols, Row, Rows, Table, TableWrapper} from "react-native-table-component";
 import {StatusBar} from "expo-status-bar";
+import Icon from "react-native-vector-icons/AntDesign";
 
 
 const window = Dimensions.get("window");
@@ -186,6 +187,10 @@ export default class App extends React.Component<MyProps, MyState> {
         }else{
             this.setState({ dialogVisible: true, isTotal })
         }
+    }
+
+    printTest = async (row: any) => {
+        await print(true, row, this.state.prices)
     }
     handleCancel = async () => {
         this.setState({ dialogVisible: false })
@@ -367,6 +372,27 @@ export default class App extends React.Component<MyProps, MyState> {
                             {
                                 name: 'Laikas',
                                 selector: 'time',
+                            },
+                            {
+                                name: '',
+                                selector: '',
+                                cell: (row) => (
+                                    <>
+
+
+                                        <TouchableOpacity>
+                                            <Icon.Button
+                                                name="printer"
+                                                size={30}
+                                                style={{ height: '100%', justifyContent: 'center', alignItems: 'center', backgroundColor: 'white',  }}
+                                                borderRadius={0}
+                                                color={'green'}
+                                                onPress={() => this.printTest(row)}
+                                            >
+                                            </Icon.Button>
+                                        </TouchableOpacity>
+                                    </>
+                                ),
                             },
                             {
                                 name: '',

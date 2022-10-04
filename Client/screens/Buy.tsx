@@ -549,7 +549,7 @@ export class Buy extends React.Component<MyProps, MyState> {
                                     style={styles.singleHeadLeftSide}
                                     borderRadius={0}
                                     color={'red'}
-                                    onPress={() => print(this.state.table, this.state.priceList).then(() => {
+                                    onPress={() => print(false, this.state, this.state.priceList).then(() => {
                                         this.resetHistory().then(() => this.createHistory())
                                     })}
                                 >
