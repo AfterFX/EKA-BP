@@ -292,9 +292,17 @@ export class Buy extends React.Component<MyProps, MyState> {
 
     elementInput = (property: any, underline: boolean) => {
         // console.log( this.state.counter++)
+        let length: any
+        if(this.state.table[property]?.units) {
+            length = this.state.table[property]?.units.length;
+        }else{
+            length = 0
+        }
+
         return (
 
             <TextField
+                selection={{start: length, end: length}}
                 style={[styles.textField, {height: '100%', justifyContent: 'center'}, underline ? {borderBottomWidth: 2} : {borderBottomWidth: 0}]}
                 value={this.state.table[property]?.units}
                 label=""
