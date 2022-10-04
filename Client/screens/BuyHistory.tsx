@@ -27,7 +27,8 @@ interface MyState {
     itemTotalPriceTable: object
     isTotal: boolean,
     historyTotalCount: number
-    historyPayTotal: number
+    historyPayTotal: number,
+    checkedList: any
 }
 
 export default class App extends React.Component<MyProps, MyState> {
@@ -44,7 +45,8 @@ export default class App extends React.Component<MyProps, MyState> {
             itemTotalPriceTable: {},
             isTotal: false,
             historyTotalCount: 0,
-            historyPayTotal: 0
+            historyPayTotal: 0,
+            checkedList: {}
         };
     }
 
@@ -192,6 +194,31 @@ export default class App extends React.Component<MyProps, MyState> {
     printTable = async (row: any) => {
         await print(true, row, this.state.prices)
     }
+
+    check = async (row: any) => {
+        const newCheck = JSON.parse(this.state.data).map(obj => {//ganerate to storage
+            if (obj.id === row.id) {
+                return {...obj, isChecked: 1};
+
+            }
+
+            // 👇️ otherwise return object as is
+            return obj;
+        });
+        this.setState((previousState) => {
+            return {
+                checkedList: {
+                    ...previousState.checkedList,
+                    [row.id]: 1
+                }
+            }
+        });
+
+
+        return await AsyncStorage.setItem('@BuyHistory', JSON.stringify(newCheck)).then(() => this.setState({data: JSON.stringify(newCheck)}));
+
+    }
+
     handleCancel = async () => {
         this.setState({ dialogVisible: false })
     };
@@ -378,8 +405,6 @@ export default class App extends React.Component<MyProps, MyState> {
                                 selector: '',
                                 cell: (row) => (
                                     <>
-
-
                                         <TouchableOpacity>
                                             <Icon.Button
                                                 name="printer"
@@ -401,6 +426,20 @@ export default class App extends React.Component<MyProps, MyState> {
                                     <>
                                         <TouchableOpacity onPress={() => this.showDialog(row, false)}>
                                             <Text>Rodyti</Text>
+                                        </TouchableOpacity>
+                                    </>
+                                ),
+                            },
+                            {
+                                name: 'Čekis?',
+                                selector: '',
+                                cell: (row) => (
+                                    <>
+                                        <TouchableOpacity onPress={() => this.check(row)}>
+                                            {/*<Text>check {row.isChecked}</Text>*/}
+                                            {/*<Text>check {row.isChecked || this.state.checkedList[row.id]}</Text>*/}
+                                            <Text style={{backgroundColor: this.state.checkedList[row.id] || row.isChecked ? "green" : "red", width: 50, textAlign: "center"}}><Text style={{fontWeight: "bold"}}>{this.state.checkedList[row.id] || row.isChecked ? "TAIP" : "NE"}</Text></Text>
+
                                         </TouchableOpacity>
                                     </>
                                 ),
