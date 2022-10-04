@@ -35,7 +35,7 @@ interface MyState {
     foo: boolean,
     text: string,
     result: any,
-    table: any,
+    table: object,
     priceList: any
     dialogVisible: boolean,
     OnChangePrice: string,
@@ -549,9 +549,12 @@ export class Buy extends React.Component<MyProps, MyState> {
                                     style={styles.singleHeadLeftSide}
                                     borderRadius={0}
                                     color={'red'}
-                                    onPress={() => print(false, this.state, this.state.priceList).then(() => {
-                                        this.reloadHistory().then(() => this.createHistory())
-                                    })}
+                                    onPress={() => {
+                                        Object.keys(this.state.table).length !== 0 ?
+                                        print(false, this.state, this.state.priceList).then(() => {
+                                            this.reloadHistory().then(() => this.createHistory())
+                                        }) : ""
+                                    }}
                                 >
                                 </Icon.Button>
                             </TouchableOpacity>
