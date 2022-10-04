@@ -95,7 +95,7 @@ export class Buy extends React.Component<MyProps, MyState> {
         }
     }
 
-    resetHistory = async () => {
+    reloadHistory = async () => {
         const date = new Date();
         const todayDate = date.toISOString().slice(0, 10);
         await AsyncStorage.getItem('@BuyHistory').then((r) => {
@@ -550,7 +550,7 @@ export class Buy extends React.Component<MyProps, MyState> {
                                     borderRadius={0}
                                     color={'red'}
                                     onPress={() => print(false, this.state, this.state.priceList).then(() => {
-                                        this.resetHistory().then(() => this.createHistory())
+                                        this.reloadHistory().then(() => this.createHistory())
                                     })}
                                 >
                                 </Icon.Button>
