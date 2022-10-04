@@ -189,7 +189,7 @@ export default class App extends React.Component<MyProps, MyState> {
         }
     }
 
-    printTest = async (row: any) => {
+    printTable = async (row: any) => {
         await print(true, row, this.state.prices)
     }
     handleCancel = async () => {
@@ -387,7 +387,7 @@ export default class App extends React.Component<MyProps, MyState> {
                                                 style={{ height: '100%', justifyContent: 'center', alignItems: 'center', backgroundColor: 'white',  }}
                                                 borderRadius={0}
                                                 color={'green'}
-                                                onPress={() => this.printTest(row)}
+                                                onPress={() => this.printTable(row)}
                                             >
                                             </Icon.Button>
                                         </TouchableOpacity>
