@@ -388,7 +388,7 @@ export default class App extends React.Component<MyProps, MyState> {
                                 selector: 'payTotal',
                                 cell: (row: any) => (
                                     <>
-                                        <Text>€{row.payTotal}</Text>
+                                        <Text style={{fontWeight: "bold"}}>€{row.payTotal}</Text>
                                     </>
                                 ),
                             },
@@ -438,7 +438,7 @@ export default class App extends React.Component<MyProps, MyState> {
                                         <TouchableOpacity onPress={() => this.check(row)}>
                                             {/*<Text>check {row.isChecked}</Text>*/}
                                             {/*<Text>check {row.isChecked || this.state.checkedList[row.id]}</Text>*/}
-                                            <Text style={{backgroundColor: this.state.checkedList[row.id] || row.isChecked ? "green" : "red", width: 50, textAlign: "center"}}><Text style={{fontWeight: "bold"}}>{this.state.checkedList[row.id] || row.isChecked ? "TAIP" : "NE"}</Text></Text>
+                                            <Text style={{backgroundColor: this.state.checkedList[row.id] || row.isChecked ? "green" : "red", width: 50, height: 30, textAlign: "center", textAlignVertical: "center"}}><Text style={{fontWeight: "bold"}}>{this.state.checkedList[row.id] || row.isChecked ? "TAIP" : "NE"}</Text></Text>
 
                                         </TouchableOpacity>
                                     </>
