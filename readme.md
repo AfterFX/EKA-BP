@@ -27,7 +27,7 @@ Feature
 
 
 # Login page
-`enter some letters.`
+`enter some letters.`<br>
 ![Login_page](gif/login.gif)
 
 # Buy Page
