@@ -59,10 +59,45 @@ export const print = async (isHistory: boolean, tableObject: object, storedPrice
     })
 }
 
+export const printH = async (row: object) => {
+    await Print.printAsync({
+        html: createHitoryDynamicTable(row).html,
+    })
+}
+
 export const destroy = async (onChangeNumber: (value: (((prevState: Array<String>) => Array<String>) | Array<String>)) => void) => {
     return onChangeNumber([]);
 }
-
+export const createHitoryDynamicTable = (row: any) => {
+    const tt = JSON.parse(JSON.stringify(row))
+    const bStyle = "border-bottom: 2px solid red;background-color: lightgrey;"
+    const html = `<!DOCTYPE html>
+    <html>
+        <body>
+        <table>
+          <tr>
+            <th>Nr.</th>
+            <th>Kiekis</th>
+            <th>Suma</th>
+            <th>Laikas</th>
+          </tr>
+          
+            ${Object.keys(tt).map(key => {
+                return `
+        <tr>
+            <td style="${bStyle}">${tt[key].id}</td>
+            <td style="${bStyle}">${tt[key].countTotal}</td>
+            <td style="${bStyle}">€${tt[key].payTotal}</td>
+            <td style="${bStyle}">${tt[key].time}</td>
+        </tr>
+    `
+        }).join("")}
+            
+        </table>
+        </body>
+    </html>`
+    return {html: html};
+};
 
 export const createDynamicTable = (isHistory: boolean, tableObject: any, storedPrices: any) => {
     const table = tableObject.table;

@@ -4,7 +4,7 @@ import { Chip, Text } from 'react-native-paper';
 import Datatable from './Datatable';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from '@react-navigation/native';
-import {destroyStorage, print, saveNewPrice} from "../components/functions";
+import {destroyStorage, print, printH, saveNewPrice} from "../components/functions";
 import Dialog from "react-native-dialog";
 import {Cell, Col, Cols, Row, Rows, Table, TableWrapper} from "react-native-table-component";
 import {StatusBar} from "expo-status-bar";
@@ -195,6 +195,10 @@ export default class App extends React.Component<MyProps, MyState> {
         await print(true, row, this.state.prices)
     }
 
+    printHistory = async (row: any) => {
+        await printH(row)
+    }
+
     check = async (row: any) => {
         const newCheck = JSON.parse(this.state.data).map(obj => {//ganerate to storage
             if (obj.id === row.id) {
@@ -366,9 +370,21 @@ export default class App extends React.Component<MyProps, MyState> {
                         </Dialog.Container>
                     : <Text> </Text>}
                 </View>
-
                 {this.state.data ?
-                    <><Datatable
+                    <>
+                        <TouchableOpacity>
+                            <Icon.Button
+                                name="printer"
+                                size={30}
+                                // style={{ height: '100%', justifyContent: 'center', alignItems: 'center', backgroundColor: 'white',  }}
+                                borderRadius={0}
+                                color={'green'}
+                                onPress={() => this.printHistory(JSON.parse(this.state.data))}
+                                // onPress={() => console.log(this.state.data)}
+                            >
+                            </Icon.Button>
+                        </TouchableOpacity>
+                        <Datatable
                         columns={[
                             /*{
                               name: 'Email',
