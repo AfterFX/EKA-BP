@@ -372,18 +372,6 @@ export default class App extends React.Component<MyProps, MyState> {
                 </View>
                 {this.state.data ?
                     <>
-                        <TouchableOpacity>
-                            <Icon.Button
-                                name="printer"
-                                size={30}
-                                // style={{ height: '100%', justifyContent: 'center', alignItems: 'center', backgroundColor: 'white',  }}
-                                borderRadius={0}
-                                color={'green'}
-                                onPress={() => this.printHistory(JSON.parse(this.state.data))}
-                                // onPress={() => console.log(this.state.data)}
-                            >
-                            </Icon.Button>
-                        </TouchableOpacity>
                         <Datatable
                         columns={[
                             /*{
@@ -498,6 +486,13 @@ export default class App extends React.Component<MyProps, MyState> {
                             }}
                             title="Rodyti dienos rezultatus"
                             color="green"
+                            accessibilityLabel="Open modal"
+                        />
+
+                        <Button
+                            onPress={() => this.printHistory(JSON.parse(this.state.data))}
+                            title="Spausdinti dienos ataskaita"
+                            color="#2596be"
                             accessibilityLabel="Open modal"
                         />
 
