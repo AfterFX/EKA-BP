@@ -74,7 +74,8 @@ export const createHitoryDynamicTable = (row: any) => {
     const html = `<!DOCTYPE html>
     <html>
         <body>
-        <table>
+        <center>${row[0].date}</center>
+        <table style="position: absolute; float:right;">
           <tr>
             <th>Nr.</th>
             <th>Kiekis</th>
@@ -83,7 +84,8 @@ export const createHitoryDynamicTable = (row: any) => {
           </tr>
           
             ${Object.keys(tt).map(key => {
-                return `
+        if(tt[key].id < 21) {
+            return `
         <tr>
             <td style="${bStyle}">${tt[key].id}</td>
             <td style="${bStyle}">${tt[key].countTotal}</td>
@@ -91,9 +93,34 @@ export const createHitoryDynamicTable = (row: any) => {
             <td style="${bStyle}">${tt[key].time}</td>
         </tr>
     `
+        }
         }).join("")}
             
         </table>
+        
+          
+            ${Object.keys(tt).map(key => {
+        if(tt[key].id > 20) {
+            return `
+        <table style="float:right;">
+          <tr>
+            <th>Nr.</th>
+            <th>Kiekis</th>
+            <th>Suma</th>
+            <th>Laikas</th>
+          </tr>
+        <tr>
+            <td style="${bStyle}">${tt[key].id}</td>
+            <td style="${bStyle}">${tt[key].countTotal}</td>
+            <td style="${bStyle}">€${tt[key].payTotal}</td>
+            <td style="${bStyle}">${tt[key].time}</td>
+        </tr>
+        </table>
+    `
+        }
+    }).join("")}
+            
+        
         </body>
     </html>`
     return {html: html};
